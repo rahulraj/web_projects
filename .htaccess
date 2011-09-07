@@ -1,0 +1,3 @@
+AuthType SSLCert
+Require user MY_USERNAME_HERE
+ErrorDocument 401 /__scripts/needcerts
