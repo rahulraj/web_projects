@@ -14,7 +14,7 @@ def zwrite(msg):
 @app.route('/')
 def hello_world():
     zwrite("request passed to test flask " + request.path)
-    return 'Hello World! I'm a flask example.'
+    return "Hello World! I'm a flask example."
 
 if __name__ == '__main__':
     app.run()
