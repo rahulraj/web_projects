@@ -1,3 +1,4 @@
 AuthType SSLCert
-Require user MY_USERNAME_HERE
+Require user $SETUPSCRIPT_INSERT_USERNAME$
 ErrorDocument 401 /__scripts/needcerts
+
