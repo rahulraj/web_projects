@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Args:
+    title - the title, as a string
+    images - a list of the image objects to be displayed. They should
+             have the following attributes:
+               alt_text - the alt text for the image for screenreaders
+               src - the file name of the image, to pass to the src attributes
+                     of the img tag.
+  -->
+  <head>
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <ul>
+      {% for image in images %}
+        <li><img alt="{{ image.alt_text }}" src="{{ image.src }}"></li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
