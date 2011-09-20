@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<head>
+	<title>lookups in DOM example</title>
+
+	<script>
+		
+		// display the HTML contained within the node with id 'content'
+        function display() {
+        	var e = document.getElementById('content');
+        	console.log("HTML of content: " + e.innerHTML);
+        }
+        
+		// register the display function to be executed when
+		// the DOM is available
+		window.onload = display;
+	</script>
+	
+	
+</head>
+
+<body>
+	<h1 id="header">
+	    My new webpage
+	</h1>
+	<div id="content">Welcome!
+	</div>
+</body>
+</html>

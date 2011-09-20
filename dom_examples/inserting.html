@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<head>
+        
+	<title>insertion in DOM example</title>
+    <style>
+        #content {
+            font-size: 20px;
+        }
+        .popup {
+        position:relative;
+        left: 10px;
+        width: 100px;
+        top: -40px;
+        opacity: 0.5;
+        background:yellow;
+        }
+    </style>
+
+	<script>
+        function popup(elt) {
+            var box = document.createElement('div');
+            box.innerHTML = "comment";
+            box.className = 'popup';
+            elt.appendChild(box);
+        }
+       
+		function go () {
+	        var elt = document.getElementById('content');
+			popup(elt);
+		}
+		// execute this command in the browser console to see the effect:
+		// go ();
+
+	</script>
+	
+	
+</head>
+
+<body>
+	<h1 id="header">
+	    My new webpage
+	</h1>
+	<div id="content">Content
+	</div>
+</body>
+</html>
