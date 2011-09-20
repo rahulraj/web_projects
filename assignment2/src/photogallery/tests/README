@@ -1,0 +1,15 @@
+This directory contains tests for the photogallery assignment.
+
+Note that simply running "python foo_test.py" won't work! The reason
+for this is because the code uses relative imports to access modules
+from other parts of photogallery. If you run the file directly, __name__
+will become bound to '__main__' and the relative imports will fail.
+
+Instead, from assignment2/src, run
+"python -m photogallery.tests.foo_test.py".
+This should handle relative imports properly.
+
+Alternatively, if you have nosetests installed, you can run it from
+assignment2/, assignment2/src/, assignment2/src/photogallery/, or
+assignment2/src/photogallery/tests/ and its test runner should do the 
+right thing.
