@@ -7,8 +7,10 @@ class GalleryItem(object):
   """
   pass
 
+
 class NoSuchMetadata(Exception):
   pass
+
 
 class JpegPicture(GalleryItem):
   """ A single immutable JPEG picture """
@@ -32,11 +34,30 @@ class JpegPicture(GalleryItem):
 
     Args:
       attribute_name the name to look up.
+
+    Returns:
+      The value associated with attribute_name in the JPEG's metadata.
+
+    Raises:
+      NoSuchMetadata if attribute_name does not exist in the lookup table.
     """
     if attribute_name not in self.lookup_table:
       raise NoSuchMetadata, attribute_name
     iptc_info_key = self.lookup_table[attribute_name]
     return self.iptc_info.data[iptc_info_key]
+
+  def __eq__(self, other):
+    """
+    For testing, allow JpegPictures to be compared by value.
+
+    Returns:
+      True if the unique aspects of self equal those of the other object.
+    """
+    if not isinstance(other, JpegPicture):
+      return False
+    return self.file_name == other.file_name and \
+        self.lookup_table == other.lookup_table
+
 
 class JpegDirectory(GalleryItem):
   def __init__(self, directory_name, contents):
@@ -48,3 +69,14 @@ class JpegDirectory(GalleryItem):
       contents a list of GalleryItems inside the directory.
     """
     assign_injectables(self, locals())
+
+  def __eq__(self, other):
+    """
+    For testing, allow JpegDirectories to be compared by value.
+
+    Returns:
+      True if the unique aspects of self equal those of other.
+    """
+    if not isinstance(other, JpegDirectory):
+      return False
+    return self.directory_name == other.directory_name
