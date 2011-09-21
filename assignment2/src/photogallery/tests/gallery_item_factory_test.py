@@ -1,6 +1,6 @@
 import unittest
 from ..generator.galleryitemfactory import GalleryItemFactory
-from ..generator.galleryitem import JpegDirectory
+from ..generator.galleryitem import JpegDirectory, JpegPicture
 from ..utils.inject import assign_injectables
 
 class SimpleStubOsModule(object):
@@ -10,6 +10,19 @@ class SimpleStubOsModule(object):
   def listdir(self, path):
     if path == '/not/real':
       return self.stub_list
+    else:
+      return []
+
+
+class NestedDirectoryOsModule(object):
+  def __init__(self, first_list, second_list):
+    assign_injectables(self, locals())
+
+  def listdir(self, path):
+    if path == '/first':
+      return self.first_list
+    elif path == 'second':
+      return self.second_list
     else:
       return []
 
@@ -48,6 +61,41 @@ class GalleryItemFactoryTest(unittest.TestCase):
 
     self.assertEquals(1, len(directory))
     self.assertEquals(self.directory_names[0], directory[0].get_name())
+
+  def test_it_should_create_GalleryItems_in_nested_directories(self):
+    files_in_first = ['6170_sample_image_01.jpg', '6170_sample_image_02.jpg',
+        'second'] 
+    files_in_second = ['a_jpeg.jpg', 'another_jpeg.jpg']
+    self.file_finder = NestedDirectoryOsModule(files_in_first, files_in_second)
+
+    def is_directory(name):
+      return name == '/first' or name == 'second'
+
+    self.factory = GalleryItemFactory(None, None,
+        file_finder=self.file_finder, is_directory=is_directory)
+
+    first_directory = self.factory.create_directory('/first')
+    contents = first_directory.get_contents()
+    jpeg_names_in_first = [jpeg.get_name() for jpeg in contents \
+        if isinstance(jpeg, JpegPicture)]
+    self.assertTrue('6170_sample_image_01.jpg' in jpeg_names_in_first) 
+    self.assertTrue('6170_sample_image_02.jpg' in jpeg_names_in_first) 
+
+    directories_in_first = [directory for directory in contents \
+        if isinstance(directory, JpegDirectory)]
+    self.assertEquals(len(directories_in_first), 1)
+    second_directory = directories_in_first[0]
+    self.assertEquals('second', second_directory.get_name())
+
+    second_contents = second_directory.get_contents()
+    jpeg_names_in_second = [jpeg.get_name() for jpeg in second_contents \
+        if isinstance(jpeg, JpegPicture)]
+    self.assertTrue('a_jpeg.jpg' in jpeg_names_in_second)
+    self.assertTrue('another_jpeg.jpg' in jpeg_names_in_second)
+
+    directories_in_second = [directory for directory in second_contents \
+        if isinstance(directory, JpegDirectory)]
+    self.assertEquals(0, len(directories_in_second))
 
 if __name__ == '__main__':
   unittest.main()

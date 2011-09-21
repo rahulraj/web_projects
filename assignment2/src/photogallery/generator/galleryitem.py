@@ -46,6 +46,12 @@ class JpegPicture(GalleryItem):
       raise NoSuchMetadata, attribute_name
     iptc_info_key = self.lookup_table[attribute_name]
     return self.iptc_info.data[iptc_info_key]
+
+  def __str__(self):
+    return 'JpegPicture(' + self.name + ')'
+
+  def __repr__(self):
+    return self.__str__()
 with_getters_for(JpegPicture, 'name')
 
 
@@ -59,4 +65,10 @@ class JpegDirectory(GalleryItem):
       contents a tuple of GalleryItems inside the directory.
     """
     assign_injectables(self, locals())
+
+  def __str__(self):
+    return 'JpegDirectory(' + self.name + ')'
+
+  def __repr__(self):
+    return self.__str__()
 with_getters_for(JpegDirectory, 'name', 'contents')
