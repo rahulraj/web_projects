@@ -12,3 +12,11 @@ class ImmutableDictTest(unittest.TestCase):
     except DisallowedModification:
       pass
     self.assertEquals('bar', self.test_dict['foo'])
+
+  def test_adding_new_values_should_throw_an_exception(self):
+    try:
+      self.test_dict['baz'] = 'new_value'
+      self.fail()
+    except DisallowedModification:
+      pass
+    self.assertTrue('baz' not in self.test_dict)
