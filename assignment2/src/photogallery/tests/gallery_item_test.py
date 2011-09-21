@@ -1,5 +1,5 @@
 import unittest
-from ..generator.galleryitem import JpegPicture
+from ..generator.galleryitem import JpegPicture, NoSuchMetadata
 from ..utils.immutabledict import ImmutableDict
 
 class StubIptcInfo(object):
@@ -32,10 +32,15 @@ class JpegPictureTest(unittest.TestCase):
         self.metadata_dict)
 
   def test_it_should_lookup_valid_metadata(self):
-    self.assertEquals('Daniel Jackson', self.jpeg_picture.lookup('Photographer'))
+    self.assertEquals('Daniel Jackson',
+        self.jpeg_picture.lookup('Photographer'))
     self.assertEquals('Jerusalem', self.jpeg_picture.lookup('City'))
     self.assertEquals('Israel', self.jpeg_picture.lookup('Country'))
     self.assertEquals('Hike in Ein Kerem', self.jpeg_picture.lookup('Caption'))
+
+  def test_it_should_raise_NoSuchMetadata_when_looking_up_invalid_data(self):
+    self.assertRaises(NoSuchMetadata, self.jpeg_picture.lookup,
+        'not_real_attribute')
 
 if __name__ == '__main__':
   unittest.main()

@@ -7,6 +7,9 @@ class GalleryItem(object):
   """
   pass
 
+class NoSuchMetadata(Exception):
+  pass
+
 class JpegPicture(GalleryItem):
   """ A single immutable JPEG picture """
   def __init__(self, file_name, iptc_info, lookup_table):
@@ -30,6 +33,8 @@ class JpegPicture(GalleryItem):
     Args:
       attribute_name the name to look up.
     """
+    if attribute_name not in self.lookup_table:
+      raise NoSuchMetadata, attribute_name
     iptc_info_key = self.lookup_table[attribute_name]
     return self.iptc_info.data[iptc_info_key]
 
