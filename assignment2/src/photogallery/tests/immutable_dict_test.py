@@ -1,7 +1,13 @@
 import unittest
 from ..utils.immutabledict import ImmutableDict, DisallowedModification
 
-class ImmutableDictTest(unittest.TestCase):
+class ImmutableDictNamedConstructorTest(unittest.TestCase):
+  def test_construct_immutable_dict(self):
+    my_dict = ImmutableDict.of(foo='bar', baz='quux')
+    self.assertEquals('bar', my_dict['foo'])
+    self.assertEquals('quux', my_dict['baz'])
+
+class ImmutableDictModificationTest(unittest.TestCase):
   def setUp(self):
     self.test_dict = ImmutableDict({'foo': 'bar'})
 
