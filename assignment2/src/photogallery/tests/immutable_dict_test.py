@@ -21,5 +21,21 @@ class ImmutableDictTest(unittest.TestCase):
       pass
     self.assertTrue('baz' not in self.test_dict)
 
+  def test_pop_should_throw_an_exception(self):
+    try:
+      self.test_dict.pop('foo')
+      self.fail()
+    except DisallowedModification:
+      pass
+    self.assertTrue('foo' in self.test_dict)
+
+  def test_popitem_should_throw_an_exception(self):
+    try:
+      self.test_dict.popitem()
+      self.fail()
+    except DisallowedModification:
+      pass
+    self.assertTrue('foo' in self.test_dict)
+
 if __name__ == '__main__':
   unittest.main()
