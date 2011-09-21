@@ -1,4 +1,5 @@
 from ..utils.inject import assign_injectables
+from ..utils.getters import with_getters_for
 
 class GalleryItem(object):
   """ 
@@ -45,18 +46,7 @@ class JpegPicture(GalleryItem):
       raise NoSuchMetadata, attribute_name
     iptc_info_key = self.lookup_table[attribute_name]
     return self.iptc_info.data[iptc_info_key]
-
-  def __eq__(self, other):
-    """
-    For testing, allow JpegPictures to be compared by value.
-
-    Returns:
-      True if the unique aspects of self equal those of the other object.
-    """
-    if not isinstance(other, JpegPicture):
-      return False
-    return self.file_name == other.file_name and \
-        self.lookup_table == other.lookup_table
+with_getters_for(JpegPicture, 'file_name')
 
 
 class JpegDirectory(GalleryItem):
@@ -66,17 +56,7 @@ class JpegDirectory(GalleryItem):
 
     Args:
       directory_name the name of the directory.
-      contents a list of GalleryItems inside the directory.
+      contents a tuple of GalleryItems inside the directory.
     """
     assign_injectables(self, locals())
-
-  def __eq__(self, other):
-    """
-    For testing, allow JpegDirectories to be compared by value.
-
-    Returns:
-      True if the unique aspects of self equal those of other.
-    """
-    if not isinstance(other, JpegDirectory):
-      return False
-    return self.directory_name == other.directory_name
+with_getters_for(JpegDirectory, 'directory_name', 'contents')
