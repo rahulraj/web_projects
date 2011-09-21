@@ -14,12 +14,24 @@ class JpegPicture(GalleryItem):
     Constructor for JpegPictures.
 
     Args:
-      file_name the name of the JPEG file
-      iptc_info the IPTCInfo object wrapped around the file
+      file_name the name of the JPEG file.
+      iptc_info the IPTCInfo object wrapped around the file.
       lookup_table an immutable dictionary mapping metadata
-                   attribute names to their indices in iptc_info.data
+                   attribute names to their indices in iptc_info.data.
     """
     assign_injectables(self, locals())
+
+  def lookup(self, attribute_name):
+    """
+    Given the name of an attribute, finds that attribute in the JPEG's
+    metadata via iptc_info, using lookup_table to map attribute names
+    to keys in iptc_info.data
+
+    Args:
+      attribute_name the name to look up.
+    """
+    iptc_info_key = self.lookup_table[attribute_name]
+    return self.iptc_info.data[iptc_info_key]
 
 class JpegDirectory(GalleryItem):
   def __init__(self, directory_name, contents):
@@ -27,7 +39,7 @@ class JpegDirectory(GalleryItem):
     Constructor for JpegDirectories.
 
     Args:
-      directory_name the name of the directory
-      contents a list of GalleryItems inside the directory
+      directory_name the name of the directory.
+      contents a list of GalleryItems inside the directory.
     """
     assign_injectables(self, locals())
