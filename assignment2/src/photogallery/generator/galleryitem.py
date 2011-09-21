@@ -15,12 +15,12 @@ class NoSuchMetadata(Exception):
 
 class JpegPicture(GalleryItem):
   """ A single immutable JPEG picture """
-  def __init__(self, file_name, iptc_info, lookup_table):
+  def __init__(self, name, iptc_info, lookup_table):
     """
     Constructor for JpegPictures.
 
     Args:
-      file_name the name of the JPEG file.
+      name the name of the JPEG file.
       iptc_info the IPTCInfo object wrapped around the file.
       lookup_table an immutable dictionary mapping metadata
                    attribute names to their indices in iptc_info.data.
@@ -46,17 +46,17 @@ class JpegPicture(GalleryItem):
       raise NoSuchMetadata, attribute_name
     iptc_info_key = self.lookup_table[attribute_name]
     return self.iptc_info.data[iptc_info_key]
-with_getters_for(JpegPicture, 'file_name')
+with_getters_for(JpegPicture, 'name')
 
 
 class JpegDirectory(GalleryItem):
-  def __init__(self, directory_name, contents):
+  def __init__(self, name, contents):
     """
     Constructor for JpegDirectories.
 
     Args:
-      directory_name the name of the directory.
+      name the name of the directory.
       contents a tuple of GalleryItems inside the directory.
     """
     assign_injectables(self, locals())
-with_getters_for(JpegDirectory, 'directory_name', 'contents')
+with_getters_for(JpegDirectory, 'name', 'contents')
