@@ -15,3 +15,9 @@ class ImmutableDict(dict):
 
   def popitem(self):
     raise DisallowedModification
+
+  def setdefault(self, key, default=None):
+    raise DisallowedModification
+
+  def update(*args, **kwargs):
+    raise DisallowedModification

@@ -37,5 +37,21 @@ class ImmutableDictTest(unittest.TestCase):
       pass
     self.assertTrue('foo' in self.test_dict)
 
+  def test_setdefault_should_throw_an_exception(self):
+    try:
+      self.test_dict.setdefault('baz', 'quux')
+      self.fail()
+    except DisallowedModification:
+      pass
+    self.assertTrue('baz' not in self.test_dict)
+
+  def test_update_should_throw_an_exception(self):
+    try:
+      self.test_dict.update(baz='quux')
+      self.fail()
+    except DisallowedModification:
+      pass
+    self.assertTrue('baz' not in self.test_dict)
+
 if __name__ == '__main__':
   unittest.main()
