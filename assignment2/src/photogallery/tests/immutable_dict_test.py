@@ -20,3 +20,6 @@ class ImmutableDictTest(unittest.TestCase):
     except DisallowedModification:
       pass
     self.assertTrue('baz' not in self.test_dict)
+
+if __name__ == '__main__':
+  unittest.main()
