@@ -1,4 +1,3 @@
-from iptcinfo import IPTCInfo
 from ..utils.inject import assign_injectables
 
 class GalleryItem(object):
