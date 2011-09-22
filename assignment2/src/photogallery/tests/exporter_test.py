@@ -1,7 +1,7 @@
 import unittest
 from ..utils.inject import assign_injectables
 from ..utils.immutabledict import ImmutableDict
-from ..generator.jpegdirectoryexporter import Exporter
+from ..generator.exporter import Exporter
 
 class MockJinja2Template(object):
   def __init__(self, required_values):
