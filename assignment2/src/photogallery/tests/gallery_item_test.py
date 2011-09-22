@@ -48,5 +48,16 @@ class JpegPictureTest(unittest.TestCase):
         'City': 'Jerusalem', 'Country': 'Israel', 'Caption': 'Hike in Ein Kerem'}
     self.assertEquals(actual_attributes, attributes)
 
+  def test_it_should_create_a_caption_from_its_attributes(self):
+    """ 
+    For flexibility, this test doesn't match the caption exactly, it just
+    verifies that the given information is in there.
+    """
+    caption = self.jpeg_picture.build_caption()
+    self.assertTrue('Daniel Jackson' in caption)
+    self.assertTrue('Jerusalem' in caption)
+    self.assertTrue('Israel' in caption)
+    self.assertTrue('Hike in Ein Kerem' in caption)
+
 if __name__ == '__main__':
   unittest.main()

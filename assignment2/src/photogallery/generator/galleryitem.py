@@ -1,6 +1,7 @@
 from ..utils.inject import assign_injectables
 from ..utils.getters import with_getters_for
 from ..utils.immutabledict import ImmutableDict
+from ..utils.disallowedmodification import DisallowedModification
 
 class GalleryItem(object):
   """ 
@@ -49,6 +50,14 @@ class JpegPicture(GalleryItem):
     return self.iptc_info.data[iptc_info_key]
 
   def get_all_attributes(self):
+    """
+    Returns all of the attribute names in self.lookup_table.
+    Used for making the caption.
+
+    Returns:
+      An ImmutableDict mapping all the available attribute names
+      to their values.
+    """
     result = {}
     for attribute_name in self.lookup_table:
       result[attribute_name] = self.lookup(attribute_name)
@@ -59,6 +68,37 @@ class JpegPicture(GalleryItem):
 
   def __repr__(self):
     return self.__str__()
+
+  def build_caption(self):
+    """
+    Pretty-prints all of the attributes associated with this JPEG picture
+    into a caption.
+
+    Returns:
+      A string caption that can be put in the template.
+    """
+    caption = ''
+    attributes = self.get_all_attributes()
+    for attribute in attributes:
+      caption += attribute + ": "
+      caption += self.lookup(attribute) + "\n"
+    return caption
+
+  def as_picture_view(self):
+    """
+    Injects self's data into a JpegPictureView and returns it.
+
+    Returns:
+      A new JpegPictureView containing data about self.
+    """
+    if 'alt_text' in self.lookup_table:
+      alt_text = self.lookup('alt_text')
+    else:
+      alt_text = self.name
+
+    src = self.name
+    caption_data = self.build_caption()
+    return JpegPictureView(alt_text, src, caption_data)
 with_getters_for(JpegPicture, 'name')
 
 
@@ -79,3 +119,26 @@ class JpegDirectory(GalleryItem):
   def __repr__(self):
     return self.__str__()
 with_getters_for(JpegDirectory, 'name', 'contents')
+
+
+class JpegPictureView(object):
+  """
+  A simple immutable view of a JPEG picture, to be passed
+  to a Jinja2 template.
+  """
+  def __init__(self, alt_text, src, caption_data):
+    assign_injectables(self, locals())    
+
+  def __setattr__(self):
+    raise DisallowedModification
+
+class JpegDirectoryView(object):
+  """
+  A simple immutable view of a directory, to be passed
+  to a Jinja2 template.
+  """
+  def __init__(self, title, images):
+    assign_injectables(self, locals())    
+
+  def __setattr__(self):
+    raise DisallowedModification
