@@ -1,8 +1,12 @@
 import os
+import re
 import os.path
 from galleryitem import JpegPicture, JpegDirectory
 from ..utils.inject import assign_injectables
-from isjpegfile import is_jpeg_file
+
+def is_jpeg_file(file_name):
+  jpeg_file_re = re.compile(r'\.jpg$')
+  return jpeg_file_re.search(file_name) != None
 
 
 class GalleryItemFactory(object):
