@@ -29,27 +29,16 @@ class ImmutableDictModificationTest(unittest.TestCase):
     self.assertTrue('baz' not in self.test_dict)
 
   def test_pop_should_throw_an_exception(self):
-    try:
-      self.test_dict.pop('foo')
-      self.fail()
-    except DisallowedModification:
-      pass
+    self.assertRaises(DisallowedModification, self.test_dict.pop, 'foo')
     self.assertTrue('foo' in self.test_dict)
 
   def test_popitem_should_throw_an_exception(self):
-    try:
-      self.test_dict.popitem()
-      self.fail()
-    except DisallowedModification:
-      pass
+    self.assertRaises(DisallowedModification, self.test_dict.popitem)
     self.assertTrue('foo' in self.test_dict)
 
   def test_setdefault_should_throw_an_exception(self):
-    try:
-      self.test_dict.setdefault('baz', 'quux')
-      self.fail()
-    except DisallowedModification:
-      pass
+    self.assertRaises(DisallowedModification, self.test_dict.setdefault, 'baz',
+        'quux')
     self.assertTrue('baz' not in self.test_dict)
 
   def test_update_should_throw_an_exception(self):
