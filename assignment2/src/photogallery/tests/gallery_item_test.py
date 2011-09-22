@@ -42,5 +42,11 @@ class JpegPictureTest(unittest.TestCase):
     self.assertRaises(NoSuchMetadata, self.jpeg_picture.lookup,
         'not_real_attribute')
 
+  def test_get_all_attributes(self):
+    attributes = self.jpeg_picture.get_all_attributes()
+    actual_attributes = {'Photographer': 'Daniel Jackson',
+        'City': 'Jerusalem', 'Country': 'Israel', 'Caption': 'Hike in Ein Kerem'}
+    self.assertEquals(actual_attributes, attributes)
+
 if __name__ == '__main__':
   unittest.main()

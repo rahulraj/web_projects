@@ -1,5 +1,6 @@
 from ..utils.inject import assign_injectables
 from ..utils.getters import with_getters_for
+from ..utils.immutabledict import ImmutableDict
 
 class GalleryItem(object):
   """ 
@@ -46,6 +47,12 @@ class JpegPicture(GalleryItem):
       raise NoSuchMetadata, attribute_name
     iptc_info_key = self.lookup_table[attribute_name]
     return self.iptc_info.data[iptc_info_key]
+
+  def get_all_attributes(self):
+    result = {}
+    for attribute_name in self.lookup_table:
+      result[attribute_name] = self.lookup(attribute_name)
+    return ImmutableDict(result)
 
   def __str__(self):
     return 'JpegPicture(' + self.name + ')'
