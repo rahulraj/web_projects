@@ -18,8 +18,7 @@ class JpegDirectoryExporter(object):
     assign_injectables(self, locals())
 
   def export_directory(self, jpeg_directory_view):
-    return self.jinja_template.render({'title': jpeg_directory_view.title, 
-        'images': jpeg_directory_view.images})
+    return self.jinja_template.render(jpeg_directory_view)
 
 
 class JpegPictureExporter(object):

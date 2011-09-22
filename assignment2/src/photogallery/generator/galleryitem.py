@@ -119,12 +119,13 @@ class JpegDirectory(GalleryItem):
     Creates a view of this object that can be sent to the template.
 
     Returns:
-      A JpegDirectoryView representation of this object.
+      An ImmutableDict with data about this object to be displayed.
     """
-    title = self.name
+    result = {}
+    result['title'] = self.name
     images = [jpeg for jpeg in self.contents() if isinstance(jpeg, JpegPicture)]
-    image_views = [picture.as_picture_view for picture in images]
-    return JpegDirectoryView(title, image_views)
+    result['images'] = [picture.as_picture_view for picture in images]
+    return ImmutableDict(result)
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'
@@ -132,19 +133,3 @@ class JpegDirectory(GalleryItem):
   def __repr__(self):
     return self.__str__()
 with_getters_for(JpegDirectory, 'name', 'contents')
-
-
-class JpegDirectoryView(object):
-  """
-  A simple immutable view of a directory, to be passed
-  to a Jinja2 template.
-  """
-  def __init__(self, title, images):
-    """
-    Constructor for JpegDirectoryView
-
-    Args:
-      title the title for the page
-      images a list of GalleryItems that belong to the directory
-    """
-    assign_injectables(self, locals())    
