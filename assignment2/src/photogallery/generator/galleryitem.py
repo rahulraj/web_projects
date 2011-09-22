@@ -138,7 +138,16 @@ class JpegPictureView(object):
   to a Jinja2 template.
   """
   def __init__(self, alt_text, src, caption_data):
+    """
+    Constructor for JpegPictureView
+
+    Args:
+      alt_text the alt text to be displayed for the image
+      src the src attribute for the image tag
+      caption_data the detailed caption to be displayed for the image
+    """
     assign_injectables(self, locals())    
+
 
 class JpegDirectoryView(object):
   """
@@ -146,4 +155,11 @@ class JpegDirectoryView(object):
   to a Jinja2 template.
   """
   def __init__(self, title, images):
+    """
+    Constructor for JpegDirectoryView
+
+    Args:
+      title the title for the page
+      images a list of GalleryItems that belong to the directory
+    """
     assign_injectables(self, locals())    
