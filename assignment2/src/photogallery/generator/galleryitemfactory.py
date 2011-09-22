@@ -4,6 +4,11 @@ import re
 from galleryitem import JpegPicture, JpegDirectory
 from ..utils.inject import assign_injectables
 
+def is_jpeg_file(file_name):
+  jpeg_file_re = re.compile(r'\.jpg$')
+  return jpeg_file_re.search(file_name) != None
+
+
 class GalleryItemFactory(object):
   """
   Class to bootstrap the application by reading the disk and
@@ -31,8 +36,7 @@ class GalleryItemFactory(object):
       path the path to the directory that the JPEGs are stored in.
     """
     file_names = self.file_finder.listdir(path)
-    jpeg_file_re = re.compile(r'\.jpg$')
-    jpeg_names = [name for name in file_names if jpeg_file_re.search(name) != None]
+    jpeg_names = filter(is_jpeg_file, file_names)
     jpeg_pictures = [JpegPicture(name, self.iptc_info, self.lookup_table) \
         for name in jpeg_names]
     directory_names = filter(self.is_directory, file_names)

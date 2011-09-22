@@ -2,6 +2,7 @@ from ..utils.inject import assign_injectables
 from ..utils.getters import with_getters_for
 from ..utils.immutabledict import ImmutableDict
 from ..utils.disallowedmodification import DisallowedModification
+from galleryitemfactory import is_jpeg_file
 
 class GalleryItem(object):
   """ 
@@ -13,6 +14,7 @@ class GalleryItem(object):
 
 class NoSuchMetadata(Exception):
   pass
+
 
 
 class JpegPicture(GalleryItem):
@@ -112,6 +114,17 @@ class JpegDirectory(GalleryItem):
       contents a tuple of GalleryItems inside the directory.
     """
     assign_injectables(self, locals())
+
+  def as_directory_view(self):
+    """
+    Creates a view of this object that can be sent to the template.
+
+    Returns:
+      A JpegDirectoryView representation of this object.
+    """
+    title = self.name
+    images = filter(is_jpeg_file, self.contents)
+    return JpegDirectoryView(title, images)
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'
