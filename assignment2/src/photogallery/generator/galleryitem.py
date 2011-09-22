@@ -2,7 +2,7 @@ from ..utils.inject import assign_injectables
 from ..utils.getters import with_getters_for
 from ..utils.immutabledict import ImmutableDict
 from ..utils.disallowedmodification import DisallowedModification
-from galleryitemfactory import is_jpeg_file
+from isjpegfile import is_jpeg_file
 
 class GalleryItem(object):
   """ 
