@@ -1,5 +1,6 @@
 import unittest
-from ..utils.immutabledict import ImmutableDict, DisallowedModification
+from ..utils.immutabledict import ImmutableDict
+from ..utils.disallowedmodification import DisallowedModification
 
 class ImmutableDictNamedConstructorTest(unittest.TestCase):
   def test_construct_immutable_dict(self):

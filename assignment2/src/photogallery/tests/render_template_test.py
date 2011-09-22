@@ -17,7 +17,7 @@ class Jinja2EnvironmentTest(unittest.TestCase):
     """ 
     Get the template for the photo list. This should not throw TemplateNotFound.
     """
-    self.environment.get_template('photo-list.html')
+    self.environment.get_template('photo-directory.html')
 
 if __name__ == '__main__':
   unittest.main()
