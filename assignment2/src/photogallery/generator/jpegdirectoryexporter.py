@@ -1,5 +1,4 @@
 from ..utils.inject import assign_injectables
-from ..utils.disallowedmodification import DisallowedModification
 
 PHOTO_DIRECTORY_TEMPLATE_NAME = 'photo-directory.html'
 PHOTO_DETAIL_TEMPLATE_NAME = 'photo-detail.html'
@@ -20,7 +19,8 @@ class JpegDirectoryExporter(object):
     assign_injectables(self, locals())
 
   def export_directory(self, jpeg_directory_view):
-    pass
+    return self.jinja_template.render({'title': jpeg_directory_view.title, 
+        'images': jpeg_directory_view.images})
 
 
 class JpegPictureExporter(object):
