@@ -15,7 +15,6 @@ class JpegDirectoryExporterTest(unittest.TestCase):
   def setUp(self):
     self.required_values = ['title', 'images']
     self.mock_template = MockJinja2Template(self.required_values)
-    #import ipdb; ipdb.set_trace()
     picture = JpegPictureView('a picture',
         'picture1.jpg', 'Taken with my new camera')
     self.images = [picture]
