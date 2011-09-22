@@ -41,7 +41,6 @@ class GalleryItemFactoryTest(unittest.TestCase):
         file_finder=self.file_finder, is_directory=is_directory)
 
   def test_it_should_create_JpegPictures_for_all_jpg_files(self):
-    #import ipdb; ipdb.set_trace()
     jpeg_directory = self.factory.create_directory('/not/real')
     entries = jpeg_directory.get_contents()
     for picture in entries:
