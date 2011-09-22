@@ -1,7 +1,6 @@
 from ..utils.inject import assign_injectables
 from ..utils.getters import with_getters_for
 from ..utils.immutabledict import ImmutableDict
-from isjpegfile import is_jpeg_file
 
 class GalleryItem(object):
   """ 
@@ -121,8 +120,9 @@ class JpegDirectory(GalleryItem):
       A JpegDirectoryView representation of this object.
     """
     title = self.name
-    images = filter(is_jpeg_file, self.contents)
-    return JpegDirectoryView(title, images)
+    images = [jpeg for jpeg in self.contents() if isinstance(jpeg, JpegPicture)]
+    image_views = [picture.as_picture_view for picture in images]
+    return JpegDirectoryView(title, image_views)
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'
