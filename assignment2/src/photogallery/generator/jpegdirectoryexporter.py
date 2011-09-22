@@ -4,7 +4,6 @@ PHOTO_DIRECTORY_TEMPLATE_NAME = 'photo-directory.html'
 PHOTO_DETAIL_TEMPLATE_NAME = 'photo-detail.html'
 
 
-
 class JpegDirectoryExporter(object):
   """
   Class to take a JpegDirectory and export it as a HTML

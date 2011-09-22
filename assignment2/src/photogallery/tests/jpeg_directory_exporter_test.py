@@ -1,7 +1,8 @@
 import unittest
 from ..utils.inject import assign_injectables
+from ..utils.immutabledict import ImmutableDict
 from ..generator.jpegdirectoryexporter import JpegDirectoryExporter
-from ..generator.galleryitem import JpegDirectoryView, JpegPictureView
+from ..generator.galleryitem import JpegDirectoryView
 
 class MockJinja2Template(object):
   def __init__(self, required_values):
@@ -15,8 +16,8 @@ class JpegDirectoryExporterTest(unittest.TestCase):
   def setUp(self):
     self.required_values = ['title', 'images']
     self.mock_template = MockJinja2Template(self.required_values)
-    picture = JpegPictureView('a picture',
-        'picture1.jpg', 'Taken with my new camera')
+    picture = ImmutableDict.of(title='a picture', src='picture1.jpg',
+        caption_data='Taken with my new camera')
     self.images = [picture]
     self.directory_view = JpegDirectoryView('My Pictures', self.images)
     self.exporter = JpegDirectoryExporter(self.mock_template)

@@ -86,18 +86,20 @@ class JpegPicture(GalleryItem):
   def as_picture_view(self):
     """
     Injects self's data into a JpegPictureView and returns it.
+    The result can be sent to a template.
 
     Returns:
-      A new JpegPictureView containing data about self.
+      A new ImmutableDict containing data about self.
     """
+    result = {}
     if 'alt_text' in self.lookup_table:
-      alt_text = self.lookup('alt_text')
+      result['alt_text'] = self.lookup('alt_text')
     else:
-      alt_text = self.name
+      result['alt_text'] = self.name
 
-    src = self.name
-    caption_data = self.build_caption()
-    return JpegPictureView(alt_text, src, caption_data)
+    result['src'] = self.name
+    result['caption_data'] = self.build_caption()
+    return ImmutableDict(result)
 with_getters_for(JpegPicture, 'name')
 
 
@@ -130,23 +132,6 @@ class JpegDirectory(GalleryItem):
   def __repr__(self):
     return self.__str__()
 with_getters_for(JpegDirectory, 'name', 'contents')
-
-
-class JpegPictureView(object):
-  """
-  A simple immutable view of a JPEG picture, to be passed
-  to a Jinja2 template.
-  """
-  def __init__(self, alt_text, src, caption_data):
-    """
-    Constructor for JpegPictureView
-
-    Args:
-      alt_text the alt text to be displayed for the image
-      src the src attribute for the image tag
-      caption_data the detailed caption to be displayed for the image
-    """
-    assign_injectables(self, locals())    
 
 
 class JpegDirectoryView(object):
