@@ -1,7 +1,6 @@
 from ..utils.inject import assign_injectables
 from ..utils.getters import with_getters_for
 from ..utils.immutabledict import ImmutableDict
-from ..utils.disallowedmodification import DisallowedModification
 from isjpegfile import is_jpeg_file
 
 class GalleryItem(object):
@@ -14,7 +13,6 @@ class GalleryItem(object):
 
 class NoSuchMetadata(Exception):
   pass
-
 
 
 class JpegPicture(GalleryItem):
@@ -142,9 +140,6 @@ class JpegPictureView(object):
   def __init__(self, alt_text, src, caption_data):
     assign_injectables(self, locals())    
 
-  def __setattr__(self):
-    raise DisallowedModification
-
 class JpegDirectoryView(object):
   """
   A simple immutable view of a directory, to be passed
@@ -152,6 +147,3 @@ class JpegDirectoryView(object):
   """
   def __init__(self, title, images):
     assign_injectables(self, locals())    
-
-  def __setattr__(self):
-    raise DisallowedModification
