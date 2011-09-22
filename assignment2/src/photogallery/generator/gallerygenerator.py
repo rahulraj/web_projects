@@ -26,26 +26,41 @@ class GalleryGenerator(object):
 
     Acceptable command line arguments are:
     -h, --help -> Prints a help message
-    -i, --input-directory -> The root directory for the gallery (required)
-    -o, --output-directory -> the output directory for the HTML (required)
+    --input-directory -> The root directory for the gallery (required)
+    --output-directory -> the output directory for the HTML (required)
 
     Args:
-      command_line_arguments the command line args with the program
+      command_line_arguments the command line arguments with the program
                              name removed.
     """
+
     try:
-      opts, args = getopt.getopt(command_line_arguments, "")
+      options, arguments = getopt.getopt(command_line_arguments,
+          "hi:o:", ['help', 'input-file=', 'output-file='])
     except getopt.GetoptError:
       clazz.print_usage()
       sys.exit(2)
+
+    print 'options: ', options
+    for option, argument in options:
+      if option in ('-h', '--help'):
+        clazz.print_usage()
+        sys.exit(0)
+      elif option in ('-i', '--input-file'):
+        input_directory = argument
+        print 'input_directory: ', input_directory
+      elif option in ('-o', '--output-file'):
+        output_directory = argument
+        print 'output_directory: ', output_directory
+    return None
 
   @classmethod
   def print_usage(clazz):
     print "Please call this script with the following arguments:"
     print "-i my_pictures/ where my_pictures is the directory containing " + \
-        "the JPEGs to render (long form: --input-file)"
+        "the JPEGs to render (long form: --input-file=)"
     print "-o my_site/ where my_site is the directory in which to " + \
-        "write the output files (long form: --output-file)"
+        "write the output files (long form: --output-file=)"
     print "Calling this script with -h or --help prints this message " + \
         "and exits."
 
