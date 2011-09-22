@@ -1,7 +1,5 @@
 import unittest
 from jinja2 import Environment, PackageLoader
-# Example of how to import from other parts of the package
-#from ..renderers import renderer
 
 class Jinja2EnvironmentTest(unittest.TestCase):
   """ 
