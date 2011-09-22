@@ -1,8 +1,15 @@
 from ..utils.inject import assign_injectables
 
 class GalleryGenerator(object):
-  def __init__(self, manifest_parser, gallery_item_factory,
-      jpeg_directory_exporter):
+  def __init__(self, gallery_item_factory, path, exporter):
+    """
+    Constructor for GalleryGenerator
+
+    Args:
+      gallery_item_factory the GalleryItemFactory that creates the items.
+      path the path of the directory to start in.
+      exporter the Exporter to populate the templates.
+    """
     assign_injectables(self, locals())
 
   @classmethod
@@ -10,4 +17,6 @@ class GalleryGenerator(object):
     pass
 
   def run(self):
-    pass
+    top_directory = self.gallery_item_factory.create_directory(self.path)
+    directory_view = top_directory.as_directory_view()
+    populated_template = self.exporter.export(directory_view)

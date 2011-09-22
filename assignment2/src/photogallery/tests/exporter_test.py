@@ -11,19 +11,26 @@ class MockJinja2Template(object):
     for argument in template_arguments:
       assert (argument in self.required_values)
 
+class StubJpegPicture(object):
+  def __init__(self, alt_text, src, caption_data):
+    assign_injectables(self, locals())
+
+  def get_contents(self):
+    return []
+
+  def as_view(self):
+    return ImmutableDict.of(alt_text=self.alt_text, src=self.src,
+        caption_data=self.caption_data)
+
 class ExporterTest(unittest.TestCase):
   def setUp(self):
-    self.required_values = ['title', 'images']
+    self.required_values = ['alt_text', 'src', 'caption_data']
     self.mock_template = MockJinja2Template(self.required_values)
-    picture = ImmutableDict.of(title='a picture', src='picture1.jpg',
-        caption_data='Taken with my new camera')
-    self.images = [picture]
-    self.directory_view = ImmutableDict.of(title='My Pictures',
-        images=self.images)
+    self.picture = StubJpegPicture('a picture', 'picture1.jpg', 'Caption')
     self.exporter = Exporter(self.mock_template)
 
   def test_it_should_populate_the_jinja2_template(self):
-    self.exporter.export(self.directory_view)
+    self.exporter.export(self.picture)
 
 if __name__ == '__main__':
   unittest.main()

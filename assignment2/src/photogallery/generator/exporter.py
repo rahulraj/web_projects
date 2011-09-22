@@ -15,12 +15,22 @@ class Exporter(object):
     """
     assign_injectables(self, locals())
 
-  def export(self, view):
+  def export(self, gallery_item):
     """
-    Given an ImmutableDict with which to populate the template,
-    render the template and return it.
+    Given a GalleryItem with which to populate the template,
+    render the template(s) and return them. If gallery_item
+    is a directory, this method recurses on its contents.
+
+    Returns:
+      A list of all the templates that were populated. There's one
+      for each GalleryItem.
     """
-    return self.jinja_template.render(view)
+    contents = gallery_item.get_contents()
+    templates = [gallery_item.as_view()]
+    for entry in contents:
+      appropriate_exporter = entry.get_exporter()
+      templates.extend(appropriate_exporter.export(entry))
+    return templates
 
 def create_photo_detail_exporter():
   return create_exporter(PHOTO_DETAIL_TEMPLATE_NAME)

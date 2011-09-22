@@ -1,13 +1,22 @@
 from ..utils.inject import assign_injectables
 from ..utils.getters import with_getters_for
 from ..utils.immutabledict import ImmutableDict
+import exporter
+
 
 class GalleryItem(object):
   """ 
   A single item in the gallery, can be either a JPEG or a
   directory containing other GalleryItems.     
   """
-  pass
+  def as_view(self):
+    raise NotImplementedError
+
+  def get_contents(self):
+    raise NotImplementedError
+
+  def get_exporter(self):
+    raise NotImplementedError
 
 
 class NoSuchMetadata(Exception):
@@ -27,6 +36,14 @@ class JpegPicture(GalleryItem):
                    attribute names to their indices in iptc_info.data.
     """
     assign_injectables(self, locals())
+
+  def get_contents(self):
+    """ A single picture has no contents, so return an empty list. """
+    return []
+
+  def get_exporter(self):
+    """ To export self, we need the picture detail template. """
+    return exporter.create_photo_detail_exporter()
 
   def lookup(self, attribute_name):
     """
@@ -83,7 +100,7 @@ class JpegPicture(GalleryItem):
       caption += self.lookup(attribute) + "\n"
     return caption
 
-  def as_picture_view(self):
+  def as_view(self):
     """
     Injects self's data into a JpegPictureView and returns it.
     The result can be sent to a template.
@@ -110,11 +127,11 @@ class JpegDirectory(GalleryItem):
 
     Args:
       name the name of the directory.
-      contents a tuple of GalleryItems inside the directory.
+      contents a list of GalleryItems inside the directory.
     """
     assign_injectables(self, locals())
 
-  def as_directory_view(self):
+  def as_view(self):
     """
     Creates a view of this object that can be sent to the template.
 
@@ -126,6 +143,10 @@ class JpegDirectory(GalleryItem):
     images = [jpeg for jpeg in self.contents() if isinstance(jpeg, JpegPicture)]
     result['images'] = [picture.as_picture_view for picture in images]
     return ImmutableDict(result)
+
+  def get_exporter():
+    """ We need a directory exporter. """
+    return exporter.create_photo_directory_exporter()
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'
