@@ -23,6 +23,10 @@ class EndToEndTest(unittest.TestCase):
       json_file.write('{}')
 
   def disabled_test_it_should_create_html_files(self):
+    """
+    This test needs actual JPEGs, not text files pretending to be.
+    """
+    return
     command_line_arguments = ['-i', '/tmp/fromdir', '-o', '/tmp/todir',
         '-m', '/tmp/fromdir/manifest.json']
     generator = create_gallery_generator(command_line_arguments)
