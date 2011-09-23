@@ -27,7 +27,7 @@ class TemplateWriter(object):
       Performs IO by writing multiple files to disk.
     """
     for template in templates:
-      output_file = self.output_directory + template.get_name()
+      output_file = self.output_directory + template.get_file_name()
       with open(output_file, 'w') as template_out_file:
         template_out_file.write(template.get_contents())
 
