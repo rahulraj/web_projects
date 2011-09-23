@@ -26,11 +26,11 @@ class Exporter(object):
       A list of all the templates that were populated, as
       HtmlFileNameAndContents. There's one for each GalleryItem.
     """
-    import ipdb; ipdb.set_trace()
     contents = gallery_item.get_contents()
     templates = [HtmlFileNameAndContents(gallery_item.get_output_file_name(),
         self.jinja_template.render(gallery_item.as_view()))]
     for entry in contents:
+      #import ipdb; ipdb.set_trace()
       appropriate_exporter = entry.get_exporter()
       templates.extend(appropriate_exporter.export(entry))
     return templates

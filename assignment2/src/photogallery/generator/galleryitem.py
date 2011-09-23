@@ -106,16 +106,17 @@ class JpegPicture(GalleryItem):
     Returns:
       A string caption that can be put in the template.
     """
-    caption = ''
+    caption = []
     attributes = self.get_all_attributes()
     for attribute in attributes:
-      caption += attribute + ": "
+      attribute_string = attribute + ": "
       attribute_value = self.lookup(attribute)
       if attribute_value is None:
         result = 'No data for this image\n'
       else:
         result = attribute_value + "\n"
-      caption += result
+      attribute_string += result
+      caption.append(attribute_string)
     return caption
 
   def as_view(self):
