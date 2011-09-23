@@ -162,9 +162,15 @@ class JpegDirectory(GalleryItem):
     result['images'] = [picture.as_view for picture in images]
     return ImmutableDict(result)
 
-  def get_exporter():
+  def get_exporter(self):
     """ We need a directory exporter. """
     return exporter.create_photo_directory_exporter()
+
+  def get_output_file_name(self):
+    no_spaces = self.name.replace(' ', '-')
+    no_slashes = no_spaces.replace('/', '-')
+    no_backslashes = no_slashes.replace('\\', '-')
+    return no_backslashes + '.html'
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'

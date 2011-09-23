@@ -1,5 +1,5 @@
 import unittest
-from ..generator.galleryitem import JpegPicture, NoSuchMetadata
+from ..generator.galleryitem import JpegPicture, NoSuchMetadata, JpegDirectory
 from ..utils.immutabledict import ImmutableDict
 
 class StubIptcInfo(object):
@@ -71,12 +71,31 @@ class OutputFileNameTest(unittest.TestCase):
     output_name = jpeg_picture.get_output_file_name()
     self.assertEquals('file_name.html', output_name)
 
-  def test_it_should_replace_spaces_with_hyphens(self):
+  def test_picture_should_replace_spaces_with_hyphens(self):
     jpeg_picture = JpegPicture('file name.jpg', self.stub_iptc_info,
         self.metadata_dict)
     output_name = jpeg_picture.get_output_file_name()
     self.assertEquals('file-name.html', output_name)
 
+  def test_simple_directory_output_file_name(self):
+    jpeg_directory = JpegDirectory('directory', [])
+    output_name = jpeg_directory.get_output_file_name()
+    self.assertEquals('directory.html', output_name)
+
+  def test_directory_should_replace_spaces_with_hyphens(self):
+    jpeg_directory = JpegDirectory('directory name', [])
+    output_name = jpeg_directory.get_output_file_name()
+    self.assertEquals('directory-name.html', output_name)
+
+  def test_directory_should_replace_slashes_with_hyphens(self):
+    jpeg_directory = JpegDirectory('directory/name', [])
+    output_name = jpeg_directory.get_output_file_name()
+    self.assertEquals('directory-name.html', output_name)
+
+  def test_directory_should_replace_backslashes_with_hyphens(self):
+    jpeg_directory = JpegDirectory('directory\\name', [])
+    output_name = jpeg_directory.get_output_file_name()
+    self.assertEquals('directory-name.html', output_name)
 
 if __name__ == '__main__':
   unittest.main()
