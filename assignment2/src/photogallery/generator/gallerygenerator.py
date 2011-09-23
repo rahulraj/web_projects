@@ -105,7 +105,7 @@ def parse_command_line_arguments(command_line_arguments):
 
   return ImmutableDict(input_data)
 
-def print_usage(clazz):
+def print_usage():
   print "Please call this script with the following arguments:"
   print "-i my_pictures/ where my_pictures is the directory containing " + \
       "the JPEGs to render (long form: --input-file=)"
