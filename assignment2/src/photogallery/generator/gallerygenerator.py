@@ -7,13 +7,15 @@ from manifestparser import ManifestParser
 from galleryitemfactory import GalleryItemFactory
 import exporter
 import templatewriter
+import copier
 
 class GalleryGenerator(object):
   """
   The top level class for the application. This is the only object
   that the main function interacts with.
   """
-  def __init__(self, gallery_item_factory, path, exporter, template_writer):
+  def __init__(self, gallery_item_factory, input_directory, output_directory,
+      exporter, template_writer):
     """
     Constructor for GalleryGenerator. All needed service objects are injected.
 
@@ -26,9 +28,13 @@ class GalleryGenerator(object):
     assign_injectables(self, locals())
 
   def run(self):
-    top_jpeg_directory = self.gallery_item_factory.create_directory(self.path)
+    # TODO Fix the links between pictures.
+    top_jpeg_directory = \
+        self.gallery_item_factory.create_directory(self.input_directory)
     populated_templates = self.exporter.export(top_jpeg_directory)
     self.template_writer.write_templates(populated_templates)
+    # We need to copy the JPEGs over too
+    copier.copy_jpegs(self.input_directory, self.output_directory)
 
 
 def create_gallery_generator(command_line_arguments):
@@ -51,7 +57,8 @@ def create_gallery_generator(command_line_arguments):
   template_writer = \
       templatewriter.create_template_writer(input_data['output_directory'])
   return GalleryGenerator(gallery_item_factory=factory,
-      path=input_data['input_directory'],
+      input_directory=input_data['input_directory'],
+      output_directory=input_data['output_directory'],
       exporter=template_exporter,
       template_writer=template_writer)
 

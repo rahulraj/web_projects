@@ -29,6 +29,7 @@ class NoSuchMetadata(Exception):
 
 
 class JpegPicture(GalleryItem):
+  # TODO Add back_href
   """ A single immutable JPEG picture """
   def __init__(self, name, iptc_info, lookup_table):
     """
@@ -92,12 +93,6 @@ class JpegPicture(GalleryItem):
       result[attribute_name] = self.lookup(attribute_name)
     return ImmutableDict(result)
 
-  def __str__(self):
-    return 'JpegPicture(' + self.name + ')'
-
-  def __repr__(self):
-    return self.__str__()
-
   def build_caption(self):
     """
     Pretty-prints all of the attributes associated with this JPEG picture
@@ -135,7 +130,14 @@ class JpegPicture(GalleryItem):
 
     result['src'] = self.name
     result['caption_data'] = self.build_caption()
+    result['href'] = self.get_output_file_name()
     return ImmutableDict(result)
+
+  def __str__(self):
+    return 'JpegPicture(' + self.name + ')'
+
+  def __repr__(self):
+    return self.__str__()
 with_getters_for(JpegPicture, 'name')
 
 
