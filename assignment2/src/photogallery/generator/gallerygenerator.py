@@ -15,7 +15,7 @@ class GalleryGenerator(object):
   that the main function interacts with.
   """
   def __init__(self, gallery_item_factory, input_directory, output_directory,
-      css_directory, exporter, template_writer, should_prompt):
+      css_directory, exporter, template_writer):
     """
     Constructor for GalleryGenerator. All needed service objects are injected.
 
@@ -26,20 +26,20 @@ class GalleryGenerator(object):
       css_directory the directory containing the CSS files to copy over.
       exporter the Exporter to populate the templates.
       template_writer the object that writes the templates to disk.
-      should_prompt whether to prompt the user for directory names.
     """
     assign_injectables(self, locals())
 
   def run(self):
     # TODO Fix the links between pictures.
     top_jpeg_directory = \
-        self.gallery_item_factory.create_directory(self.input_directory,
-            self.should_prompt)
+        self.gallery_item_factory.create_directory(self.input_directory)
     populated_templates = self.exporter.export(top_jpeg_directory)
     self.template_writer.write_templates(populated_templates)
     # We need to copy the JPEGs over too, and the CSS
     copier.copy_jpegs(self.input_directory, self.output_directory)
     copier.copy_css(self.css_directory, self.output_directory)
+    # Also grab a copy of directory_image.jpg
+    copier.copy_jpegs(self.css_directory, self.output_directory)
 
 
 def create_gallery_generator(command_line_arguments, css_directory):
@@ -58,7 +58,7 @@ def create_gallery_generator(command_line_arguments, css_directory):
   with open(input_data['manifest_file'], 'r') as manifest_file:
     parser = ManifestParser(manifest_file)
     lookup_table = parser.get_json_data()
-  factory = GalleryItemFactory(lookup_table)
+  factory = GalleryItemFactory(lookup_table, input_data['should_prompt'])
   template_exporter = exporter.create_photo_directory_exporter()
   template_writer = \
       templatewriter.create_template_writer(input_data['output_directory'])
@@ -67,8 +67,7 @@ def create_gallery_generator(command_line_arguments, css_directory):
       output_directory=input_data['output_directory'],
       css_directory=css_directory,
       exporter=template_exporter,
-      template_writer=template_writer,
-      should_prompt=input_data['should_prompt'])
+      template_writer=template_writer)
 
 def parse_command_line_arguments(command_line_arguments):
   """
