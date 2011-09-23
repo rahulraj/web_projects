@@ -54,10 +54,10 @@ class JpegPictureTest(unittest.TestCase):
     verifies that the given information is in there.
     """
     caption = self.jpeg_picture.build_caption()
-    self.assertTrue('Daniel Jackson' in caption)
-    self.assertTrue('Jerusalem' in caption)
-    self.assertTrue('Israel' in caption)
-    self.assertTrue('Hike in Ein Kerem' in caption)
+    self.assertTrue(any(map(lambda line: 'Daniel Jackson' in line, caption)))
+    self.assertTrue(any(map(lambda line: 'Jerusalem' in line, caption)))
+    self.assertTrue(any(map(lambda line: 'Israel' in line, caption)))
+    self.assertTrue(any(map(lambda line: 'Hike in Ein Kerem' in line, caption)))
 
 class OutputFileNameTest(unittest.TestCase):
   def setUp(self):
