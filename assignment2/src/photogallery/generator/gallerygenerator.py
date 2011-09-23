@@ -27,8 +27,7 @@ class GalleryGenerator(object):
 
   def run(self):
     top_jpeg_directory = self.gallery_item_factory.create_directory(self.path)
-    directory_view = top_jpeg_directory.as_view()
-    populated_templates = self.exporter.export(directory_view)
+    populated_templates = self.exporter.export(top_jpeg_directory)
     self.template_writer.write_templates(populated_templates)
 
 
