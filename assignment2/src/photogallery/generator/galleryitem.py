@@ -21,6 +21,8 @@ class GalleryItem(object):
   def get_exporter(self):
     raise NotImplementedError
 
+  def get_output_file_name(self):
+    raise NotImplementedError
 
 class NoSuchMetadata(Exception):
   pass
@@ -47,6 +49,14 @@ class JpegPicture(GalleryItem):
   def get_exporter(self):
     """ To export self, we need the picture detail template. """
     return exporter.create_photo_detail_exporter()
+
+  def get_output_file_name(self):
+    """
+    Convert self.name to an appropriate name for the output file.
+    It should end in .html and not have any spaces.
+    """
+    name_without_spaces = self.name.replace(' ', '-')
+    return name_without_spaces.replace('jpg', 'html')
 
   def lookup(self, attribute_name):
     """

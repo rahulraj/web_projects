@@ -59,5 +59,24 @@ class JpegPictureTest(unittest.TestCase):
     self.assertTrue('Israel' in caption)
     self.assertTrue('Hike in Ein Kerem' in caption)
 
+class OutputFileNameTest(unittest.TestCase):
+  def setUp(self):
+    self.stub_iptc_info = StubIptcInfo()
+    self.metadata_dict = ImmutableDict({'Photographer': 80, 'City': 90,
+        'Country': 101, 'Caption': 120})
+
+  def test_simple_jpeg_picture_output_file_name(self):
+    jpeg_picture = JpegPicture('file_name.jpg', self.stub_iptc_info,
+        self.metadata_dict)
+    output_name = jpeg_picture.get_output_file_name()
+    self.assertEquals('file_name.html', output_name)
+
+  def test_it_should_replace_spaces_with_hyphens(self):
+    jpeg_picture = JpegPicture('file name.jpg', self.stub_iptc_info,
+        self.metadata_dict)
+    output_name = jpeg_picture.get_output_file_name()
+    self.assertEquals('file-name.html', output_name)
+
+
 if __name__ == '__main__':
   unittest.main()
