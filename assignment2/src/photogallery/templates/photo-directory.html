@@ -7,6 +7,7 @@
                alt_text - the alt text for the image for screenreaders
                src - the file name of the image, to pass to the src attributes
                      of the img tag.
+               href - the relative link to the image's photo-detail page.
   #}
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -15,7 +16,9 @@
   <body>
     <ul>
       {% for image in images %}
-        <li><img alt="{{ image.alt_text }}" src="{{ image.src }}"></li>
+        <li><a href="{{ image.href }}">
+          <img alt="{{ image.alt_text }}" src="{{ image.src }}">
+        </a></li>
       {% endfor %}
     </ul>
   </body>
