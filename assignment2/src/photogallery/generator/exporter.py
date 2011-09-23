@@ -27,7 +27,7 @@ class Exporter(object):
       HtmlFileNameAndContents. There's one for each GalleryItem.
     """
     contents = gallery_item.get_contents()
-    templates = [HtmlFileNameAndContents(gallery_item.get_name(), 
+    templates = [HtmlFileNameAndContents(gallery_item.get_output_file_name(),
         gallery_item.as_view())]
     for entry in contents:
       appropriate_exporter = entry.get_exporter()
