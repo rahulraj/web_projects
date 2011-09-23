@@ -167,7 +167,11 @@ class JpegDirectory(GalleryItem):
     return exporter.create_photo_directory_exporter()
 
   def get_output_file_name(self):
-    no_spaces = self.name.replace(' ', '-')
+    if self.name[0] == '/':
+      to_process = self.name[1:]
+    else:
+      to_process = self.name
+    no_spaces = to_process.replace(' ', '-')
     no_slashes = no_spaces.replace('/', '-')
     no_backslashes = no_slashes.replace('\\', '-')
     no_dots = no_backslashes.replace('.', '-')
