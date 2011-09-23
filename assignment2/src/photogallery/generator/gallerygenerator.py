@@ -2,6 +2,7 @@ import os
 import getopt
 import sys
 from ..utils.inject import assign_injectables
+from ..utils.immutabledict import ImmutableDict
 import template_writer
 
 class GalleryGenerator(object):
@@ -33,6 +34,16 @@ def create_gallery_generator(command_line_arguments):
   Given command line arguments, wire up the application and return
   it to the main function.
 
+  Args:
+    command_line_arguments the command line arguments with the program
+                           name removed.
+  """
+  input_data = self.parse_command_line_arguments(command_line_arguments)
+  print 'Still under construction!'
+  sys.exit(0)
+
+def parse_command_line_arguments(command_line_arguments):
+  """
   Acceptable command line arguments are:
   -h, --help -> Prints a help message
   --input-directory -> The root directory for the gallery (required)
@@ -42,7 +53,6 @@ def create_gallery_generator(command_line_arguments):
     command_line_arguments the command line arguments with the program
                            name removed.
   """
-
   try:
     options, arguments = getopt.getopt(command_line_arguments,
         "hi:o:", ['help', 'input-directory=', 'output-directory='])
@@ -50,27 +60,27 @@ def create_gallery_generator(command_line_arguments):
     print_usage()
     sys.exit(2)
 
-  has_input_directory = has_output_directory = False
+  input_data = {}
   for option, argument in options:
     if option in ('-h', '--help'):
       print_usage()
       sys.exit(0)
     elif option in ('-i', '--input-directory'):
-      input_directory = argument
-      if not os.path.isdir(input_directory):
-        print input_directory, "doesn't appear to be a directory."
+      if os.path.isdir(argument):
+        input_data['input_directory'] = argument
+      else:
+        print argument, "doesn't appear to be a directory."
         print_usage()
         sys.exit(1)
-      has_input_directory = True
     elif option in ('-o', '--output-directory'):
-      output_directory = argument
-      has_output_directory = True
+      input_data['output_directory'] = argument
 
-  if not has_input_directory or not has_output_directory:
+  if 'input_directory' not in input_data \
+      or 'output_directory' not in input_data:
     print_usage() 
     sys.exit(1)
-  print 'Still under construction!'
-  sys.exit(0)
+
+  return ImmutableDict(input_data)
 
 def print_usage(clazz):
   print "Please call this script with the following arguments:"
