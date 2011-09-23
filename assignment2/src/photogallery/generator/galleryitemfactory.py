@@ -6,8 +6,31 @@ from galleryitem import JpegPicture, JpegDirectory
 from ..utils.inject import assign_injectables
 
 def is_jpeg_file(file_name):
-  jpeg_file_re = re.compile(r'\.jpg$')
-  return jpeg_file_re.search(file_name) != None
+  """
+  Determine if a file is labeled as a JPEG.
+
+  Args:
+    file_name the name of the file.
+
+  Returns:
+    True if the file ends with .jpg.
+  """
+  return file_is_of_type(file_name, 'jpg')
+
+def file_is_of_type(file_name, extension):
+  """
+  Return whether a file is of a certain type.
+
+  Args:
+    file_name the name of the file to test.
+    extension the part of the name after the . which will be checked
+              with a regular expression. 
+
+  Returns:
+    True if file_name ends with extension.
+  """
+  type_re = re.compile('\.%s' % extension)
+  return type_re.search(file_name) != None
 
 
 class GalleryItemFactory(object):
