@@ -16,11 +16,13 @@
   <body>
     <p><img alt="{{ alt_text }}" src="{{ src }}"></p>
 
-    <ul> 
-      {% for datum in caption_data %}
-        <li>{{ datum }}</li>
-      {% endfor %} 
-    </ul>
+    <section>
+      <ul> 
+        {% for datum in caption_data %}
+          <li>{{ datum }}</li>
+        {% endfor %} 
+      </ul>
+    </section>
 
     <a href="{{ back_href }}">Back to Directory</a>
   </body>

@@ -78,37 +78,37 @@ class OutputFileNameTest(unittest.TestCase):
     self.assertEquals('file-name.html', output_name)
 
   def test_simple_directory_output_file_name(self):
-    jpeg_directory = JpegDirectory('directory', [])
+    jpeg_directory = JpegDirectory('directory', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory.html', output_name)
 
   def test_directory_should_replace_spaces_with_hyphens(self):
-    jpeg_directory = JpegDirectory('directory name', [])
+    jpeg_directory = JpegDirectory('directory name', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory-name.html', output_name)
 
   def test_directory_should_replace_slashes_with_hyphens(self):
-    jpeg_directory = JpegDirectory('directory/name', [])
+    jpeg_directory = JpegDirectory('directory/name', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory-name.html', output_name)
 
   def test_directory_should_replace_backslashes_with_hyphens(self):
-    jpeg_directory = JpegDirectory('directory\\name', [])
+    jpeg_directory = JpegDirectory('directory\\name', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory-name.html', output_name)
 
   def test_directory_should_replace_dots_with_hyphens(self):
-    jpeg_directory = JpegDirectory('directory.name', [])
+    jpeg_directory = JpegDirectory('directory.name', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory-name.html', output_name)
 
   def test_directory_should_remove_a_leading_slash(self):
-    jpeg_directory = JpegDirectory('/directory/name', [])
+    jpeg_directory = JpegDirectory('/directory/name', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory-name.html', output_name)
 
   def test_directory_should_not_have_trailing_dashes(self):
-    jpeg_directory = JpegDirectory('/directory/name/', [])
+    jpeg_directory = JpegDirectory('/directory/name/', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory-name.html', output_name)
 

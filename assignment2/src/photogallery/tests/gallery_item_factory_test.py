@@ -42,7 +42,7 @@ class GalleryItemFactoryTest(unittest.TestCase):
       return name in self.directory_names
 
     self.file_finder = SimpleStubOsModule(self.files)
-    self.factory = GalleryItemFactory(None,
+    self.factory = GalleryItemFactory(lookup_table=None, should_prompt=False,
         iptc_info_constructor=StubIptcInfoConstructor,
         file_finder=self.file_finder, is_directory=is_directory)
 
@@ -76,7 +76,7 @@ class GalleryItemFactoryTest(unittest.TestCase):
     def is_directory(name):
       return name == '/first' or name == 'second'
 
-    self.factory = GalleryItemFactory(None,
+    self.factory = GalleryItemFactory(lookup_table=None, should_prompt=False,
         iptc_info_constructor=StubIptcInfoConstructor,
         file_finder=self.file_finder, is_directory=is_directory)
 

@@ -15,7 +15,7 @@ class GalleryGenerator(object):
   that the main function interacts with.
   """
   def __init__(self, gallery_item_factory, input_directory, output_directory,
-      css_directory, exporter, template_writer):
+      css_directory, exporter, template_writer, should_prompt):
     """
     Constructor for GalleryGenerator. All needed service objects are injected.
 
@@ -25,14 +25,16 @@ class GalleryGenerator(object):
       output_directory the directory to which files should be written.
       css_directory the directory containing the CSS files to copy over.
       exporter the Exporter to populate the templates.
-      template_writer the object that writes the templates to disk
+      template_writer the object that writes the templates to disk.
+      should_prompt whether to prompt the user for directory names.
     """
     assign_injectables(self, locals())
 
   def run(self):
     # TODO Fix the links between pictures.
     top_jpeg_directory = \
-        self.gallery_item_factory.create_directory(self.input_directory)
+        self.gallery_item_factory.create_directory(self.input_directory,
+            self.should_prompt)
     populated_templates = self.exporter.export(top_jpeg_directory)
     self.template_writer.write_templates(populated_templates)
     # We need to copy the JPEGs over too, and the CSS
@@ -65,14 +67,17 @@ def create_gallery_generator(command_line_arguments, css_directory):
       output_directory=input_data['output_directory'],
       css_directory=css_directory,
       exporter=template_exporter,
-      template_writer=template_writer)
+      template_writer=template_writer,
+      should_prompt=input_data['should_prompt'])
 
 def parse_command_line_arguments(command_line_arguments):
   """
   Acceptable command line arguments are:
   -h, --help -> Prints a help message
-  --input-directory -> The root directory for the gallery (required)
-  --output-directory -> the output directory for the HTML (required)
+  -i, --input-directory -> The root directory for the gallery (required)
+  -o, --output-directory -> the output directory for the HTML (required)
+  -n, --no-prompt -> Automatically use inferred names for directories,
+                 instead of prompting the user.
 
   Args:
     command_line_arguments the command line arguments with the program
@@ -80,13 +85,13 @@ def parse_command_line_arguments(command_line_arguments):
   """
   try:
     options, arguments = getopt.getopt(command_line_arguments,
-        "hi:o:m:", ['help', 'input-directory=', 'output-directory=',
-          'manifest-file='])
+        "hi:o:m:n", ['help', 'input-directory=', 'output-directory=',
+          'manifest-file=', 'no-prompt'])
   except getopt.GetoptError:
     print_usage()
     sys.exit(2)
 
-  input_data = {}
+  input_data = {'should_prompt': True}
   for option, argument in options:
     if option in ('-h', '--help'):
       print_usage()
@@ -107,6 +112,8 @@ def parse_command_line_arguments(command_line_arguments):
         print argument, "file couldn't be read for some reason."
         print_usage()
         sys.exit(1)
+    elif option in ('-n', '--no-prompt'):
+      input_data['should_prompt'] = False
 
   if 'input_directory' not in input_data \
       or 'output_directory' not in input_data \
@@ -125,5 +132,7 @@ def print_usage():
   print "-m manifest.json where manifest.json is a manifest file " + \
       "describing the JPEGs' metadata as a JSON string (long form:" + \
         "--manifest_file=)"
+  print "-n Automatically infer directory titles instead of asking, " + \
+      "will ask by default. (long form: --no-prompt)"
   print "Calling this script with -h or --help prints this message " + \
       "and exits."

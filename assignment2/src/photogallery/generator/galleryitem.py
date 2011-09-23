@@ -149,13 +149,14 @@ def directory_name_to_html_file_name(directory_name):
     return no_illegal_chars + '.html'
 
 class JpegDirectory(GalleryItem):
-  def __init__(self, name, contents):
+  def __init__(self, name, contents, should_prompt):
     """
     Constructor for JpegDirectories.
 
     Args:
       name the name of the directory.
       contents a list of GalleryItems inside the directory.
+      should_prompt whether we should ask the user for a readable title.
     """
     assign_injectables(self, locals())
 

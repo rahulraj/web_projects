@@ -51,13 +51,16 @@ class GalleryItemFactory(object):
   Class to bootstrap the application by reading the disk and
   creating GalleryItems from the existing JPEGs and subdirectories.
   """
-  def __init__(self, lookup_table,  iptc_info_constructor=IPTCInfo,
+  def __init__(self, lookup_table, should_prompt,
+      iptc_info_constructor=IPTCInfo,
       file_finder=os, is_directory=os.path.isdir):
     """
     Constructor for GalleryItemFactory
 
     Args:
       lookup_table the lookup_table that the files use to search IPTCInfo.data.
+      should_prompt whether the program should prompt the user for directory 
+                    names.
       iptc_info_constructor the constructor for IPTCInfo objects that the files 
                             will use to lookup metadata (defaults to IPTCInfo).
       file_finder the object that finds the files (defaults to os).
@@ -92,4 +95,4 @@ class GalleryItemFactory(object):
     directory_names = filter(self.is_directory, file_names)
     jpeg_directories = map(self.create_directory, directory_names)
     jpeg_pictures.extend(jpeg_directories)
-    return JpegDirectory(path, jpeg_pictures)
+    return JpegDirectory(path, jpeg_pictures, self.should_prompt)
