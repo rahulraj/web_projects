@@ -170,7 +170,8 @@ class JpegDirectory(GalleryItem):
     no_spaces = self.name.replace(' ', '-')
     no_slashes = no_spaces.replace('/', '-')
     no_backslashes = no_slashes.replace('\\', '-')
-    return no_backslashes + '.html'
+    no_dots = no_backslashes.replace('.', '-')
+    return no_dots + '.html'
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'
