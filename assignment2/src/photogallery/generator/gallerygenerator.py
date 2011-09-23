@@ -2,6 +2,7 @@ import os
 import getopt
 import sys
 from ..utils.inject import assign_injectables
+import template_writer
 
 class GalleryGenerator(object):
   """
@@ -49,6 +50,7 @@ def create_gallery_generator(command_line_arguments):
     print_usage()
     sys.exit(2)
 
+  has_input_directory = has_output_directory = False
   for option, argument in options:
     if option in ('-h', '--help'):
       print_usage()
@@ -59,8 +61,14 @@ def create_gallery_generator(command_line_arguments):
         print input_directory, "doesn't appear to be a directory."
         print_usage()
         sys.exit(1)
+      has_input_directory = True
     elif option in ('-o', '--output-directory'):
       output_directory = argument
+      has_output_directory = True
+
+  if not has_input_directory or not has_output_directory:
+    print_usage() 
+    sys.exit(1)
   print 'Still under construction!'
   sys.exit(0)
 

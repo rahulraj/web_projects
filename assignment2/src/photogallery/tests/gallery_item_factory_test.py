@@ -27,6 +27,11 @@ class NestedDirectoryOsModule(object):
       return []
 
 
+class StubIptcInfoConstructor(object):
+  def __init__(self, file_name):
+    pass
+
+
 class GalleryItemFactoryTest(unittest.TestCase):
   def setUp(self):
     self.files = ['6170_sample_image_01.jpg', '6170_sample_image_02.jpg'] 
@@ -37,7 +42,8 @@ class GalleryItemFactoryTest(unittest.TestCase):
       return name in self.directory_names
 
     self.file_finder = SimpleStubOsModule(self.files)
-    self.factory = GalleryItemFactory(None, None,
+    self.factory = GalleryItemFactory(None,
+        iptc_info_constructor=StubIptcInfoConstructor,
         file_finder=self.file_finder, is_directory=is_directory)
 
   def test_it_should_create_JpegPictures_for_all_jpg_files(self):
@@ -70,7 +76,8 @@ class GalleryItemFactoryTest(unittest.TestCase):
     def is_directory(name):
       return name == '/first' or name == 'second'
 
-    self.factory = GalleryItemFactory(None, None,
+    self.factory = GalleryItemFactory(None,
+        iptc_info_constructor=StubIptcInfoConstructor,
         file_finder=self.file_finder, is_directory=is_directory)
 
     first_directory = self.factory.create_directory('/first')
