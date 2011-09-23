@@ -28,7 +28,7 @@ class Exporter(object):
     """
     contents = gallery_item.get_contents()
     templates = [HtmlFileNameAndContents(gallery_item.get_output_file_name(),
-        gallery_item.as_view())]
+        self.jinja_template.render(gallery_item.as_view()))]
     for entry in contents:
       appropriate_exporter = entry.get_exporter()
       templates.extend(appropriate_exporter.export(entry))
