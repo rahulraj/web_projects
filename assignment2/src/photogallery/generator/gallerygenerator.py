@@ -15,13 +15,15 @@ class GalleryGenerator(object):
   that the main function interacts with.
   """
   def __init__(self, gallery_item_factory, input_directory, output_directory,
-      exporter, template_writer):
+      css_directory, exporter, template_writer):
     """
     Constructor for GalleryGenerator. All needed service objects are injected.
 
     Args:
       gallery_item_factory the GalleryItemFactory that creates the items.
-      path the path of the directory to start in.
+      input_directory the path of the directory to start in.
+      output_directory the directory to which files should be written.
+      css_directory the directory containing the CSS files to copy over.
       exporter the Exporter to populate the templates.
       template_writer the object that writes the templates to disk
     """
@@ -33,11 +35,12 @@ class GalleryGenerator(object):
         self.gallery_item_factory.create_directory(self.input_directory)
     populated_templates = self.exporter.export(top_jpeg_directory)
     self.template_writer.write_templates(populated_templates)
-    # We need to copy the JPEGs over too
+    # We need to copy the JPEGs over too, and the CSS
     copier.copy_jpegs(self.input_directory, self.output_directory)
+    copier.copy_css(self.css_directory, self.output_directory)
 
 
-def create_gallery_generator(command_line_arguments):
+def create_gallery_generator(command_line_arguments, css_directory):
   """
   Given command line arguments, wire up the application and return
   it to the main function. This requires creating most of the objects
@@ -46,6 +49,7 @@ def create_gallery_generator(command_line_arguments):
   Args:
     command_line_arguments the command line arguments with the program
                            name removed.
+    css_directory the directory containing the CSS files.
   """
   input_data = parse_command_line_arguments(command_line_arguments)
   # First parse the manifest file
@@ -59,6 +63,7 @@ def create_gallery_generator(command_line_arguments):
   return GalleryGenerator(gallery_item_factory=factory,
       input_directory=input_data['input_directory'],
       output_directory=input_data['output_directory'],
+      css_directory=css_directory,
       exporter=template_exporter,
       template_writer=template_writer)
 

@@ -51,7 +51,6 @@ class HtmlFileNameAndContents(object):
   """
   def __init__(self, file_name, contents):
     assign_injectables(self, locals())
-
 with_getters_for(HtmlFileNameAndContents, 'file_name', 'contents')
 
 def create_photo_detail_exporter():

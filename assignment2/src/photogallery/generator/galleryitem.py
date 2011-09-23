@@ -29,7 +29,6 @@ class NoSuchMetadata(Exception):
 
 
 class JpegPicture(GalleryItem):
-  # TODO Add back_href
   """ A single immutable JPEG picture """
   def __init__(self, name, back_href, iptc_info, lookup_table):
     """

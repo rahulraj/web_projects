@@ -11,15 +11,19 @@
   #}
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="gallery-style.css">
     <title>{{ title }}</title>
   </head>
   <body>
-    <ul>
-      {% for image in images %}
-        <li><a href="{{ image.href }}">
-          <img alt="{{ image.alt_text }}" src="{{ image.src }}">
-        </a></li>
-      {% endfor %}
-    </ul>
+    <header> <h1> {{ title }} </h1> </header>
+    <section>
+      <ul>
+        {% for image in images %}
+          <li><a href="{{ image.href }}">
+            <img alt="{{ image.alt_text }}" src="{{ image.src }}">
+          </a></li>
+        {% endfor %}
+      </ul>
+    </section>
   </body>
 </html>
