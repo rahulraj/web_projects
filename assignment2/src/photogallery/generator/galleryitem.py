@@ -100,7 +100,12 @@ class JpegPicture(GalleryItem):
     attributes = self.get_all_attributes()
     for attribute in attributes:
       caption += attribute + ": "
-      caption += self.lookup(attribute) + "\n"
+      attribute_value = self.lookup(attribute)
+      if attribute_value is None:
+        result = 'No data for this image\n'
+      else:
+        result = attribute_value + "\n"
+      caption += result
     return caption
 
   def as_view(self):
