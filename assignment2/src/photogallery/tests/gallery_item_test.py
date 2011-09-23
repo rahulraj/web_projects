@@ -107,6 +107,11 @@ class OutputFileNameTest(unittest.TestCase):
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory-name.html', output_name)
 
+  def test_directory_should_not_have_trailing_dashes(self):
+    jpeg_directory = JpegDirectory('/directory/name/', [])
+    output_name = jpeg_directory.get_output_file_name()
+    self.assertEquals('directory-name.html', output_name)
+
 
 if __name__ == '__main__':
   unittest.main()

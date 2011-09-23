@@ -170,15 +170,12 @@ class JpegDirectory(GalleryItem):
     return exporter.create_photo_directory_exporter()
 
   def get_output_file_name(self):
-    if self.name[0] == '/':
-      to_process = self.name[1:]
-    else:
-      to_process = self.name
-    no_spaces = to_process.replace(' ', '-')
-    no_slashes = no_spaces.replace('/', '-')
-    no_backslashes = no_slashes.replace('\\', '-')
-    no_dots = no_backslashes.replace('.', '-')
-    return no_dots + '.html'
+    # Remove leading and trailing /, if they exist
+    to_process = self.name.strip('/')
+    no_illegal_chars = to_process.replace(' ', '-').replace('/', '-'). \
+        replace('\\', '-').replace('.', '-')
+
+    return no_illegal_chars + '.html'
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'
