@@ -108,9 +108,9 @@ def parse_command_line_arguments(command_line_arguments):
 def print_usage():
   print "Please call this script with the following arguments:"
   print "-i my_pictures/ where my_pictures is the directory containing " + \
-      "the JPEGs to render (long form: --input-file=)"
+      "the JPEGs to render (long form: --input-directory=)"
   print "-o my_site/ where my_site is the directory in which to " + \
-      "write the output files (long form: --output-file=)"
+      "write the output files (long form: --output-directory=)"
   print "-m manifest.json where manifest.json is a manifest file " + \
       "describing the JPEGs' metadata as a JSON string (long form:" + \
         "--manifest_file=)"
