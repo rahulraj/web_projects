@@ -17,6 +17,19 @@ def is_jpeg_file(file_name):
   """
   return file_is_of_type(file_name, 'jpg')
 
+def is_css_file(file_name):
+  """
+  Determine if a file is labeled as CSS.
+
+  Args:
+    file_name the name of the file.
+
+  Returns:
+    True if the file ends with .css.
+  """
+  return file_is_of_type(file_name, 'css')
+  
+
 def file_is_of_type(file_name, extension):
   """
   Return whether a file is of a certain type.
@@ -29,7 +42,7 @@ def file_is_of_type(file_name, extension):
   Returns:
     True if file_name ends with extension.
   """
-  type_re = re.compile('\.%s' % extension)
+  type_re = re.compile(r'\.%s' % extension)
   return type_re.search(file_name) != None
 
 
