@@ -143,7 +143,7 @@ class JpegDirectory(GalleryItem):
     """
     result = {}
     result['title'] = self.name
-    images = [jpeg for jpeg in self.contents() if isinstance(jpeg, JpegPicture)]
+    images = [jpeg for jpeg in self.contents if isinstance(jpeg, JpegPicture)]
     result['images'] = [picture.as_picture_view for picture in images]
     return ImmutableDict(result)
 
