@@ -3,7 +3,10 @@ import getopt
 import sys
 from ..utils.inject import assign_injectables
 from ..utils.immutabledict import ImmutableDict
-import template_writer
+from manifestparser import ManifestParser
+from galleryitemfactory import GalleryItemFactory
+import exporter
+import templatewriter
 
 class GalleryGenerator(object):
   """
@@ -24,7 +27,7 @@ class GalleryGenerator(object):
 
   def run(self):
     top_jpeg_directory = self.gallery_item_factory.create_directory(self.path)
-    directory_view = top_directory.as_directory_view()
+    directory_view = top_jpeg_directory.as_directory_view()
     populated_templates = self.exporter.export(directory_view)
     self.template_writer.write_templates(populated_templates)
 
@@ -32,15 +35,26 @@ class GalleryGenerator(object):
 def create_gallery_generator(command_line_arguments):
   """
   Given command line arguments, wire up the application and return
-  it to the main function.
+  it to the main function. This requires creating most of the objects
+  described in the other files from this directory.
 
   Args:
     command_line_arguments the command line arguments with the program
                            name removed.
   """
-  input_data = self.parse_command_line_arguments(command_line_arguments)
-  print 'Still under construction!'
-  sys.exit(0)
+  input_data = parse_command_line_arguments(command_line_arguments)
+  # First parse the manifest file
+  with open(input_data['manifest_file'], 'r') as manifest_file:
+    parser = ManifestParser(manifest_file)
+    lookup_table = parser.get_json_data()
+  factory = GalleryItemFactory(lookup_table)
+  template_exporter = exporter.create_photo_directory_exporter()
+  template_writer = \
+      templatewriter.create_template_writer(input_data['output_directory'])
+  return GalleryGenerator(gallery_item_factory=factory,
+      path=input_data['input_directory'],
+      exporter=template_exporter,
+      template_writer=template_writer)
 
 def parse_command_line_arguments(command_line_arguments):
   """

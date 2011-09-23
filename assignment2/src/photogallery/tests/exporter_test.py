@@ -28,6 +28,9 @@ class StubJpegPicture(object):
   def get_exporter(self):
     return Exporter(MockJinja2Template(picture_values))
 
+  def get_name(self):
+    return self.src
+
 class StubJpegDirectory(object):
   def __init__(self, title, images):
     assign_injectables(self, locals())
@@ -40,6 +43,9 @@ class StubJpegDirectory(object):
 
   def get_exporter(self):
     return Exporter(MockJinja2Template(directory_values))
+
+  def get_name(self):
+    return self.title
 
 class SimpleExporterTest(unittest.TestCase):
   def setUp(self):

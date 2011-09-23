@@ -9,6 +9,9 @@ class GalleryItem(object):
   A single item in the gallery, can be either a JPEG or a
   directory containing other GalleryItems.     
   """
+  def get_name(self):
+    raise NotImplementedError
+
   def as_view(self):
     raise NotImplementedError
 
