@@ -27,12 +27,21 @@ class Exporter(object):
       HtmlFileNameAndContents. There's one for each GalleryItem.
     """
     contents = gallery_item.get_contents()
+    # Put the file names in alphabetical order
+    def sorter(first, second):
+      if first.get_name() > second.get_name():
+        return 1
+      elif first.get_name() < second.get_name():
+        return -1
+      else:
+        return 0
+    contents.sort(sorter)
     templates = [HtmlFileNameAndContents(gallery_item.get_output_file_name(),
         self.jinja_template.render(gallery_item.as_view()))]
     for entry in contents:
-      #import ipdb; ipdb.set_trace()
       appropriate_exporter = entry.get_exporter()
       templates.extend(appropriate_exporter.export(entry))
+    
     return templates
 
 class HtmlFileNameAndContents(object):
@@ -42,6 +51,7 @@ class HtmlFileNameAndContents(object):
   """
   def __init__(self, file_name, contents):
     assign_injectables(self, locals())
+
 with_getters_for(HtmlFileNameAndContents, 'file_name', 'contents')
 
 def create_photo_detail_exporter():
