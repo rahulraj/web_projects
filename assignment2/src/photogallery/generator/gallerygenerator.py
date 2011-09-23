@@ -55,7 +55,8 @@ def parse_command_line_arguments(command_line_arguments):
   """
   try:
     options, arguments = getopt.getopt(command_line_arguments,
-        "hi:o:", ['help', 'input-directory=', 'output-directory='])
+        "hi:o:m:", ['help', 'input-directory=', 'output-directory=',
+          'manifest-file='])
   except getopt.GetoptError:
     print_usage()
     sys.exit(2)
@@ -74,9 +75,17 @@ def parse_command_line_arguments(command_line_arguments):
         sys.exit(1)
     elif option in ('-o', '--output-directory'):
       input_data['output_directory'] = argument
+    elif option in ('-m', '--manifest-file'):
+      if os.path.isfile(argument):
+        input_data['manifest_file'] = argument
+      else:
+        print argument, "file couldn't be read for some reason."
+        print_usage()
+        sys.exit(1)
 
   if 'input_directory' not in input_data \
-      or 'output_directory' not in input_data:
+      or 'output_directory' not in input_data \
+      or 'manifest_file' not in input_data:
     print_usage() 
     sys.exit(1)
 
@@ -88,5 +97,8 @@ def print_usage(clazz):
       "the JPEGs to render (long form: --input-file=)"
   print "-o my_site/ where my_site is the directory in which to " + \
       "write the output files (long form: --output-file=)"
+  print "-m manifest.json where manifest.json is a manifest file " + \
+      "describing the JPEGs' metadata as a JSON string (long form:" + \
+        "--manifest_file=)"
   print "Calling this script with -h or --help prints this message " + \
       "and exits."
