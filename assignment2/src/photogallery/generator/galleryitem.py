@@ -31,12 +31,13 @@ class NoSuchMetadata(Exception):
 class JpegPicture(GalleryItem):
   # TODO Add back_href
   """ A single immutable JPEG picture """
-  def __init__(self, name, iptc_info, lookup_table):
+  def __init__(self, name, back_href, iptc_info, lookup_table):
     """
     Constructor for JpegPictures.
 
     Args:
       name the name of the JPEG file.
+      back_href the link to the parent directory.
       iptc_info the IPTCInfo object wrapped around the file.
       lookup_table an immutable dictionary mapping metadata
                    attribute names to their indices in iptc_info.data.
@@ -131,6 +132,7 @@ class JpegPicture(GalleryItem):
     result['src'] = self.name
     result['caption_data'] = self.build_caption()
     result['href'] = self.get_output_file_name()
+    result['back_href'] = self.back_href
     return ImmutableDict(result)
 
   def __str__(self):
@@ -140,6 +142,12 @@ class JpegPicture(GalleryItem):
     return self.__str__()
 with_getters_for(JpegPicture, 'name')
 
+def directory_name_to_html_file_name(directory_name):
+    # Remove leading and trailing /, if they exist
+    to_process = directory_name.strip('/')
+    no_illegal_chars = to_process.replace(' ', '-').replace('/', '-'). \
+        replace('\\', '-').replace('.', '-')
+    return no_illegal_chars + '.html'
 
 class JpegDirectory(GalleryItem):
   def __init__(self, name, contents):
@@ -160,7 +168,7 @@ class JpegDirectory(GalleryItem):
       An ImmutableDict with data about this object to be displayed.
     """
     result = {}
-    result['title'] = self.name
+    result['title'] = self.get_human_readable_title()
     images = [jpeg for jpeg in self.contents if isinstance(jpeg, JpegPicture)]
     result['images'] = [picture.as_view() for picture in images]
     return ImmutableDict(result)
@@ -170,12 +178,11 @@ class JpegDirectory(GalleryItem):
     return exporter.create_photo_directory_exporter()
 
   def get_output_file_name(self):
-    # Remove leading and trailing /, if they exist
-    to_process = self.name.strip('/')
-    no_illegal_chars = to_process.replace(' ', '-').replace('/', '-'). \
-        replace('\\', '-').replace('.', '-')
+    return directory_name_to_html_file_name(self.name)
 
-    return no_illegal_chars + '.html'
+  def get_human_readable_title(self):
+    file_name = self.get_output_file_name()
+    return file_name.replace('-', ' ').replace('_', ' ').rstrip('.html')
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'

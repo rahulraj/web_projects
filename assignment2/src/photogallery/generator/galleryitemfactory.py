@@ -2,7 +2,7 @@ import os
 import re
 import os.path
 from iptcinfo import IPTCInfo
-from galleryitem import JpegPicture, JpegDirectory
+from galleryitem import JpegPicture, JpegDirectory, directory_name_to_html_file_name
 from ..utils.inject import assign_injectables
 
 def is_jpeg_file(file_name):
@@ -81,6 +81,7 @@ class GalleryItemFactory(object):
       full_file_name = os.path.join(path, name)
       try:
         jpeg_pictures.append(JpegPicture(name,
+          directory_name_to_html_file_name(path),
           self.iptc_info_constructor(full_file_name),
             self.lookup_table))
       except IOError:
