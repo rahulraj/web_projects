@@ -10,20 +10,21 @@
                href - the relative link to the image's photo-detail page.
   #}
   <head>
+    <!-- Generated from the photo-directory.html template -->
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <link rel="stylesheet" type="text/css" href="gallery-style.css">
-    <title>{{ title }}</title>
+    <title>Directory Detail {{ title }}</title>
   </head>
   <body>
-    <header> <h1> {{ title }} </h1> </header>
-    <section>
-      <ul>
+    <header> <h1>Directory Detail {{ title }} </h1> </header>
+    <div id="main">
+      <ul id="pictureList">
         {% for image in images %}
           <li><a href="{{ image.href }}">
             <img alt="{{ image.alt_text }}" src="{{ image.src }}">
           </a></li>
         {% endfor %}
       </ul>
-    </section>
+    </div>
   </body>
 </html>

@@ -26,6 +26,7 @@ class Exporter(object):
       A list of all the templates that were populated, as
       HtmlFileNameAndContents. There's one for each GalleryItem.
     """
+    #import ipdb; ipdb.set_trace()
     contents = gallery_item.get_contents()
     # Put the file names in alphabetical order
     def sorter(first, second):

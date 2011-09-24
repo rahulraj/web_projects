@@ -159,6 +159,7 @@ class JpegDirectory(GalleryItem):
       should_prompt whether we should ask the user for a readable title.
     """
     assign_injectables(self, locals())
+    self.human_readable_title = None
 
   def as_view(self):
     """
@@ -169,13 +170,12 @@ class JpegDirectory(GalleryItem):
     """
     result = {}
     result['title'] = self.get_human_readable_title()
-    images = [jpeg for jpeg in self.contents if isinstance(jpeg, JpegPicture)]
-    result['images'] = [picture.as_view() for picture in images]
+    result['images'] = [picture.as_view() for picture in self.contents]
 
     # Needed if this is being viewed as a subdirectory:
+    result['alt_text'] = self.get_output_file_name()
     result['src'] = 'directory_image.jpg'
     result['href'] = self.get_output_file_name()
-    result['alt_text'] = self.get_output_file_name()
     return ImmutableDict(result)
 
   def get_exporter(self):
@@ -186,16 +186,19 @@ class JpegDirectory(GalleryItem):
     return directory_name_to_html_file_name(self.name)
 
   def get_human_readable_title(self):
+    if self.human_readable_title is not None:
+      return self.human_readable_title
     file_name = self.get_output_file_name()
     inferred_name = file_name.replace('-', ' ').replace('_', ' '). \
         rstrip('.html')
     if self.should_prompt:
-      readable_title = raw_input("Name for the directory %s [%s]:" % \
-          (file_name, inferred_name))
-      if readable_title.strip() == '':
+      self.human_readable_title = raw_input( \
+          "Name for the directory %s [%s]:" % \
+          (self.get_name(), inferred_name))
+      if self.human_readable_title.strip() == '':
         return inferred_name
       else:
-        return readable_title
+        return self.human_readable_title
     else:
       return inferred_name
 

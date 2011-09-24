@@ -9,21 +9,25 @@
     back_href - the link to go back to the directory page.
   #}
   <head>
+    <!-- Generated from the photo-detail.html template -->
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <link rel="stylesheet" type="text/css" href="gallery-style.css">
-    <title>{{ title }}</title>
+    <title>Picture Detail {{ title }}</title>
   </head>
   <body>
-    <p><img alt="{{ alt_text }}" src="{{ src }}"></p>
+    <header><h1>Picture Detail {{ title }}</h1></header>
+    <div id="main">
+      <p id="photoDetailImg">
+        <a href="{{ back_href }}"><img alt="{{ alt_text }}" src="{{ src }}"></a>
+      </p>
 
-    <section>
-      <ul> 
+      <ul id="caption"> 
         {% for datum in caption_data %}
           <li>{{ datum }}</li>
         {% endfor %} 
       </ul>
-    </section>
+      <a href="{{ back_href }}">Back to Directory</a>
+    </div>
 
-    <a href="{{ back_href }}">Back to Directory</a>
   </body>
 </html>
