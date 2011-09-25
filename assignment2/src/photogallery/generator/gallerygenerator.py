@@ -14,6 +14,8 @@ class GalleryGenerator(object):
   The top level class for the application. This is the only object
   that the main function interacts with.
   """
+  # TODO For nested directories, make lower level directories point back
+  # to their parents
   def __init__(self, gallery_item_factory, input_directory, output_directory,
       css_directory, exporter, template_writer):
     """

@@ -8,6 +8,7 @@
                src - the file name of the image, to pass to the src attributes
                      of the img tag.
                href - the relative link to the image's photo-detail page.
+    back_href - the link to the parent directory, if there is one
   #}
   <head>
     <!-- Generated from the photo-directory.html template -->
@@ -25,6 +26,10 @@
           </a></li>
         {% endfor %}
       </ul>
+
+      {% if back_href %}
+        <a href="{{ back_href }}">Back to parent directory</a>
+      {% endif %}
     </div>
   </body>
 </html>
