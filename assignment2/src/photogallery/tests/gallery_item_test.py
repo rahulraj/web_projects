@@ -59,24 +59,23 @@ class JpegPictureTest(unittest.TestCase):
     self.assertTrue(any(map(lambda line: 'Israel' in line, caption)))
     self.assertTrue(any(map(lambda line: 'Hike in Ein Kerem' in line, caption)))
 
-class OutputFileNameTest(unittest.TestCase):
+class JpegPictureOutputFileNameTest(unittest.TestCase):
   def setUp(self):
     self.stub_iptc_info = StubIptcInfo()
     self.metadata_dict = ImmutableDict({'Photographer': 80, 'City': 90,
         'Country': 101, 'Caption': 120})
+    self.jpeg_picture = JpegPicture('file_name.jpg', 'dir', self.stub_iptc_info,
+        self.metadata_dict)
 
   def test_simple_jpeg_picture_output_file_name(self):
-    jpeg_picture = JpegPicture('file_name.jpg', 'dir', self.stub_iptc_info,
-        self.metadata_dict)
-    output_name = jpeg_picture.get_output_file_name()
+    output_name = self.jpeg_picture.get_output_file_name()
     self.assertEquals('file_name.html', output_name)
 
   def test_picture_should_replace_spaces_with_hyphens(self):
-    jpeg_picture = JpegPicture('file name.jpg', 'dir', self.stub_iptc_info,
-        self.metadata_dict)
-    output_name = jpeg_picture.get_output_file_name()
-    self.assertEquals('file-name.html', output_name)
+    output_name = self.jpeg_picture.get_output_file_name()
+    self.assertEquals('file_name.html', output_name)
 
+class JpegDirectoryOutputFileNameTest(unittest.TestCase):
   def test_simple_directory_output_file_name(self):
     jpeg_directory = JpegDirectory('directory', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
@@ -111,6 +110,10 @@ class OutputFileNameTest(unittest.TestCase):
     jpeg_directory = JpegDirectory('/directory/name/', [], should_prompt=False)
     output_name = jpeg_directory.get_output_file_name()
     self.assertEquals('directory-name.html', output_name)
+
+
+class HumanReadableNameTest(unittest.TestCase):
+  pass  
 
 
 if __name__ == '__main__':

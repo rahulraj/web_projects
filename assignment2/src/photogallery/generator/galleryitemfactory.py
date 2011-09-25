@@ -92,6 +92,7 @@ class GalleryItemFactory(object):
     jpeg_names = filter(is_jpeg_file, file_names)
 
     path_contents = []
+
     for name in jpeg_names:
       maybe_jpeg_picture = self.try_create_jpeg_picture(path, name)
       if maybe_jpeg_picture is not None:

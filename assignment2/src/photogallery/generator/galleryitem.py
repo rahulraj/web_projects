@@ -7,7 +7,9 @@ import exporter
 class GalleryItem(object):
   """ 
   A single item in the gallery, can be either a JPEG or a
-  directory containing other GalleryItems.     
+  directory containing other GalleryItems. Specifies an interface
+  that should be implemented by subclasses (currently, implemented by
+  JpegPicture and JpegDirectory)
   """
   def get_name(self):
     raise NotImplementedError
@@ -23,6 +25,7 @@ class GalleryItem(object):
 
   def get_output_file_name(self):
     raise NotImplementedError
+
 
 class NoSuchMetadata(Exception):
   pass
@@ -56,8 +59,7 @@ class JpegPicture(GalleryItem):
     Convert self.name to an appropriate name for the output file.
     It should end in .html and not have any spaces.
     """
-    name_without_spaces = self.name.replace(' ', '-')
-    return name_without_spaces.replace('jpg', 'html')
+    return self.name.replace(' ', '-').replace('jpg', 'html')
 
   def lookup(self, attribute_name):
     """
@@ -142,7 +144,7 @@ class JpegPicture(GalleryItem):
 with_getters_for(JpegPicture, 'name')
 
 def directory_name_to_html_file_name(directory_name):
-    # Remove leading and trailing /, if they exist
+    """ Remove leading and trailing /, if they exist. """
     to_process = directory_name.strip('/')
     no_illegal_chars = to_process.replace(' ', '-').replace('/', '-'). \
         replace('\\', '-').replace('.', '-')
@@ -175,7 +177,7 @@ class JpegDirectory(GalleryItem):
     result['title'] = self.get_human_readable_title()
     result['images'] = [picture.as_view() for picture in self.contents]
 
-    # Needed if this is being viewed as a subdirectory:
+    # Needed if this is being viewed as a subdirectory in photo-directory
     result['alt_text'] = self.get_output_file_name()
     result['src'] = 'directory_image.jpg'
     result['href'] = self.get_output_file_name()
@@ -183,13 +185,18 @@ class JpegDirectory(GalleryItem):
     return ImmutableDict(result)
 
   def get_exporter(self):
-    """ We need a directory exporter. """
+    """ Returns a directory exporter. """
     return exporter.create_photo_directory_exporter()
 
   def get_output_file_name(self):
+    """ Convert self.name into an appropriate HTML file name."""
     return directory_name_to_html_file_name(self.name)
 
   def get_human_readable_title(self):
+    """
+    Try to infer a title for the template page.
+    If allowed, prompt the user for a better version.
+    """
     if self.human_readable_title is not None:
       return self.human_readable_title
     file_name = self.get_output_file_name()
