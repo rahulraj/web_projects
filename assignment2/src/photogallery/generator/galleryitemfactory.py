@@ -103,7 +103,12 @@ class GalleryItemFactory(object):
 
     subdirectories = self.create_subdirectories(file_names, path)
     path_contents.extend(subdirectories)
-    return JpegDirectory(path, path_contents, self.should_prompt, back_href=parent_path)
+    if parent_path is None:
+      back_href = None
+    else:
+      back_href = directory_name_to_html_file_name(parent_path)
+    return JpegDirectory(path, path_contents, self.should_prompt,
+        back_href=back_href)
 
   def create_subdirectories(self, file_names, path):
     """

@@ -126,6 +126,7 @@ class NestedDirectoryGalleryItemFactoryTest(unittest.TestCase):
     view = directory.as_view()
     self.assertTrue('back_href' in view)
     self.assertTrue('first' in view['back_href'])
+    self.assertTrue('.html' in view['back_href'])
 
 if __name__ == '__main__':
   unittest.main()
