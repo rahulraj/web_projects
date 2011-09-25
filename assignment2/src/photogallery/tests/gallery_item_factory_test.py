@@ -37,10 +37,10 @@ class GalleryItemFactoryTest(unittest.TestCase):
           return True
       return False
 
-    self.file_finder = SimpleStubOsModule(self.files)
+    self.list_directory = SimpleStubOsModule(self.files).listdir
     self.factory = GalleryItemFactory(lookup_table=None, should_prompt=False,
         iptc_info_constructor=StubIptcInfoConstructor,
-        file_finder=self.file_finder, is_directory=is_directory)
+        list_directory=self.list_directory, is_directory=is_directory)
 
   def test_it_should_create_JpegPictures_for_all_jpg_files(self):
     jpeg_directory = self.factory.create_directory(self.top_directory)
@@ -86,11 +86,11 @@ class NestedDirectoryGalleryItemFactoryTest(unittest.TestCase):
     def is_directory(name):
       return name == '/first' or name == '/first/second'
     self.is_directory = is_directory
-    self.file_finder = NestedDirectoryOsModule(self.files_in_first,
-        self.files_in_second)
+    self.list_directory = NestedDirectoryOsModule(self.files_in_first,
+        self.files_in_second).listdir
     self.factory = GalleryItemFactory(lookup_table={}, should_prompt=False,
         iptc_info_constructor=StubIptcInfoConstructor,
-        file_finder=self.file_finder, is_directory=self.is_directory)
+        list_directory=self.list_directory, is_directory=self.is_directory)
 
   def test_it_should_create_GalleryItems_in_nested_directories(self):
     first_directory = self.factory.create_directory(self.top_directory)
