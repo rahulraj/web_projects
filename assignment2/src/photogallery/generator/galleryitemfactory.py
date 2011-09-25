@@ -63,7 +63,7 @@ class GalleryItemFactory(object):
                     names.
       iptc_info_constructor the constructor for IPTCInfo objects that the files 
                             will use to lookup metadata (defaults to IPTCInfo).
-      file_finder the object that finds the files (defaults to os).
+      file_finder the object that finds the files in a directory (defaults to os).
       is_directory a function that takes a file name and returns true if it
                    is  a directory (defaults to os.path.isdir).
     """
@@ -81,11 +81,11 @@ class GalleryItemFactory(object):
 
     path_contents = []
     for name in jpeg_names:
-      full_file_name = os.path.join(path, name)
+      full_jpeg_name = os.path.join(path, name)
       try:
         path_contents.append(JpegPicture(name,
           directory_name_to_html_file_name(path),
-          self.iptc_info_constructor(full_file_name),
+          self.iptc_info_constructor(full_jpeg_name),
             self.lookup_table))
       except IOError:
         print "I was unable to open the file ", name, " for some reason"
@@ -98,10 +98,20 @@ class GalleryItemFactory(object):
         else:
           raise possible_iptc_exception # Some other exception
 
+    subdirectories = self.create_subdirectories(file_names, path)
+    path_contents.extend(subdirectories)
+    return JpegDirectory(path, path_contents, self.should_prompt)
 
+  def create_subdirectories(self, file_names, path):
+    """
+    Helper methods to find the subdirectories of path and create JpegDirectories
+    for them, fully initializing their contents too.
+
+    Args:
+      file_names the names of the files in path.
+      path the root directory path to process.
+    """
     full_file_name = [os.path.join(path, name) for name in file_names]
-    #import ipdb; ipdb.set_trace()
     directory_names = filter(self.is_directory, full_file_name)
     jpeg_directories = map(self.create_directory, directory_names)
-    path_contents.extend(jpeg_directories)
-    return JpegDirectory(path, path_contents, self.should_prompt)
+    return jpeg_directories
