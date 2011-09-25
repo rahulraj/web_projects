@@ -38,6 +38,10 @@ ul {
   list-style-type: none;
 }
 
+.lightsOff {
+  background-color: #181818;
+}
+
 #pictureList li {
   padding-top:35px;
 }
