@@ -112,8 +112,7 @@ class JpegPicture(GalleryItem):
         result = 'No data for this image\n'
       else:
         result = attribute_value + "\n"
-      attribute_string += result
-      caption.append(attribute_string)
+      caption.append(attribute_string + result)
     return caption
 
   def as_view(self):
