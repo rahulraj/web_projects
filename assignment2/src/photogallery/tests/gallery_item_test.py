@@ -112,9 +112,5 @@ class JpegDirectoryOutputFileNameTest(unittest.TestCase):
     self.assertEquals('directory-name.html', output_name)
 
 
-class HumanReadableNameTest(unittest.TestCase):
-  pass  
-
-
 if __name__ == '__main__':
   unittest.main()

@@ -200,8 +200,8 @@ class JpegDirectory(GalleryItem):
     if self.human_readable_title is not None:
       return self.human_readable_title
     file_name = self.get_output_file_name()
-    inferred_name = file_name.replace('-', ' ').replace('_', ' '). \
-        rstrip('.html')
+    inferred_name = self.remove_extension(file_name) \
+        .replace('-', ' ').replace('_', ' ').capitalize()
     if self.should_prompt:
       self.human_readable_title = raw_input( \
           "Name for the directory %s [%s]:" % \
@@ -212,6 +212,18 @@ class JpegDirectory(GalleryItem):
         return self.human_readable_title
     else:
       return inferred_name
+
+  def remove_extension(self, name):
+    """
+    Given a file name, removes its extension.
+
+    Args:
+      name the name to process.
+    """
+    dot_index = name.find('.')
+    if dot_index == -1: # No extension
+      return name
+    return name[:dot_index]
 
   def __str__(self):
     return 'JpegDirectory(' + self.name + ')'
