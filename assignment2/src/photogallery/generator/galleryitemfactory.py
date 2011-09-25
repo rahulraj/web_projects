@@ -53,7 +53,7 @@ class GalleryItemFactory(object):
   """
   def __init__(self, lookup_table, should_prompt,
       iptc_info_constructor=IPTCInfo,
-      file_finder=os, is_directory=os.path.isdir):
+      list_directory=os.listdir, is_directory=os.path.isdir):
     """
     Constructor for GalleryItemFactory
 
@@ -63,7 +63,8 @@ class GalleryItemFactory(object):
                     names.
       iptc_info_constructor the constructor for IPTCInfo objects that the files 
                             will use to lookup metadata (defaults to IPTCInfo).
-      file_finder the object that finds the files in a directory (defaults to os).
+      list_directory the function that takes a path and lists the files in it,
+                     defaults to os.listdir
       is_directory a function that takes a file name and returns true if it
                    is  a directory (defaults to os.path.isdir).
     """
@@ -79,7 +80,7 @@ class GalleryItemFactory(object):
                   a subdirectory this will be used to populate back_href.
                   It can be None if we are creating the top-most directory.
     """
-    file_names = self.file_finder.listdir(path)
+    file_names = self.list_directory(path)
     jpeg_names = filter(is_jpeg_file, file_names)
 
     path_contents = []
@@ -103,12 +104,23 @@ class GalleryItemFactory(object):
 
     subdirectories = self.create_subdirectories(file_names, path)
     path_contents.extend(subdirectories)
-    if parent_path is None:
-      back_href = None
-    else:
-      back_href = directory_name_to_html_file_name(parent_path)
+    back_href = self.maybe_get_back_href(parent_path)
     return JpegDirectory(path, path_contents, self.should_prompt,
         back_href=back_href)
+
+  def maybe_get_back_href(self, path):
+    """
+    Given a nullable path name, turns it into a href that can be used
+    to write an anchor tag pointing to a HTML file. If path
+    is None, propagates the None by returning it.
+
+    Args:
+      path the path name, or None if it is not applicable.
+    """
+    if path is None:
+     return None
+    else:
+      return directory_name_to_html_file_name(path)
 
   def create_subdirectories(self, file_names, path):
     """
