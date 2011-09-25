@@ -79,34 +79,68 @@ class GalleryItemFactory(object):
       parent_path the directory one level up of path; if we are creating
                   a subdirectory this will be used to populate back_href.
                   It can be None if we are creating the top-most directory.
+
+    Returns:
+      A JpegDirectory containing GalleryItems wrapped around all the appropriate
+      contents of the directory referred to by path.
+
+    Raises:
+      Any exception thrown when trying to extract IPTC information from a JPEG
+      file. See the documentation of try_create_jpeg_picture for details.
     """
     file_names = self.list_directory(path)
     jpeg_names = filter(is_jpeg_file, file_names)
 
     path_contents = []
     for name in jpeg_names:
-      full_jpeg_name = os.path.join(path, name)
-      try:
-        path_contents.append(JpegPicture(name,
-          directory_name_to_html_file_name(path),
-          self.iptc_info_constructor(full_jpeg_name),
-            self.lookup_table))
-      except IOError:
-        print "I was unable to open the file ", name, " for some reason"
-        print "Maybe it's corrupted?"
-        print "Skipping it..."
-      except Exception as possible_iptc_exception:
-        if str(possible_iptc_exception) == 'No IPTC data found.':
-          print "I was unable to get IPTC data from the file %s" % name
-          print "Skipping it..."
-        else:
-          raise possible_iptc_exception # Some other exception
+      maybe_jpeg_picture = self.try_create_jpeg_picture(path, name)
+      if maybe_jpeg_picture is not None:
+        path_contents.append(maybe_jpeg_picture)
 
     subdirectories = self.create_subdirectories(file_names, path)
     path_contents.extend(subdirectories)
     back_href = self.maybe_get_back_href(parent_path)
     return JpegDirectory(path, path_contents, self.should_prompt,
         back_href=back_href)
+
+  def try_create_jpeg_picture(self, path, name):
+    """
+    Given a path and the name of a file ending in .jpg, tries to create
+    a JpegPicture object out of it.
+
+    Args:
+      path the path to the directory the file is in.
+      name the name of the file.
+
+    Returns:
+      A JpegPicture object, if creating it was successful. None if creating
+      the JpegPicture failed for some reason that does not warrant crashing
+      the program.
+
+    Raises:
+      Any exception raised when trying to extract IPTC information from the
+      JPEG, that is not an IOError or an exception with the message 
+      'No IPTC data found.' In those two cases, simply skips the file and
+      prints a message saying so.
+    """
+    full_jpeg_name = os.path.join(path, name)
+    try:
+      return JpegPicture(name,
+        directory_name_to_html_file_name(path),
+        self.iptc_info_constructor(full_jpeg_name),
+          self.lookup_table)
+    except IOError:
+      print "I was unable to open the file ", name, " for some reason"
+      print "Maybe it's corrupted?"
+      print "Skipping it..."
+      return None
+    except Exception as possible_iptc_exception:
+      if str(possible_iptc_exception) == 'No IPTC data found.':
+        print "I was unable to get IPTC data from the file %s" % name
+        print "Skipping it..."
+        return None
+      else:
+        raise possible_iptc_exception # Some other exception
 
   def maybe_get_back_href(self, path):
     """
