@@ -158,7 +158,8 @@ class JpegDirectory(GalleryItem):
       contents a list of GalleryItems inside the directory.
       should_prompt whether we should ask the user for a readable title.
       back_href the href for the parent directory, if it exists,
-                or None if it doesn't
+                or None if it doesn't. Unlike with JpegPictures, it is possible
+                for back_href to be None.
     """
     assign_injectables(self, locals())
     self.human_readable_title = None
@@ -178,6 +179,7 @@ class JpegDirectory(GalleryItem):
     result['alt_text'] = self.get_output_file_name()
     result['src'] = 'directory_image.jpg'
     result['href'] = self.get_output_file_name()
+    result['back_href'] = self.back_href
     return ImmutableDict(result)
 
   def get_exporter(self):

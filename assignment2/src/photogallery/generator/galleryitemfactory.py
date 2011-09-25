@@ -69,12 +69,15 @@ class GalleryItemFactory(object):
     """
     assign_injectables(self, locals())
 
-  def create_directory(self, path):
+  def create_directory(self, path, parent_path=None):
     """
     Creates a JpegDirectory object with the appropriate GalleryItems
 
     Args:
       path the path to the directory that the JPEGs are stored in.
+      parent_path the directory one level up of path; if we are creating
+                  a subdirectory this will be used to populate back_href.
+                  It can be None if we are creating the top-most directory.
     """
     file_names = self.file_finder.listdir(path)
     jpeg_names = filter(is_jpeg_file, file_names)
@@ -100,7 +103,7 @@ class GalleryItemFactory(object):
 
     subdirectories = self.create_subdirectories(file_names, path)
     path_contents.extend(subdirectories)
-    return JpegDirectory(path, path_contents, self.should_prompt)
+    return JpegDirectory(path, path_contents, self.should_prompt, back_href=parent_path)
 
   def create_subdirectories(self, file_names, path):
     """
@@ -111,7 +114,8 @@ class GalleryItemFactory(object):
       file_names the names of the files in path.
       path the root directory path to process.
     """
-    full_file_name = [os.path.join(path, name) for name in file_names]
-    directory_names = filter(self.is_directory, full_file_name)
-    jpeg_directories = map(self.create_directory, directory_names)
+    full_file_names = [os.path.join(path, name) for name in file_names]
+    directory_names = filter(self.is_directory, full_file_names)
+    jpeg_directories = [self.create_directory(directory_name, parent_path=path) \
+        for directory_name in directory_names]
     return jpeg_directories

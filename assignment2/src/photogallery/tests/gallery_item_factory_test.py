@@ -88,13 +88,12 @@ class NestedDirectoryGalleryItemFactoryTest(unittest.TestCase):
     self.is_directory = is_directory
     self.file_finder = NestedDirectoryOsModule(self.files_in_first,
         self.files_in_second)
-
-  def test_it_should_create_GalleryItems_in_nested_directories(self):
-    factory = GalleryItemFactory(lookup_table=None, should_prompt=False,
+    self.factory = GalleryItemFactory(lookup_table={}, should_prompt=False,
         iptc_info_constructor=StubIptcInfoConstructor,
         file_finder=self.file_finder, is_directory=self.is_directory)
 
-    first_directory = factory.create_directory(self.top_directory)
+  def test_it_should_create_GalleryItems_in_nested_directories(self):
+    first_directory = self.factory.create_directory(self.top_directory)
     contents = first_directory.get_contents()
     jpeg_names_in_first = [jpeg.get_name() for jpeg in contents \
         if isinstance(jpeg, JpegPicture)]
@@ -116,6 +115,17 @@ class NestedDirectoryGalleryItemFactoryTest(unittest.TestCase):
     directories_in_second = [directory for directory in second_contents \
         if isinstance(directory, JpegDirectory)]
     self.assertEquals(0, len(directories_in_second))
+
+  def test_nested_directories_should_remember_their_parents(self):
+    first_directory = self.factory.create_directory(self.top_directory)
+    contents = first_directory.get_contents()
+    second_directory = [directory for directory in contents \
+        if isinstance(directory, JpegDirectory)]
+    self.assertEquals(1, len(second_directory))
+    directory = second_directory[0]
+    view = directory.as_view()
+    self.assertTrue('back_href' in view)
+    self.assertTrue('first' in view['back_href'])
 
 if __name__ == '__main__':
   unittest.main()
