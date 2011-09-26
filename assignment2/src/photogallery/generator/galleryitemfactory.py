@@ -28,6 +28,19 @@ def is_css_file(file_name):
     True if the file ends with .css.
   """
   return file_is_of_type(file_name, 'css')
+
+
+def is_js_file(file_name):
+  """
+  Determine if a file is labeled as JavaScript.
+
+  Args:
+    file_name the name of the file.
+
+  Returns:
+    True if the file ends with .js.
+  """
+  return file_is_of_type(file_name, 'js')
   
 
 def file_is_of_type(file_name, extension):

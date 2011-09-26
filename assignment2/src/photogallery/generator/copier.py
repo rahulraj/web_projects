@@ -1,7 +1,7 @@
 import shutil
 import os
 import os.path
-from galleryitemfactory import is_jpeg_file, is_css_file
+from galleryitemfactory import is_jpeg_file, is_css_file, is_js_file
 
 def copy_css(from_directory, to_directory):
   """
@@ -33,6 +33,23 @@ def copy_jpegs(from_directory, to_directory):
     Copies files over the directories in the filesystem.
   """
   return copy_files_of_type(from_directory, to_directory, is_jpeg_file)
+
+
+def copy_javascript(from_directory, to_directory):
+  """
+  Scans from_directory and finds all the JPEGs in it and its subdirectories.
+  Copies those JPEGs to to_directory. Note that to_directory will have a flat
+  structure for simplicity.
+
+  Args:
+    from_directory the directory to search for JPEGs
+    to_directory the directory to copy the JPEGs to
+
+  Effects:
+    Copies files over the directories in the filesystem.
+  """
+  return copy_files_of_type(from_directory, to_directory, is_js_file)
+
 
 def copy_files_of_type(from_directory, to_directory, type_tester):
   """

@@ -14,10 +14,8 @@ class GalleryGenerator(object):
   The top level class for the application. This is the only object
   that the main function interacts with.
   """
-  # TODO For nested directories, make lower level directories point back
-  # to their parents
   def __init__(self, gallery_item_factory, input_directory, output_directory,
-      css_directory, exporter, template_writer):
+      static_files_directory, exporter, template_writer):
     """
     Constructor for GalleryGenerator. All needed service objects are injected.
 
@@ -25,23 +23,25 @@ class GalleryGenerator(object):
       gallery_item_factory the GalleryItemFactory that creates the items.
       input_directory the path of the directory to start in.
       output_directory the directory to which files should be written.
-      css_directory the directory containing the CSS files to copy over.
+      static_files_directory the directory containing static files to copy over.
       exporter the Exporter to populate the templates.
       template_writer the object that writes the templates to disk.
     """
     assign_injectables(self, locals())
 
   def run(self):
-    # TODO Fix the links between pictures.
     top_jpeg_directory = \
         self.gallery_item_factory.create_directory(self.input_directory)
     populated_templates = self.exporter.export(top_jpeg_directory)
     self.template_writer.write_templates(populated_templates)
     # We need to copy the JPEGs over too, and the CSS
     copier.copy_jpegs(self.input_directory, self.output_directory)
-    copier.copy_css(self.css_directory, self.output_directory)
+    copier.copy_css(self.static_files_directory, self.output_directory)
+    # Also, if there are scripts that enhance the experience,
+    # copy them over too.
+    copier.copy_javascript(self.static_files_directory, self.output_directory)
     # Also grab a copy of directory_image.jpg
-    copier.copy_jpegs(self.css_directory, self.output_directory)
+    copier.copy_jpegs(self.static_files_directory, self.output_directory)
 
 
 def create_gallery_generator(command_line_arguments, css_directory):
@@ -67,7 +67,7 @@ def create_gallery_generator(command_line_arguments, css_directory):
   return GalleryGenerator(gallery_item_factory=factory,
       input_directory=input_data['input_directory'],
       output_directory=input_data['output_directory'],
-      css_directory=css_directory,
+      static_files_directory=css_directory,
       exporter=template_exporter,
       template_writer=template_writer)
 
