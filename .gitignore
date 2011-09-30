@@ -1,2 +1,5 @@
 *.pyc
-
+*.odg
+*.odt
+assignment2/src/photogallery/.ropeproject/
+assignment2/src/photogallery/generator/.ropeproject/
