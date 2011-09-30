@@ -7,6 +7,7 @@ var othello = othello || {};
  * @param {Array.<Array.<othello.Board.Piece>>} board a 2D array
  *     representing the board.
  * @constructor
+ * @const
  */
 othello.Board = function(board) {
   /** @const */ this.board = board;
@@ -35,6 +36,7 @@ othello.Board.length = 8;
  * Constructor for an Othello board builder
  * @param {Array.<Array.<othello.Board.Piece>>} board the board to start with.
  * @constructor
+ * @const
  */
 othello.Board.Builder = function(board) {
   this.board = board;
@@ -46,6 +48,7 @@ othello.Board.Builder = function(board) {
 /**
  * Named constructor to create an initial game board
  * @return {othello.Board.Builder} the created Builder.
+ * @const
  */
 othello.Board.Builder.initialGame = function() {
   /** @const */ var board = [];
@@ -62,6 +65,7 @@ othello.Board.Builder.initialGame = function() {
  * Named constructor to create a board, templated by
  * another board.
  * @return {othello.Board.Builder} the created Builder.
+ * @const
  */
 othello.Board.Builder.templatedBy = function() {
   // TODO fill in
@@ -74,6 +78,7 @@ othello.Board.Builder.templatedBy = function() {
  * @param {number} row the value for the row.
  * @param {number} column the value for the column.
  * @return {othello.Board.Builder} this for chaining.
+ * @const
  */
 othello.Board.Builder.prototype.at = function(row, column) {
   this.row = row;
@@ -86,6 +91,7 @@ othello.Board.Builder.prototype.at = function(row, column) {
  * Add a marker to the board
  * @param {othello.Board.Piece} piece the piece to add.
  * @return {othello.Board.Builder} this for chaining.
+ * @const
  */
 othello.Board.Builder.prototype.place = function(piece) {
   this.board[this.row][this.column] = piece;
@@ -96,6 +102,7 @@ othello.Board.Builder.prototype.place = function(piece) {
 /**
  * Flip a piece, at the place specified by row and column (set with at)
  * @return {othello.Board.Builder} this for chaining.
+ * @const
  */
 othello.Board.Builder.prototype.flip = function() {
   /** @const */ var piece = this.board[this.row][this.column];
@@ -114,6 +121,7 @@ othello.Board.Builder.prototype.flip = function() {
  * Helper function to create a row.
  * @return {Array.<othello.Board.Piece>} an unpopulated
  *    row in the board.
+ * @const
  */
 othello.Board.Builder.createRow = function() {
   /** @const */ var row = [];
