@@ -1,18 +1,6 @@
 
 
 /**
- * @enum {number}
- * @const
- */
-othello.Piece = {
-  empty: -1,
-  dark: 0,
-  light: 1
-};
-
-
-
-/**
  * A type of piece that can go on a square.
  * We don't actually need a parent class in JavaScript, but
  * it helps for documentation.
