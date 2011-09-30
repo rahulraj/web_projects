@@ -1,5 +1,26 @@
 BoardTest = TestCase('BoardTest');
 
+BoardTest.prototype.testValidNextSquare = function() {
+  /** @const */ var board = othello.Board.Builder.emptyBoard().
+      at(3, 3).placeLightMarker().build();
+  /** @const */ var square = board.nextSquare(2, 3, 1, 0).
+      getOrElse(null);
+  assertEquals(othello.LightPiece.instance, square);
+};
+
+BoardTest.prototype.testInvalidNextSquare = function() {
+  /** @const */ var board = othello.Board.Builder.emptyBoard().build();
+  /** @const */ var square = board.nextSquare(0, 0, -1, 0).
+      getOrElse(null);
+  assertNull(square);
+};
+
+BoardTest.prototype.testOverlappingPiecePlacementNotValid = function() {
+  /** @const */ var board = othello.Board.Builder.emptyBoard().
+      at(3, 3).placeLightMarker().build();
+  assertFalse(board.placementIsValid(othello.LightPiece.instance, 3, 3));
+};
+
 BoardTest.prototype.testCorrectDimensions = function() {
   assertEquals(8, othello.Board.size);
 };

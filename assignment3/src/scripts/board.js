@@ -1,4 +1,3 @@
-// Dependencies: othello.js, piece.js
 
 
 
@@ -23,6 +22,65 @@ othello.Board = function(board) {
 othello.Board.prototype.pieceAt = function(row, column) {
   return this.board[row][column];
 };
+
+
+/**
+ * Given a proposed location to place a piece, return true
+ * if it is valid.
+ * @param {othello.Piece} piece the piece being placed.
+ * @param {number} x the x coordinate for the piece.
+ * @param {number} y the y coordinate for the piece.
+ * @return {Boolean} true if it is a legal move to place the piece there.
+ */
+othello.Board.prototype.placementIsValid = function(piece, x, y) {
+  if (this.isOccupiedAt(x, y)) {
+    return false; 
+  }
+  // TODO Implement
+};
+
+
+/**
+ * Test if a square is occupied
+ * @param {number} x the x coordinate.
+ * @param {number} y the y coordinate.
+ * @return {Boolean} true if the square is occupied.
+ */
+othello.Board.prototype.isOccupiedAt = function(x, y) {
+  return this.board[x][y] !== othello.EmptyPiece.instance;
+};
+
+
+/**
+ * Get the contents of a square via relative positioning
+ * @param {number} row the initial row.
+ * @param {number} column the initial column
+ * @param {number} deltaX the amount by which to change the X coordinate.
+ * @param {number} deltaY the amount by which to change the Y coordinate.
+ * @return {Option} Some(Piece in the found square) or None if we go off
+ *     the board.
+ */
+othello.Board.prototype.nextSquare = function(row, column, deltaX, deltaY) {
+  /** @const */ var newRow = row + deltaX;
+  /** @const */ var newColumn = column + deltaY;
+  if (this.inBounds(newRow, newColumn)) {
+    return new othello.utils.Some(this.board[newRow][newColumn]); 
+  } else{
+    return othello.utils.None.instance;
+  }
+};
+
+
+/**
+ * Helper function to tell if a pair of coordinate is in bounds.
+ * @return {Boolean} true if it is safe to index this Board with
+ *     the given coordinates.
+ */
+othello.Board.prototype.inBounds = function(x, y) {
+  return x >= 0 && x < this.board.length &&
+         y >= 0 && y < this.board[0].length;
+};
+
 
 
 /**
