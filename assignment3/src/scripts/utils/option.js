@@ -28,6 +28,13 @@ othello.utils.Option.prototype.map = function(g) {};
 othello.utils.Option.prototype.flatMap = function(g) {};
 
 
+/**
+ * Get the value, or a default value if it does not exist.
+ * @param {*} elseValue the value to return if this is None.
+ */
+othello.utils.Option.prototype.getOrElse = function(elseValue) {};
+
+
 
 /**
  * Some, the subclass of Option that does contain a value.
@@ -48,7 +55,7 @@ othello.utils.Some = function(value) {
  * @return {othello.utils.Some} the new Some value after applying the function.
  */
 othello.utils.Some.prototype.map = function(g) {
-  return new Some(g(this.value));
+  return new othello.utils.Some(g(this.value));
 };
 
 
@@ -63,6 +70,15 @@ othello.utils.Some.prototype.flatMap = function(g) {
   return g(this.value);
 };
 
+
+/**
+ * For Some, getOrElse should ignore the input and return this.value
+ * @param {*} unused_elseValue the alternate value, not used.
+ * @return {*} this.value, because it exists.
+ */
+othello.utils.Some.prototype.getOrElse = function(unused_elseValue) {
+  return this.value;
+};
 
 
 /**
@@ -92,4 +108,14 @@ othello.utils.None.prototype.map = function(unused_g) {
  */
 othello.utils.None.prototype.flatMap = function(unused_g) {
   return this;
+};
+
+
+/**
+ * For None, getOrElse should return the given value.
+ * @param {*} elseValue the alternate value, which will be used.
+ * @return {*} the inputted value.
+ */
+othello.utils.None.prototype.getOrElse = function(elseValue) {
+  return elseValue;
 };
