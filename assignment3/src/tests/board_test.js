@@ -31,3 +31,13 @@ BoardTest.prototype.testBuilderCreation = function() {
   assertEquals(othello.DarkPiece.instance, board.pieceAt(3, 5));
   assertEquals(othello.LightPiece.instance, board.pieceAt(6, 7));
 };
+
+BoardTest.prototype.testBuilderTemplate = function() {
+  /** @const */ var first = othello.Board.Builder.initialGame().build();
+  /** @const */ var second = othello.Board.Builder.templatedBy(first).
+      at(1, 1).placeLightMarker().build();
+  
+  assertEquals(second.pieceAt(1, 1), othello.LightPiece.instance);
+  assertEquals('The original board should be unchanged',
+      first.pieceAt(1, 1), othello.EmptyPiece.instance);
+};

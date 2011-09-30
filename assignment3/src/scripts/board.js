@@ -62,6 +62,24 @@ othello.Board.Builder.emptyBoard = function() {
 
 
 /**
+ * Named constructor to create a new Board from an old one.
+ * @param {othello.Board} board the old board.
+ * @return {othello.Board.Builder} a new Builder based off
+ *     the old board.
+ */
+othello.Board.Builder.templatedBy = function(board) {
+  /** @const */ var builder = othello.Board.Builder.emptyBoard();
+  /** @const */ var oldArray = board.board;
+  for (var i = 0; i < oldArray.length; i++) {
+    for (var j = 0; j < oldArray[0].length; j++) {
+      builder.at(i, j).place(oldArray[i][j]);
+    }
+  }
+  return builder;
+};
+
+
+/**
  * Name constructor to create an initial game as a Builder
  * @return {othello.Board.Builder} the created Builder.
  * @const
