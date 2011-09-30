@@ -2,3 +2,4 @@
 *.jpeg
 run_gallery.sh
 run_gallery_no_prompt.sh
+run_nested_gallery.sh
