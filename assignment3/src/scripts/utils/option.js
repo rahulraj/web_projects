@@ -88,6 +88,12 @@ othello.utils.Some.prototype.getOrElse = function(unused_elseValue) {
  */
 othello.utils.None = function() {};
 
+/**
+ * None is stateless, so share an instance.
+ * @const
+ */
+othello.utils.None.instance = new othello.utils.None();
+
 
 /**
  * Since this is None, propagate the None.

@@ -3,14 +3,14 @@ OptionTest = TestCase('OptionTest');
 OptionTest.prototype.setUp = function() {
   /** @const */ this.addFour = function(num) { return num + 4};
   /** @const */ this.firstSome = new othello.utils.Some(4);
-  /** @const */ this.firstNone = new othello.utils.None();
+  /** @const */ this.firstNone = othello.utils.None.instance;
 
   /** @const */ this.secondSome = new othello.utils.Some(10);
   /** @const */ this.maybeAddTen = function(num) {
     if (num === 4) {
       return new othello.utils.Some(num + 10); 
     } else {
-      return new othello.utils.None();
+      return othello.utils.None.instance;
     }
   };
 };

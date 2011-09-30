@@ -95,7 +95,7 @@ othello.Board.Builder.prototype.at = function(row, column) {
  * @const
  */
 othello.Board.Builder.prototype.placeLightMarker = function() {
-  this.place(othello.Piece.light);
+  this.place(othello.LightPiece.instance);
   return this;
 };
 
@@ -106,7 +106,7 @@ othello.Board.Builder.prototype.placeLightMarker = function() {
  * @const
  */
 othello.Board.Builder.prototype.placeDarkMarker = function() {
-  this.place(othello.Piece.dark);
+  this.place(othello.DarkPiece.instance);
   return this;
 };
 
@@ -130,13 +130,7 @@ othello.Board.Builder.prototype.place = function(piece) {
  */
 othello.Board.Builder.prototype.flip = function() {
   /** @const */ var piece = this.board[this.row][this.column];
-  if (piece === othello.Piece.dark) {
-    this.place(othello.Piece.light);
-  } else if (piece === othello.Piece.light) {
-    this.place(othello.Piece.dark);
-  } else {
-    throw new Error('Tried to flip, but no piece in the square');
-  }
+  this.place(piece.flip());
   return this;
 };
 
@@ -150,7 +144,7 @@ othello.Board.Builder.prototype.flip = function() {
 othello.Board.Builder.createRow = function() {
   /** @const */ var row = [];
   for (var i = 0; i < othello.Board.size; i++) {
-    row.push(othello.Piece.empty);
+    row.push(othello.EmptyPiece.instance);
   }
   return row;
 };
