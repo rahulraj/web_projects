@@ -15,6 +15,17 @@ othello.Board = function(board) {
 
 
 /**
+ * Retrieve the piece at a given location.
+ * @param {number} row the row.
+ * @param {column} column the column.
+ * @return {othello.Board.Piece} the Piece at that location.
+ */
+othello.Board.prototype.pieceAt = function(row, column) {
+  return this.board[row][column];
+};
+
+
+/**
  * @enum {number}
  * @const
  */
@@ -27,8 +38,9 @@ othello.Board.Piece = {
 
 /**
  * @const
+ * @type {number}
  */
-othello.Board.length = 8;
+othello.Board.size = 8;
 
 
 
@@ -46,31 +58,33 @@ othello.Board.Builder = function(board) {
 
 
 /**
- * Named constructor to create an initial game board
+ * Named constructor to create an empty board as a Builder
  * @return {othello.Board.Builder} the created Builder.
  * @const
  */
-othello.Board.Builder.initialGame = function() {
+othello.Board.Builder.emptyBoard = function() {
   /** @const */ var board = [];
-  for (var i = 0; i < othello.Board.length; i++) {
+  for (var i = 0; i < othello.Board.size; i++) {
     board.push(othello.Board.Builder.createRow());
   }
 
-  // TODO Set the original pieces.
   return new othello.Board.Builder(board);
 };
 
 
 /**
- * Named constructor to create a board, templated by
- * another board.
+ * Name constructor to create an initial game as a Builder
  * @return {othello.Board.Builder} the created Builder.
  * @const
  */
-othello.Board.Builder.templatedBy = function() {
-  // TODO fill in
-  return null;
+othello.Board.Builder.initialGame = function() {
+  return othello.Board.Builder.emptyBoard().
+      at(3, 3).placeLightMarker().
+      at(3, 4).placeDarkMarker().
+      at(4, 3).placeDarkMarker().
+      at(4, 4).placeLightMarker().build();
 };
+
 
 
 /**
@@ -83,6 +97,28 @@ othello.Board.Builder.templatedBy = function() {
 othello.Board.Builder.prototype.at = function(row, column) {
   this.row = row;
   this.column = column;
+  return this;
+};
+
+
+/**
+ * Add a light marker to the board
+ * @return {othello.Board.Builder} this for chaining.
+ * @const
+ */
+othello.Board.Builder.prototype.placeLightMarker = function() {
+  this.place(othello.Board.Piece.light);
+  return this;
+};
+
+
+/**
+ * Add a dark marker to the board
+ * @return {othello.Board.Builder} this for chaining.
+ * @const
+ */
+othello.Board.Builder.prototype.placeDarkMarker = function() {
+  this.place(othello.Board.Piece.dark);
   return this;
 };
 
@@ -125,8 +161,17 @@ othello.Board.Builder.prototype.flip = function() {
  */
 othello.Board.Builder.createRow = function() {
   /** @const */ var row = [];
-  for (var i = 0; i < othello.Board.length; i++) {
+  for (var i = 0; i < othello.Board.size; i++) {
     row.push(othello.Board.Piece.empty);
   }
   return row;
+};
+
+
+/**
+ * Finally, create an Othello Board
+ * @return {othello.Board} the board created from this Builder.
+ */
+othello.Board.Builder.prototype.build = function() {
+  return new othello.Board(this.board);
 };
