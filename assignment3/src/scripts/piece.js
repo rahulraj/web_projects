@@ -1,5 +1,6 @@
 
 
+
 /**
  * A type of piece that can go on a square.
  * We don't actually need a parent class in JavaScript, but
@@ -69,6 +70,7 @@ othello.DarkPiece.instance = new othello.DarkPiece();
 othello.DarkPiece.prototype.flip = function() {
   return othello.LightPiece.instance;
 };
+
 
 
 /**

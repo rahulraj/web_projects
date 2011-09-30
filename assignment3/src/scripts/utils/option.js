@@ -81,12 +81,14 @@ othello.utils.Some.prototype.getOrElse = function(unused_elseValue) {
 };
 
 
+
 /**
  * None, the subclass of Option that represents the absence of a value
  * @constructor
  * @implements {othello.utils.Option}
  */
 othello.utils.None = function() {};
+
 
 /**
  * None is stateless, so share an instance.
