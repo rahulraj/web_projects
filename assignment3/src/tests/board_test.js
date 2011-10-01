@@ -85,6 +85,20 @@ BoardTest.prototype.testFindPiecesToFlipStopsIfIsolated = function() {
   assertEquals(0, toFlip.length);
 };
 
+BoardTest.prototype.testFindPiecesToFlipStopsIfChainIsBroken = function() {
+  /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
+  _.each(_.range(1, othello.Board.size - 1), function(i) {
+    boardBuilder.at(i, 0).placeLightMarker();
+  });
+  boardBuilder.at(7, 0).placeDarkMarker();
+  // This time, there is a space in the middle
+  boardBuilder.at(3, 0).place(othello.EmptyPiece.instance);
+  /** @const */ var board = boardBuilder.build();
+  /** @const */ var toFlip = board.findPiecesToFlip(
+      othello.DarkPiece.instance, 0, 0, 1, 0); 
+  assertEquals(0, toFlip.length);
+};
+
 BoardTest.prototype.testCorrectDimensions = function() {
   assertEquals(8, othello.Board.size);
 };
