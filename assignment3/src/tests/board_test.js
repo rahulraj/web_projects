@@ -62,7 +62,27 @@ BoardTest.prototype.testFindPiecesToFlipLoop = function() {
 };
 
 BoardTest.prototype.testFindPiecesToFlipStopsIfNextToSameColor = function() {
+  /** @const */ var board = othello.Board.Builder.initialGame().build();
+  // Suppose black tries the illegal move of placing a piece at (4, 2).
+  // If we call findPiecesToFlip with a deltaY of +1, it should see that
+  // the immediately adjacent piece is another black piece, and return
+  // an empty list.
+  /** @const */ var initialX = 4;
+  /** @const */ var initialY = 2;
+  /** @const */ var deltaX = 0;
+  /** @const */ var deltaY = 1;
+  /** @const */ var toFlip = board.findPiecesToFlip(
+      othello.DarkPiece.instance, initialX, initialY, deltaX, deltaY);
+  assertEquals(0, toFlip.length);
+};
 
+BoardTest.prototype.testFindPiecesToFlipStopsIfIsolated = function() {
+  /** @const */ var board = othello.Board.Builder.emptyBoard().
+      at(3, 3).placeLightMarker().
+      at(7, 5).placeDarkMarker().build();
+  /** @const */ var toFlip = board.findPiecesToFlip(
+      othello.DarkPiece.instance, 0, 0, 1, 1);
+  assertEquals(0, toFlip.length);
 };
 
 BoardTest.prototype.testCorrectDimensions = function() {
