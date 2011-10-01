@@ -1,8 +1,7 @@
 BoardTest = TestCase('BoardTest');
 
 BoardTest.prototype.testValidNextSquare = function() {
-  /** @const */ var board = othello.Board.Builder.emptyBoard().
-      at(3, 3).placeLightMarker().build();
+  /** @const */ var board = othello.Board.Builder.initialGame().build();
   /** @const */ var square = board.nextSquare(2, 3, 1, 0).
       getOrElse(null);
   assertEquals(othello.LightPiece.instance, square);
@@ -21,6 +20,29 @@ BoardTest.prototype.testOverlappingPiecePlacementNotValid = function() {
   assertFalse(board.placementIsValid(othello.LightPiece.instance, 3, 3));
 };
 
+BoardTest.prototype.testPiecePlacementInvalidWithoutAdjacents = function() {
+  /** @const */ var board = othello.Board.Builder.initialGame().build();
+  return;
+  //assertFalse(board.placementIsValid(othello.LightPiece.instance, 0, 0));
+};
+
+BoardTest.prototype.testFindPiecesToFlipValid = function() {
+  /** @const */ var board = othello.Board.Builder.initialGame().build();
+  // simulate a valid first move, placing a dark piece at (2, 3)
+  // this should cause the light piece at (3, 3) to flip.
+  /** @const */ var initialX = 2;
+  /** @const */ var initialY = 3;
+  /** @const */ var deltaX = 1;
+  /** @const */ var deltaY = 0; // search downwards.
+  /** @const */ var toFlip = board.findPiecesToFlip(
+      othello.DarkPiece.instance, initialX, initialY, deltaX, deltaY)
+
+  assertEquals(1, toFlip.length);
+  /** @const */ var coordinates = toFlip[0];
+  assertEquals(3, coordinates.xCoordinate);
+  assertEquals(3, coordinates.yCoordinate);
+};
+
 BoardTest.prototype.testCorrectDimensions = function() {
   assertEquals(8, othello.Board.size);
 };
@@ -32,6 +54,7 @@ BoardTest.prototype.testCreateRow = function() {
     assertEquals(othello.EmptyPiece.instance, row[i]);
   }
 };
+
 
 BoardTest.prototype.testInitialGame = function() {
   /** @const */ var board = othello.Board.Builder.initialGame().build();

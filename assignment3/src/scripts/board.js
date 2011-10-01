@@ -41,6 +41,65 @@ othello.Board.prototype.placementIsValid = function(piece, x, y) {
 
 
 /**
+ * Walk in a given direction, and locate all the coordinates
+ * whose pieces need to be flipped. This will be all the pieces
+ * in a line that starts at the original location, and ends at
+ * the first square found that contains another piece of the same color.
+ * If the chain is broken by an empty square or the end of the board,
+ * this means no pieces can be flipped. Presumably, we are analyzing
+ * the effects of a move that places a piece in (initialX, initialY).
+ * @param {othello.Piece} piece the piece being placed in the first point.
+ * @param {number} initialX the initial x coordinate.
+ * @param {number} initialY the initial y coordinate.
+ * @param {number} deltaX the amount by which to change x in each step.
+ * @param {number} deltaY the amount by which to change y in each step.
+ * @return {Array.<((xCoordinate: number, yCoordinate: number}}>} an
+ *     array containing a record with the coordinates of pieces to flip.
+ *     If no pieces can be flipped, returns an empty array.
+ */
+othello.Board.prototype.findPiecesToFlip =
+    function(piece, initialX, initialY, deltaX, deltaY) {
+  var next = this.nextSquare(initialX, initialY, deltaX, deltaY);
+  var contents = next.getOrElse(othello.EmptyPiece.instance);
+  if (contents === othello.EmptyPiece.instance || 
+      contents === piece) {
+    // It's next to an empty square or a piece of the same color.    
+    return []
+  }
+  // Now keep walking down the chain
+  var currentX = initialX + deltaX;
+  var currentY = initialY + deltaY;
+  // But don't forget to add the coordinates we just stepped over.
+  /** @const */ var firstStepCoordinates = {
+    xCoordinate: currentX,
+    yCoordinate: currentY
+  };
+  /** @const */ var captured = [firstStepCoordinates];
+  while (true) {
+    next = this.nextSquare(currentX, currentY, deltaX, deltaY);
+    contents = next.getOrElse(othello.EmptyPiece.instance);
+    if (contents === othello.EmptyPiece.instance) {
+      // the chain broke 
+      return [];
+    }
+    else if (contents === piece) {
+      // end of a valid chain, return the chain
+      return captured;
+    } else {
+      // add the location of the piece we're passing over to captured 
+      /** @const */ var currentCoordinates = {
+        xCoordinate: currentX,
+        yCoordinate: currentY
+      };
+      captured.push(currentCoordinates);
+      currentX += deltaX;
+      currentY += deltaY;
+    }
+  }
+};
+
+
+/**
  * Test if a square is occupied
  * @param {number} x the x coordinate.
  * @param {number} y the y coordinate.
