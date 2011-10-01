@@ -26,7 +26,7 @@ BoardTest.prototype.testPiecePlacementInvalidWithoutAdjacents = function() {
   //assertFalse(board.placementIsValid(othello.LightPiece.instance, 0, 0));
 };
 
-BoardTest.prototype.testFindPiecesToFlipValid = function() {
+BoardTest.prototype.testFindPiecesToFlipSimple = function() {
   /** @const */ var board = othello.Board.Builder.initialGame().build();
   // simulate a valid first move, placing a dark piece at (2, 3)
   // this should cause the light piece at (3, 3) to flip.
@@ -42,6 +42,24 @@ BoardTest.prototype.testFindPiecesToFlipValid = function() {
   assertEquals(3, coordinates.xCoordinate);
   assertEquals(3, coordinates.yCoordinate);
 };
+
+BoardTest.prototype.testFindPiecesToFlipLoop = function() {
+  /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
+  for (var i = 1; i < othello.Board.size - 1; i++) {
+    boardBuilder.at(i, 0).placeLightMarker();
+  }
+  boardBuilder.at(7, 0).placeDarkMarker();
+  /** @const */ var board = boardBuilder.build();
+  // Now, placing a dark piece at (0, 0) and searching with an xDelta
+  // of +1 should result in all 6 of the light pieces flipping.
+  /** @const */ var initialX = 0;
+  /** @const */ var initialY = 0;
+  /** @const */ var deltaX = 1;
+  /** @const */ var deltaY = 0;
+  /** @const */ var toFlip = board.findPiecesToFlip(
+      othello.DarkPiece.instance, initialX, initialY, deltaX, deltaY);
+  assertEquals(6, toFlip.length);
+}
 
 BoardTest.prototype.testCorrectDimensions = function() {
   assertEquals(8, othello.Board.size);
