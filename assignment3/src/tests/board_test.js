@@ -45,9 +45,14 @@ BoardTest.prototype.testFindPiecesToFlipSimple = function() {
 
 BoardTest.prototype.testFindPiecesToFlipLoop = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
+  _.each(_.range(1, othello.Board.size - 1), function(i) {
+    boardBuilder.at(i, 0).placeLightMarker();
+  });
+  /*
   for (var i = 1; i < othello.Board.size - 1; i++) {
     boardBuilder.at(i, 0).placeLightMarker();
   }
+  */
   boardBuilder.at(7, 0).placeDarkMarker();
   /** @const */ var board = boardBuilder.build();
   // Now, placing a dark piece at (0, 0) and searching with an xDelta
@@ -59,7 +64,11 @@ BoardTest.prototype.testFindPiecesToFlipLoop = function() {
   /** @const */ var toFlip = board.findPiecesToFlip(
       othello.DarkPiece.instance, initialX, initialY, deltaX, deltaY);
   assertEquals(6, toFlip.length);
-}
+};
+
+BoardTest.prototype.testFindPiecesToFlipStopsIfNextToSameColor = function() {
+
+};
 
 BoardTest.prototype.testCorrectDimensions = function() {
   assertEquals(8, othello.Board.size);
