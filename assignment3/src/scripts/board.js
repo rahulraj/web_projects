@@ -1,6 +1,5 @@
 
 
-
 /**
  * Constructor for an Othello board
  * @param {Array.<Array.<othello.Piece>>} board a 2D array
@@ -30,13 +29,57 @@ othello.Board.prototype.pieceAt = function(row, column) {
  * @param {othello.Piece} piece the piece being placed.
  * @param {number} x the x coordinate for the piece.
  * @param {number} y the y coordinate for the piece.
- * @return {Boolean} true if it is a legal move to place the piece there.
+ * @return {boolean} true if it is a legal move to place the piece there.
  */
 othello.Board.prototype.placementIsValid = function(piece, x, y) {
   if (this.isOccupiedAt(x, y)) {
-    return false; 
+    return false;
   }
-  // TODO Implement
+  /** @const */ var self = this;
+  /** @const */ var flipped = this.findAllPiecesToFlip(piece, x, y)
+  return flipped.length > 0;
+};
+
+
+/**
+ * Given an initial location and a piece, returns the coordinates of
+ * all the pieces that would be flipped if piece was placed in the initial
+ * location.
+ * @param {othello.Piece} piece the piece being placed.
+ * @param {number} x the x coordinate.
+ * @param {number} y the y coordinate.
+ * @return {Array.<{xCoordinate: number, yCoordinate: number}>} an Array
+ *    containing the coordinates of all the pieces that would be flipped.
+ */
+othello.Board.prototype.findAllPiecesToFlip = function(piece, x, y) {
+  /** @const */ var self = this;
+  return othello.utils.flatMap(othello.Board.deltas(), function(delta) {
+    return self.findPiecesToFlip(piece, x, y, delta[0], delta[1]);
+  });
+};
+
+
+/**
+ * Return a list of lists containing the appropriate values for
+ * deltaX and deltaY
+ * @return {othello.underscore.header.RichArray} a list of deltas, 
+ *     wrapped in an _. The exact type is defined by underscore.js.
+ *     RichArray is a type synonym to provide information to the compiler.
+ */
+othello.Board.deltas = function() {
+  /** @const */ var allCombinations = othello.utils.flatMap(_.range(-1, 2),
+  function(item) {
+      return [[-1, item], [0, item], [1, item]];
+  });
+  return _(allCombinations).reject(function removeTheZeroPair(item) {
+    return item[0] === 0 && item[1] === 0;
+  });
+  /*
+  return _(_.zip(_.range(-1, 2), _.range(-1, 2))).chain().
+      filter(function(item) {
+    return item[0] !== 0 && item[1] !== 1;
+  });
+  */
 };
 
 
@@ -53,7 +96,7 @@ othello.Board.prototype.placementIsValid = function(piece, x, y) {
  * @param {number} initialY the initial y coordinate.
  * @param {number} deltaX the amount by which to change x in each step.
  * @param {number} deltaY the amount by which to change y in each step.
- * @return {Array.<((xCoordinate: number, yCoordinate: number}}>} an
+ * @return {Array.<{xCoordinate: number, yCoordinate: number}>} an
  *     array containing a record with the coordinates of pieces to flip.
  *     If no pieces can be flipped, returns an empty array.
  */
@@ -103,7 +146,7 @@ othello.Board.prototype.findPiecesToFlip =
  * Test if a square is occupied
  * @param {number} x the x coordinate.
  * @param {number} y the y coordinate.
- * @return {Boolean} true if the square is occupied.
+ * @return {boolean} true if the square is occupied.
  */
 othello.Board.prototype.isOccupiedAt = function(x, y) {
   return this.board[x][y] !== othello.EmptyPiece.instance;
@@ -116,8 +159,8 @@ othello.Board.prototype.isOccupiedAt = function(x, y) {
  * @param {number} column the initial column
  * @param {number} deltaX the amount by which to change the X coordinate.
  * @param {number} deltaY the amount by which to change the Y coordinate.
- * @return {Option} Some(Piece in the found square) or None if we go off
- *     the board.
+ * @return {othello.utils.Option} Some(Piece in the found square) or None if 
+ *     we go off the board.
  */
 othello.Board.prototype.nextSquare = function(row, column, deltaX, deltaY) {
   /** @const */ var newRow = row + deltaX;
@@ -132,7 +175,7 @@ othello.Board.prototype.nextSquare = function(row, column, deltaX, deltaY) {
 
 /**
  * Helper function to tell if a pair of coordinate is in bounds.
- * @return {Boolean} true if it is safe to index this Board with
+ * @return {boolean} true if it is safe to index this Board with
  *     the given coordinates.
  */
 othello.Board.prototype.inBounds = function(x, y) {
@@ -170,9 +213,9 @@ othello.Board.Builder = function(board) {
  */
 othello.Board.Builder.emptyBoard = function() {
   /** @const */ var board = [];
-  for (var i = 0; i < othello.Board.size; i++) {
+  _.each(_.range(0, othello.Board.size), function(i) {
     board.push(othello.Board.Builder.createRow());
-  }
+  });
 
   return new othello.Board.Builder(board);
 };
@@ -187,11 +230,11 @@ othello.Board.Builder.emptyBoard = function() {
 othello.Board.Builder.templatedBy = function(board) {
   /** @const */ var builder = othello.Board.Builder.emptyBoard();
   /** @const */ var oldArray = board.board;
-  for (var i = 0; i < oldArray.length; i++) {
-    for (var j = 0; j < oldArray[0].length; j++) {
+  _.each(_.range(0, oldArray.length), function(i) {
+    _.each(_.range(0, oldArray.length), function(j) {
       builder.at(i, j).place(oldArray[i][j]);
-    }
-  }
+    });
+  });
   return builder;
 };
 
@@ -277,11 +320,9 @@ othello.Board.Builder.prototype.flip = function() {
  * @const
  */
 othello.Board.Builder.createRow = function() {
-  /** @const */ var row = [];
-  for (var i = 0; i < othello.Board.size; i++) {
-    row.push(othello.EmptyPiece.instance);
-  }
-  return row;
+  return _.map(_.range(0, othello.Board.size), function(i) {
+    return othello.EmptyPiece.instance;                             
+  });
 };
 
 
