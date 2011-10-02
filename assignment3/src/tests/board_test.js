@@ -179,3 +179,21 @@ BoardTest.prototype.testFindPossibleMovesNoMoves = function() {
 
   assertEquals(0, moves.length);
 };
+
+BoardTest.prototype.testNoMovesFilledGrid = function() {
+  /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
+
+  _.each(_.range(0, othello.Board.size), function(i) {
+    _.each(_.range(0, othello.Board.size), function(j) {
+      boardBuilder.at(i, j).placeLightPiece();
+    });
+  });
+
+  /** @const */ var board = boardBuilder.build();
+
+  /** @const */ var lightMoves = board.findPossibleMoves(othello.LightPiece.instance);
+  assertEquals(0, lightMoves.length);
+
+  /** @const */ var darkMoves = board.findPossibleMoves(othello.DarkPiece.instance);
+  assertEquals(0, darkMoves.length);
+};
