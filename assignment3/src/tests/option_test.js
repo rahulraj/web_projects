@@ -8,7 +8,7 @@ OptionTest.prototype.setUp = function() {
   /** @const */ this.secondSome = new othello.utils.Some(10);
   /** @const */ this.maybeAddTen = function(num) {
     if (num === 4) {
-      return new othello.utils.Some(num + 10); 
+      return new othello.utils.Some(num + 10);
     } else {
       return othello.utils.None.instance;
     }

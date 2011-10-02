@@ -35,7 +35,7 @@ BoardTest.prototype.testFindPiecesToFlipSimple = function() {
   /** @const */ var deltaX = 1;
   /** @const */ var deltaY = 0; // search downwards.
   /** @const */ var toFlip = board.findPiecesToFlip(
-      othello.DarkPiece.instance, initialX, initialY, deltaX, deltaY)
+      othello.DarkPiece.instance, initialX, initialY, deltaX, deltaY);
 
   assertEquals(1, toFlip.length);
   /** @const */ var coordinates = toFlip[0];
@@ -95,49 +95,64 @@ BoardTest.prototype.testFindPiecesToFlipStopsIfChainIsBroken = function() {
   boardBuilder.at(3, 0).place(othello.EmptyPiece.instance);
   /** @const */ var board = boardBuilder.build();
   /** @const */ var toFlip = board.findPiecesToFlip(
-      othello.DarkPiece.instance, 0, 0, 1, 0); 
+      othello.DarkPiece.instance, 0, 0, 1, 0);
   assertEquals(0, toFlip.length);
 };
 
-BoardTest.prototype.testCorrectDimensions = function() {
-  assertEquals(8, othello.Board.size);
+BoardTest.prototype.testZip = function() {
+  /** @const */ var first = [-1, 0, 1];
+  /** @const */ var second = [-1, 0, 1];
+  /** @const */ var result = _.zip(first, second);
 };
 
-BoardTest.prototype.testCreateRow = function() {
-  /** @const */ var row = othello.Board.Builder.createRow();
-  assertEquals(othello.Board.size, row.length);
-  _.each(_.range(0, othello.Board.size), function(i) {
-    assertEquals(othello.EmptyPiece.instance, row[i]);
+BoardTest.prototype.testDeltas = function() {
+  /** @const */ var deltas = othello.Board.deltas();
+  assertEquals(8, deltas.length);
+
+  /** @const */ var dxIsNegOne = _(deltas).chain().filter(function(delta) {
+    return delta[0] === -1;
+  }).sortBy(function(delta) {
+    return delta[1];
+  }).value();
+
+  assertEquals(3, dxIsNegOne.length);
+  assertEquals(-1, dxIsNegOne[0][1]);
+  assertEquals(0, dxIsNegOne[1][1]);
+  assertEquals(1, dxIsNegOne[2][1]);
+
+  /** @const */ var dxIsZero = _(deltas).chain().filter(function(delta) {
+    return delta[0] === 0; 
+  }).sortBy(function(delta) {
+    return delta[1];
+  }).value();
+
+  assertEquals(2, dxIsZero.length);
+  assertEquals(-1, dxIsZero[0][1]);
+  assertEquals(1, dxIsZero[1][1]);
+
+  /** @const */ var dxIsOne = _(deltas).chain().filter(function(delta) {
+    return delta[0] === 1;
+  }).sortBy(function(delta) {
+    return delta[1];
+  }).value();
+
+  assertEquals(3, dxIsOne.length);
+  assertEquals(-1, dxIsOne[0][1]);
+  assertEquals(0, dxIsOne[1][1]);
+  assertEquals(1, dxIsOne[2][1]);
+};
+
+BoardTest.prototype.testFindAllPiecesToFlip = function() {
+  /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
+  _.each(_.range(1, othello.Board.size - 1), function(i) {
+    boardBuilder.at(i, 0) .placeLightMarker().
+        at(0, i).placeLightMarker();
   });
-};
+  boardBuilder.at(7, 0).placeDarkMarker().
+      at(0, 7).placeDarkMarker();
+  /** @const */ var board = boardBuilder.build();
+  /** @const */ var toFlip = board.findAllPiecesToFlip(
+      othello.DarkPiece.instance, 0, 0);
 
-
-BoardTest.prototype.testInitialGame = function() {
-  /** @const */ var board = othello.Board.Builder.initialGame().build();
-
-  assertEquals(othello.LightPiece.instance, board.pieceAt(3, 3));
-  assertEquals(othello.DarkPiece.instance, board.pieceAt(3, 4));
-  assertEquals(othello.DarkPiece.instance, board.pieceAt(4, 3));
-  assertEquals(othello.LightPiece.instance, board.pieceAt(4, 4));
-}
-
-BoardTest.prototype.testBuilderCreation = function() {
-  /** @const */ var board = othello.Board.Builder.emptyBoard().
-    at(1, 1).placeLightMarker().
-    at(3, 5).placeDarkMarker().
-    at(6, 7).placeLightMarker().build()
-
-  assertEquals(othello.LightPiece.instance, board.pieceAt(1, 1));
-  assertEquals(othello.DarkPiece.instance, board.pieceAt(3, 5));
-  assertEquals(othello.LightPiece.instance, board.pieceAt(6, 7));
-};
-
-BoardTest.prototype.testBuilderTemplate = function() {
-  /** @const */ var first = othello.Board.Builder.initialGame().build();
-  /** @const */ var second = othello.Board.Builder.templatedBy(first).
-      at(1, 1).placeLightMarker().build();
-  
-  assertEquals(second.pieceAt(1, 1), othello.LightPiece.instance);
-  assertEquals('The original board should be unchanged',
-      first.pieceAt(1, 1), othello.EmptyPiece.instance);
+  assertEquals(12, toFlip.length);
 };
