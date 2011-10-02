@@ -57,9 +57,7 @@ othello.Board.prototype.findPossibleMoves = function(piece) {
         return new othello.Point(row, column);
       });
     return _(pointsOnRow).filter(function(point) {
-      return (!self.isOccupiedAt(point.getX(), point.getY()) &&
-              self.findAllPiecesToFlip(piece, point.getX(), point.getY())
-                  .length !== 0);
+      return self.placementIsValid(piece, point.getX(), point.getY());
     });
   });
 };
