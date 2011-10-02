@@ -180,7 +180,7 @@ BoardTest.prototype.testFindPossibleMovesNoMoves = function() {
   assertEquals(0, moves.length);
 };
 
-BoardTest.prototype.testNoMovesFilledGrid = function() {
+BoardTest.prototype.createAllWhitePiecesBoard = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
 
   _.each(_.range(0, othello.Board.size), function(i) {
@@ -188,12 +188,42 @@ BoardTest.prototype.testNoMovesFilledGrid = function() {
       boardBuilder.at(i, j).placeLightPiece();
     });
   });
+  return boardBuilder.build();
+};
 
-  /** @const */ var board = boardBuilder.build();
+BoardTest.prototype.testNoMovesOnFilledBoard = function() {
+  /** @const */ var board = this.createAllWhitePiecesBoard();
 
   /** @const */ var lightMoves = board.findPossibleMoves(othello.LightPiece.instance);
   assertEquals(0, lightMoves.length);
 
   /** @const */ var darkMoves = board.findPossibleMoves(othello.DarkPiece.instance);
+  assertEquals(0, darkMoves.length);
+};
+
+BoardTest.prototype.testNoMovesVlasakovaSchotte2011Game = function() {
+  // Tests the position in the Vlasakova-Schotte game in the European
+  // Grand Prix Prague 2011. See the Wikipedia article for an image.
+  
+  // There is a dark piece at (7, 5). There are empty squares at
+  // (7, 3), (7, 4), (7, 6), (6, 5), and (6, 4). All other squares
+  // have white pieces. 
+  /** @const */ var allWhiteBoard = this.createAllWhitePiecesBoard();
+  
+  /** @const */ var vlasakovaSchotteBoard = 
+      othello.Board.Builder.templatedBy(allWhiteBoard).
+        at(7, 5).placeDarkPiece().
+        at(7, 3).place(othello.EmptyPiece.instance).
+        at(7, 4).place(othello.EmptyPiece.instance).
+        at(7, 6).place(othello.EmptyPiece.instance).
+        at(6, 5).place(othello.EmptyPiece.instance).
+        at(6, 4).place(othello.EmptyPiece.instance).build();
+
+  /** @const */ var lightMoves =
+      vlasakovaSchotteBoard.findPossibleMoves(othello.LightPiece.instance);
+  assertEquals(0, lightMoves.length);
+
+  /** @const */ var darkMoves =
+      vlasakovaSchotteBoard.findPossibleMoves(othello.DarkPiece.instance);
   assertEquals(0, darkMoves.length);
 };
