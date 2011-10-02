@@ -26,3 +26,16 @@ othello.Point.prototype.getX = function() {
 othello.Point.prototype.getY = function() {
   return this.yCoordinate;
 };
+
+/**
+ * Compare equality, for testing.
+ * @param {*} other the object to test against.
+ * @return {boolean} true if this Point is the same as the other one.
+ */
+othello.Point.prototype.equals = function(other) {
+  if (!(other instanceof othello.Point)) {
+    return false; 
+  }
+  return this.xCoordinate === other.getX() &&
+         this.yCoordinate === other.getY();
+};

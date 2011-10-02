@@ -156,3 +156,19 @@ BoardTest.prototype.testFindAllPiecesToFlip = function() {
 
   assertEquals(12, toFlip.length);
 };
+
+BoardTest.prototype.testFindPossibleMovesInitialGame = function() {
+  /** @const */ var board = othello.Board.Builder.initialGame().build();
+  /** @const */ var moves = board.findPossibleMoves(othello.DarkPiece.instance);
+  // moves should contain (3, 2), (2, 3), (4, 5), and (5, 4), in any order.
+  assertEquals(4, moves.length);
+
+  /** @const */ var sortedMoves = _(moves).sortBy(function(move) {
+    return move.getX(); 
+  });
+
+  assertTrue((new othello.Point(2, 3)).equals(sortedMoves[0]));
+  assertTrue((new othello.Point(3, 2)).equals(sortedMoves[1]));
+  assertTrue((new othello.Point(4, 5)).equals(sortedMoves[2]));
+  assertTrue((new othello.Point(5, 4)).equals(sortedMoves[3]));
+};

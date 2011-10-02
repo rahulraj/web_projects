@@ -44,7 +44,25 @@ othello.Board.prototype.placementIsValid = function(piece, x, y) {
 
 /**
  * Find the possible moves that a player can make.
+ * @param {othello.Piece} piece the piece representing the player's color.
+ * @return {Array.<othello.Point>} an array of the available Points
+ *     on which the piece can be legally placed. Empty if no Points exist.
  */
+othello.Board.prototype.findPossibleMoves = function(piece) {
+  /** @const */ var rows = _.range(0, this.board.length);
+  /** @const */ var self = this;
+  return othello.utils.flatMap(rows, function(row) {
+    /** @const */ var pointsOnRow =
+      _(_.range(0, self.board[0].length)).map(function(column) {
+        return new othello.Point(row, column);
+      });
+    return _(pointsOnRow).filter(function(point) {
+      return (!self.isOccupiedAt(point.getX(), point.getY()) &&
+              self.findAllPiecesToFlip(piece, point.getX(), point.getY())
+                  .length !== 0);
+    });
+  });
+};
 
 
 /**
