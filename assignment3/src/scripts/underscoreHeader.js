@@ -27,6 +27,7 @@ var _ = _ || function() {};
  * valid, but can't be verified because underscore.js doesn't compile.
  * @const 
  * @constructor
+ * @extends {Array}
  */ 
 othello.underscore.header.RichArray = function() {};
 /** @const */ othello.underscore.header.RichArray.prototype.flatten =
@@ -39,3 +40,5 @@ othello.underscore.header.RichArray = function() {};
     _.value || function() {};
 /** @const */ othello.underscore.header.RichArray.prototype.reject =
     _.reject || function() {};
+/** @const */ othello.underscore.header.RichArray.prototype.each =
+    _.each || function() {};
