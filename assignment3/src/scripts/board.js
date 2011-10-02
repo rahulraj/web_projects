@@ -53,7 +53,7 @@ othello.Board.prototype.findPossibleMoves = function(piece) {
   /** @const */ var self = this;
   return othello.utils.flatMap(rows, function(row) {
     /** @const */ var pointsOnRow =
-      _(_.range(0, self.board[0].length)).map(function(column) {
+      _.map(_.range(0, self.board[0].length), function(column) {
         return new othello.Point(row, column);
       });
     return _(pointsOnRow).filter(function(point) {

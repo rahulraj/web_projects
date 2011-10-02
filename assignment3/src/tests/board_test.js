@@ -202,8 +202,9 @@ BoardTest.prototype.testNoMovesOnFilledBoard = function() {
 };
 
 BoardTest.prototype.testNoMovesVlasakovaSchotte2011Game = function() {
-  // Tests the position in the Vlasakova-Schotte game in the European
-  // Grand Prix Prague 2011. See the Wikipedia article for an image.
+  // Tests the position in the Vlasakova-Schotte game from the European
+  // Grand Prix Prague 2011. See the Reversi Wikipedia article for an image.
+  // This is an example of a game that ends even though the board isn't full.
   
   // There is a dark piece at (7, 5). There are empty squares at
   // (7, 3), (7, 4), (7, 6), (6, 5), and (6, 4). All other squares
