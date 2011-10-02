@@ -14,6 +14,7 @@ othello.Piece = function() {};
 /**
  * Flips to the opposite type of piece.
  * @const
+ * @return {othello.Piece} the opposite type of piece.
  */
 othello.Piece.prototype.flip = function() {};
 
@@ -76,7 +77,7 @@ othello.DarkPiece.prototype.flip = function() {
 /**
  * An empty square (no piece).
  * @constructor
- * @implements {Othello.Piece}
+ * @implements {othello.Piece}
  * @const
  */
 othello.EmptyPiece = function() {};
