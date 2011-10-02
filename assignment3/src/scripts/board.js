@@ -1,5 +1,6 @@
 
 
+
 /**
  * Constructor for an Othello board
  * @param {Array.<Array.<othello.Piece>>} board a 2D array
@@ -36,7 +37,7 @@ othello.Board.prototype.placementIsValid = function(piece, x, y) {
     return false;
   }
   /** @const */ var self = this;
-  /** @const */ var flipped = this.findAllPiecesToFlip(piece, x, y)
+  /** @const */ var flipped = this.findAllPiecesToFlip(piece, x, y);
   return flipped.length > 0;
 };
 
@@ -66,9 +67,9 @@ othello.Board.prototype.findAllPiecesToFlip = function(piece, x, y) {
  */
 othello.Board.deltas = function() {
   /** @const */ var allCombinations = othello.utils.flatMap(_.range(-1, 2),
-  function(item) {
-      return [[-1, item], [0, item], [1, item]];
-  });
+      function(item) {
+        return [[-1, item], [0, item], [1, item]];
+      });
   return _(allCombinations).reject(function removeTheZeroPair(item) {
     return item[0] === 0 && item[1] === 0;
   });
@@ -96,10 +97,10 @@ othello.Board.prototype.findPiecesToFlip =
     function(piece, initialX, initialY, deltaX, deltaY) {
   var next = this.nextSquare(initialX, initialY, deltaX, deltaY);
   var contents = next.getOrElse(othello.EmptyPiece.instance);
-  if (contents === othello.EmptyPiece.instance || 
+  if (contents === othello.EmptyPiece.instance ||
       contents === piece) {
-    // It's next to an empty square or a piece of the same color.    
-    return []
+    // It's next to an empty square or a piece of the same color.
+    return [];
   }
   // Now keep walking down the chain
   var currentX = initialX + deltaX;
@@ -114,14 +115,14 @@ othello.Board.prototype.findPiecesToFlip =
     next = this.nextSquare(currentX, currentY, deltaX, deltaY);
     contents = next.getOrElse(othello.EmptyPiece.instance);
     if (contents === othello.EmptyPiece.instance) {
-      // the chain broke 
+      // the chain broke
       return [];
     }
     else if (contents === piece) {
       // end of a valid chain, return the chain
       return captured;
     } else {
-      // add the location of the piece we're passing over to captured 
+      // add the location of the piece we're passing over to captured
       /** @const */ var currentCoordinates = {
         xCoordinate: currentX,
         yCoordinate: currentY
@@ -148,18 +149,18 @@ othello.Board.prototype.isOccupiedAt = function(x, y) {
 /**
  * Get the contents of a square via relative positioning
  * @param {number} row the initial row.
- * @param {number} column the initial column
+ * @param {number} column the initial column.
  * @param {number} deltaX the amount by which to change the X coordinate.
  * @param {number} deltaY the amount by which to change the Y coordinate.
- * @return {othello.utils.Option} Some(Piece in the found square) or None if 
+ * @return {othello.utils.Option} Some(Piece in the found square) or None if
  *     we go off the board.
  */
 othello.Board.prototype.nextSquare = function(row, column, deltaX, deltaY) {
   /** @const */ var newRow = row + deltaX;
   /** @const */ var newColumn = column + deltaY;
   if (this.inBounds(newRow, newColumn)) {
-    return new othello.utils.Some(this.board[newRow][newColumn]); 
-  } else{
+    return new othello.utils.Some(this.board[newRow][newColumn]);
+  } else {
     return othello.utils.None.instance;
   }
 };
@@ -167,6 +168,8 @@ othello.Board.prototype.nextSquare = function(row, column, deltaX, deltaY) {
 
 /**
  * Helper function to tell if a pair of coordinate is in bounds.
+ * @param {number} x the x coordinate.
+ * @param {number} y the y coordinate.
  * @return {boolean} true if it is safe to index this Board with
  *     the given coordinates.
  */
@@ -174,7 +177,6 @@ othello.Board.prototype.inBounds = function(x, y) {
   return x >= 0 && x < this.board.length &&
          y >= 0 && y < this.board[0].length;
 };
-
 
 
 /**
@@ -313,7 +315,7 @@ othello.Board.Builder.prototype.flip = function() {
  */
 othello.Board.Builder.createRow = function() {
   return _.map(_.range(0, othello.Board.size), function(i) {
-    return othello.EmptyPiece.instance;                             
+    return othello.EmptyPiece.instance;
   });
 };
 
