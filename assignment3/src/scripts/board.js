@@ -43,13 +43,18 @@ othello.Board.prototype.placementIsValid = function(piece, x, y) {
 
 
 /**
+ * Find the possible moves that a player can make.
+ */
+
+
+/**
  * Given an initial location and a piece, returns the coordinates of
  * all the pieces that would be flipped if piece was placed in the initial
  * location.
  * @param {othello.Piece} piece the piece being placed.
  * @param {number} x the x coordinate.
  * @param {number} y the y coordinate.
- * @return {Array.<{xCoordinate: number, yCoordinate: number}>} an Array
+ * @return {Array.<othello.Point>} an Array
  *    containing the coordinates of all the pieces that would be flipped.
  */
 othello.Board.prototype.findAllPiecesToFlip = function(piece, x, y) {
@@ -79,9 +84,9 @@ othello.Board.deltas = function() {
 /**
  * Walk in a given direction, and locate all the coordinates
  * whose pieces need to be flipped. This will be all the pieces
- * in a line that starts at the original location, and ends at
+ * in the line that starts at the original location, and ends at
  * the first square found that contains another piece of the same color.
- * If the chain is broken by an empty square or the end of the board,
+ * If the chain is broken by an empty square or the edge of the board,
  * this means no pieces can be flipped. Presumably, we are analyzing
  * the effects of a move that places a piece in (initialX, initialY).
  * @param {othello.Piece} piece the piece being placed in the first point.
@@ -89,8 +94,8 @@ othello.Board.deltas = function() {
  * @param {number} initialY the initial y coordinate.
  * @param {number} deltaX the amount by which to change x in each step.
  * @param {number} deltaY the amount by which to change y in each step.
- * @return {Array.<{xCoordinate: number, yCoordinate: number}>} an
- *     array containing a record with the coordinates of pieces to flip.
+ * @return {Array.<othello.Point>} an
+ *     array containing Points with the coordinates of pieces to flip.
  *     If no pieces can be flipped, returns an empty array.
  */
 othello.Board.prototype.findPiecesToFlip =
@@ -106,10 +111,7 @@ othello.Board.prototype.findPiecesToFlip =
   var currentX = initialX + deltaX;
   var currentY = initialY + deltaY;
   // But don't forget to add the coordinates we just stepped over.
-  /** @const */ var firstStepCoordinates = {
-    xCoordinate: currentX,
-    yCoordinate: currentY
-  };
+  /** @const */ var firstStepCoordinates = new othello.Point(currentX, currentY);
   /** @const */ var captured = [firstStepCoordinates];
   while (true) {
     next = this.nextSquare(currentX, currentY, deltaX, deltaY);
@@ -123,10 +125,7 @@ othello.Board.prototype.findPiecesToFlip =
       return captured;
     } else {
       // add the location of the piece we're passing over to captured
-      /** @const */ var currentCoordinates = {
-        xCoordinate: currentX,
-        yCoordinate: currentY
-      };
+      /** @const */ var currentCoordinates = new othello.Point(currentX, currentY);
       captured.push(currentCoordinates);
       currentX += deltaX;
       currentY += deltaY;
