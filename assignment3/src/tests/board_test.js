@@ -172,3 +172,10 @@ BoardTest.prototype.testFindPossibleMovesInitialGame = function() {
   assertTrue((new othello.Point(4, 5)).equals(sortedMoves[2]));
   assertTrue((new othello.Point(5, 4)).equals(sortedMoves[3]));
 };
+
+BoardTest.prototype.testFindPossibleMovesNoMoves = function() {
+  /** @const */ var emptyBoard = othello.Board.Builder.emptyBoard().build();
+  /** @const */ var moves = emptyBoard.findPossibleMoves(othello.DarkPiece.instance);
+
+  assertEquals(0, moves.length);
+};
