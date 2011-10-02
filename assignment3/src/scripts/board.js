@@ -62,9 +62,7 @@ othello.Board.prototype.findAllPiecesToFlip = function(piece, x, y) {
 /**
  * Return a list of lists containing the appropriate values for
  * deltaX and deltaY
- * @return {othello.underscore.header.RichArray} a list of deltas, 
- *     wrapped in an _. The exact type is defined by underscore.js.
- *     RichArray is a type synonym to provide information to the compiler.
+ * @return {Array.<Array.<number>>} a list of deltas, as x, y tuples.
  */
 othello.Board.deltas = function() {
   /** @const */ var allCombinations = othello.utils.flatMap(_.range(-1, 2),
@@ -74,12 +72,6 @@ othello.Board.deltas = function() {
   return _(allCombinations).reject(function removeTheZeroPair(item) {
     return item[0] === 0 && item[1] === 0;
   });
-  /*
-  return _(_.zip(_.range(-1, 2), _.range(-1, 2))).chain().
-      filter(function(item) {
-    return item[0] !== 0 && item[1] !== 1;
-  });
-  */
 };
 
 
