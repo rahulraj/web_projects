@@ -25,9 +25,9 @@ BoardBuilderTest.prototype.testInitialGame = function() {
 
 BoardBuilderTest.prototype.testBuilderCreation = function() {
   /** @const */ var board = othello.Board.Builder.emptyBoard().
-      at(1, 1).placeLightMarker().
-      at(3, 5).placeDarkMarker().
-      at(6, 7).placeLightMarker().build();
+      at(1, 1).placeLightPiece().
+      at(3, 5).placeDarkPiece().
+      at(6, 7).placeLightPiece().build();
 
   assertEquals(othello.LightPiece.instance, board.pieceAt(1, 1));
   assertEquals(othello.DarkPiece.instance, board.pieceAt(3, 5));
@@ -37,7 +37,7 @@ BoardBuilderTest.prototype.testBuilderCreation = function() {
 BoardBuilderTest.prototype.testBuilderTemplate = function() {
   /** @const */ var first = othello.Board.Builder.initialGame().build();
   /** @const */ var second = othello.Board.Builder.templatedBy(first).
-      at(1, 1).placeLightMarker().build();
+      at(1, 1).placeLightPiece().build();
 
   assertEquals(second.pieceAt(1, 1), othello.LightPiece.instance);
   assertEquals('The original board should be unchanged',

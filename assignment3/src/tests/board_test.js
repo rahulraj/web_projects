@@ -16,7 +16,7 @@ BoardTest.prototype.testInvalidNextSquare = function() {
 
 BoardTest.prototype.testOverlappingPiecePlacementNotValid = function() {
   /** @const */ var board = othello.Board.Builder.emptyBoard().
-      at(3, 3).placeLightMarker().build();
+      at(3, 3).placeLightPiece().build();
   assertFalse(board.placementIsValid(othello.LightPiece.instance, 3, 3));
 };
 
@@ -46,9 +46,9 @@ BoardTest.prototype.testFindPiecesToFlipSimple = function() {
 BoardTest.prototype.testFindPiecesToFlipLoop = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
   _.each(_.range(1, othello.Board.size - 1), function(i) {
-    boardBuilder.at(i, 0).placeLightMarker();
+    boardBuilder.at(i, 0).placeLightPiece();
   });
-  boardBuilder.at(7, 0).placeDarkMarker();
+  boardBuilder.at(7, 0).placeDarkPiece();
   /** @const */ var board = boardBuilder.build();
   // Now, placing a dark piece at (0, 0) and searching with an xDelta
   // of +1 should result in all 6 of the light pieces flipping.
@@ -78,8 +78,8 @@ BoardTest.prototype.testFindPiecesToFlipStopsIfNextToSameColor = function() {
 
 BoardTest.prototype.testFindPiecesToFlipStopsIfIsolated = function() {
   /** @const */ var board = othello.Board.Builder.emptyBoard().
-      at(3, 3).placeLightMarker().
-      at(7, 5).placeDarkMarker().build();
+      at(3, 3).placeLightPiece().
+      at(7, 5).placeDarkPiece().build();
   /** @const */ var toFlip = board.findPiecesToFlip(
       othello.DarkPiece.instance, 0, 0, 1, 1);
   assertEquals(0, toFlip.length);
@@ -88,9 +88,9 @@ BoardTest.prototype.testFindPiecesToFlipStopsIfIsolated = function() {
 BoardTest.prototype.testFindPiecesToFlipStopsIfChainIsBroken = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
   _.each(_.range(1, othello.Board.size - 1), function(i) {
-    boardBuilder.at(i, 0).placeLightMarker();
+    boardBuilder.at(i, 0).placeLightPiece();
   });
-  boardBuilder.at(7, 0).placeDarkMarker();
+  boardBuilder.at(7, 0).placeDarkPiece();
   // This time, there is a space in the middle
   boardBuilder.at(3, 0).place(othello.EmptyPiece.instance);
   /** @const */ var board = boardBuilder.build();
@@ -145,11 +145,11 @@ BoardTest.prototype.testDeltas = function() {
 BoardTest.prototype.testFindAllPiecesToFlip = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
   _.each(_.range(1, othello.Board.size - 1), function(i) {
-    boardBuilder.at(i, 0) .placeLightMarker().
-        at(0, i).placeLightMarker();
+    boardBuilder.at(i, 0) .placeLightPiece().
+        at(0, i).placeLightPiece();
   });
-  boardBuilder.at(7, 0).placeDarkMarker().
-      at(0, 7).placeDarkMarker();
+  boardBuilder.at(7, 0).placeDarkPiece().
+      at(0, 7).placeDarkPiece();
   /** @const */ var board = boardBuilder.build();
   /** @const */ var toFlip = board.findAllPiecesToFlip(
       othello.DarkPiece.instance, 0, 0);

@@ -240,10 +240,10 @@ othello.Board.Builder.templatedBy = function(board) {
  */
 othello.Board.Builder.initialGame = function() {
   return othello.Board.Builder.emptyBoard().
-      at(3, 3).placeLightMarker().
-      at(3, 4).placeDarkMarker().
-      at(4, 3).placeDarkMarker().
-      at(4, 4).placeLightMarker();
+      at(3, 3).placeLightPiece().
+      at(3, 4).placeDarkPiece().
+      at(4, 3).placeDarkPiece().
+      at(4, 4).placeLightPiece();
 };
 
 
@@ -266,7 +266,7 @@ othello.Board.Builder.prototype.at = function(row, column) {
  * @return {othello.Board.Builder} this for chaining.
  * @const
  */
-othello.Board.Builder.prototype.placeLightMarker = function() {
+othello.Board.Builder.prototype.placeLightPiece = function() {
   this.place(othello.LightPiece.instance);
   return this;
 };
@@ -277,7 +277,7 @@ othello.Board.Builder.prototype.placeLightMarker = function() {
  * @return {othello.Board.Builder} this for chaining.
  * @const
  */
-othello.Board.Builder.prototype.placeDarkMarker = function() {
+othello.Board.Builder.prototype.placeDarkPiece = function() {
   this.place(othello.DarkPiece.instance);
   return this;
 };
