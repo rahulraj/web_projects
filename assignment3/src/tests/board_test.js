@@ -228,3 +228,36 @@ BoardTest.prototype.testNoMovesVlasakovaSchotte2011Game = function() {
       vlasakovaSchotteBoard.findPossibleMoves(othello.DarkPiece.instance);
   assertEquals(0, darkMoves.length);
 };
+
+BoardTest.prototype.testFirstMove = function() {
+  /** @const */ var initialBoard = othello.Board.Builder.initialGame().build();
+
+  // Try placing a black piece at (3, 2). The white piece at (3, 3) should
+  // flip, and all remaining pieces should be the same. Also, board should
+  // not be mutated.
+  /** @const */ var nextBoard = initialBoard.makeMove(
+      othello.DarkPiece.instance, 3, 2);
+
+  _.each(_.range(0, othello.Board.size), function(i) {
+    _.each(_.range(0, othello.Board.size), function(j) {
+      if (i === 3 && j === 2) {
+        assertFalse(initialBoard.isOccupiedAt(i, j));
+        assertEquals(othello.DarkPiece.instance, nextBoard.pieceAt(i, j));
+      } else if (i === 3 && j === 3) {
+        assertEquals(othello.LightPiece.instance, initialBoard.pieceAt(i, j));
+        assertEquals(othello.DarkPiece.instance, nextBoard.pieceAt(i, j));
+      } else {
+        assertEquals(initialBoard.pieceAt(i, j), nextBoard.pieceAt(i, j));
+      }
+    });
+  });
+};
+
+BoardTest.prototype.testMakeMoveThrowsOnInvalidMove = function() {
+  /** @const */ var initialBoard = othello.Board.Builder.initialGame().build();
+
+  try {
+    initialBoard.makeMove(othello.DarkPiece.instance, 3, 3);
+    fail();
+  } catch (expectedInvalidMoveError) {}
+};

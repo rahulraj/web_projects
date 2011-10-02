@@ -25,6 +25,32 @@ othello.Board.prototype.pieceAt = function(row, column) {
 
 
 /**
+ * A client-facing method that makes one move in the game,
+ * placing piece at (x, y) and returning the new Board that results.
+ * Does not mutate this.board, creates a new Board instead.
+ * @param {piece} piece the piece being placed.
+ * @param {number} x the x coordinate to place it on.
+ * @param {number} y the y coordinate to place it on.
+ * @return {othello.Board} the new board that results.
+ * @throws {Error} if the move is invalid. Clients should verify the move
+ *    with findPossibleMoves first.
+ */
+othello.Board.prototype.makeMove = function(piece, x, y) {
+  if (!(this.placementIsValid(piece, x, y))) {
+    throw new Error('Invalid move attempted!');
+  }
+
+  /** @const */ var flipped = this.findAllPiecesToFlip(piece, x, y);
+  /** @const */ var newBoardBuilder = othello.Board.Builder.templatedBy(this);
+  newBoardBuilder.at(x, y).place(piece);
+  _(flipped).each(function(point) {
+    newBoardBuilder.at(point.getX(), point.getY()).flip();
+  });
+  return newBoardBuilder.build();
+};
+
+
+/**
  * Given a proposed location to place a piece, return true
  * if it is valid.
  * @param {othello.Piece} piece the piece being placed.
@@ -36,7 +62,6 @@ othello.Board.prototype.placementIsValid = function(piece, x, y) {
   if (this.isOccupiedAt(x, y)) {
     return false;
   }
-  /** @const */ var self = this;
   /** @const */ var flipped = this.findAllPiecesToFlip(piece, x, y);
   return flipped.length > 0;
 };
@@ -240,7 +265,7 @@ othello.Board.Builder.templatedBy = function(board) {
   /** @const */ var builder = othello.Board.Builder.emptyBoard();
   /** @const */ var oldArray = board.board;
   _.each(_.range(0, oldArray.length), function(i) {
-    _.each(_.range(0, oldArray.length), function(j) {
+    _.each(_.range(0, oldArray[0].length), function(j) {
       builder.at(i, j).place(oldArray[i][j]);
     });
   });
@@ -277,7 +302,7 @@ othello.Board.Builder.prototype.at = function(row, column) {
 
 
 /**
- * Add a light marker to the board
+ * Add a light piece to the board
  * @return {othello.Board.Builder} this for chaining.
  * @const
  */
@@ -288,7 +313,7 @@ othello.Board.Builder.prototype.placeLightPiece = function() {
 
 
 /**
- * Add a dark marker to the board
+ * Add a dark piece to the board
  * @return {othello.Board.Builder} this for chaining.
  * @const
  */
@@ -299,7 +324,7 @@ othello.Board.Builder.prototype.placeDarkPiece = function() {
 
 
 /**
- * Add a marker to the board
+ * Add a piece to the board
  * @param {othello.Piece} piece the piece to add.
  * @return {othello.Board.Builder} this for chaining.
  * @const
