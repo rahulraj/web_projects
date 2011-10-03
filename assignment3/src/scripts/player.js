@@ -9,8 +9,8 @@ othello.Player = function() {};
 /**
  * Abstract method, to decide the next move.
  * @param {othello.Board} board the board to move on.
- * @return {othello.Board} a new board object representing the state after the
- *     move.
+ * @return {othello.utils.Option} a new Board object inside an Option representing 
+ *    the state after the move. Will be None if the player had to pass.
  * @const
  */
 othello.Player.prototype.makeMove = function(board) {};
@@ -34,8 +34,8 @@ othello.AiPlayer = function(piece, playerStrategy) {
 /**
  * Decide the next move through playerStrategy.
  * @param {othello.Board} board the board to move on.
- * @return {othello.Board} a new Board object representing the state after the
- *     move.
+ * @return {othello.utils.Option} a new Board object inside an Option representing 
+ *    the state after the move. Will be None if the player had to pass.
  * @const
  */
 othello.AiPlayer.prototype.makeMove = function(board) {
@@ -69,27 +69,34 @@ othello.AiPlayer.createGreedyAi = function(piece) {
  * Simple AI strategy - randomly pick a move and make it.
  * @param {othello.Piece} piece the piece representing this player's side.
  * @param {othello.Board} board the board to move on.
- * @return {othello.Board} the board after the move, leaving the old board
- *     unchanged.
+ * @return {othello.utils.Option} the board after the move, leaving the old 
+ *     board unchanged in a Some, or None if the player had to pass.
  * @const
  */
 othello.AiPlayer.randomMakeMove = function(piece, board) {
   /** @const */ var possibleMoves = board.findPossibleMoves(piece);
+  if (possibleMoves.length === 0) {
+    return othello.utils.None.instance; 
+  }
   /** @const */ var index = Math.floor(Math.random() * possibleMoves.length);
   /** @const */ var locationOfMove = possibleMoves[index];
-  return board.makeMove(piece, locationOfMove.getX(), locationOfMove.getY());
+  return new othello.utils.Some(
+    board.makeMove(piece, locationOfMove.getX(), locationOfMove.getY()));
 };
 
 /**
  * Greedy AI strategy - at each step, make the move that has the highest gain.
  * @param {othello.Piece} piece the piece representing this player's side.
  * @param {othello.Board} board the board to move on.
- * @return {othello.Board} the board after the move, leaving the old board
- *     unchanged.
+ * @return {othello.utils.Option} the board after the move, leaving the old 
+ *     board unchanged in a Some, or None if the player had to pass.
  * @const
  */
 othello.AiPlayer.greedyMakeMove = function(piece, board) {
   /** @const */ var possibleMoves = board.findPossibleMoves(piece);
+  if (possibleMoves.length === 0) {
+    return othello.utils.None.instance;
+  }
 
   /** @const */ var newBoards = _(possibleMoves).map(function(move) {
     return board.makeMove(piece, move.getX(), move.getY());
@@ -100,11 +107,13 @@ othello.AiPlayer.greedyMakeMove = function(piece, board) {
 
   /** @const */ var boardsAndScores = _.zip(newBoards, scores);
 
-  return _(boardsAndScores).reduce(function(bestSoFar, current) {
+  /** @const */ var nextBoard = _(boardsAndScores).reduce(
+      function(bestSoFar, current) {
     /** @const */ var bestSoFarBoard = bestSoFar[0];
     /** @const */ var bestSoFarScore = bestSoFar[1];
     /** @const */ var currentBoard = current[0];
     /** @const */ var currentScore = current[1];
     return bestSoFarScore >= currentScore ? bestSoFarBoard : currentBoard;
   }, boardsAndScores[0][0]);
+  return new othello.utils.Some(nextBoard);
 };

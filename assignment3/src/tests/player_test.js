@@ -6,7 +6,7 @@ PlayerTest.prototype.runOneMoveOnAiPlayer = function(aiPlayer) {
     at(5, 4).placeDarkPiece().build();
 
   // The AI has one choice: place a dark piece at (3, 4). It should do that.
-  /** @const */ var resultBoard = aiPlayer.makeMove(board);
+  /** @const */ var resultBoard = aiPlayer.makeMove(board).getOrElse(null);
 
   assertEquals(othello.DarkPiece.instance, resultBoard.pieceAt(3, 4));
   assertEquals(othello.DarkPiece.instance, resultBoard.pieceAt(4, 4));
@@ -40,7 +40,8 @@ PlayerTest.prototype.testGreedyPlayerPicksBetterChoice = function() {
   
   /** @const */ var greedyAi =
       othello.AiPlayer.createGreedyAi(othello.DarkPiece.instance)
-  /** @const */ var newBoard = greedyAi.makeMove(boardBuilder.build());
+  /** @const */ var newBoard = greedyAi.makeMove(boardBuilder.build()).
+      getOrElse(null);
 
   assertEquals(othello.DarkPiece.instance, newBoard.pieceAt(0, 0));
 };
