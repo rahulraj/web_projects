@@ -24,3 +24,23 @@ PlayerTest.prototype.testGreedyPlayerOneMove = function() {
   this.runOneMoveOnAiPlayer(
       othello.AiPlayer.createGreedyAi(othello.DarkPiece.instance));
 };
+
+PlayerTest.prototype.testGreedyPlayerPicksBetterChoice = function() {
+  /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard().
+    at(4, 4).placeLightPiece().
+    at(5, 4).placeDarkPiece();
+
+  // Place light pieces along the top row.
+  _.each(_.range(1, othello.Board.size - 1), function(i) {
+    boardBuilder.at(i, 0).placeLightPiece();
+  });
+  boardBuilder.at(7, 0).placeDarkPiece();
+
+  // Now, the greedy strategy is to place a dark piece at (0, 0)
+  
+  /** @const */ var greedyAi =
+      othello.AiPlayer.createGreedyAi(othello.DarkPiece.instance)
+  /** @const */ var newBoard = greedyAi.makeMove(boardBuilder.build());
+
+  assertEquals(othello.DarkPiece.instance, newBoard.pieceAt(0, 0));
+};
