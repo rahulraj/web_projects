@@ -56,7 +56,14 @@ class GalleryGenerator(object):
       file_name the name of the file to symlink to.
     """
     full_link_name = os.path.join(output_directory, 'index.html')
-    os.symlink(file_name, full_link_name)
+    try:
+      os.symlink(file_name, full_link_name)
+    except OSError:
+      print 'You already have a file named index.html in the output ' + \
+          'directory, so the symlink failed.'
+      print "I'll assume that there was a specific page that you wanted to" + \
+          'display when the user points a browser at the output directory.'
+      print 'Skipping the symlink...'
 
 
 def create_gallery_generator(command_line_arguments, css_directory):
