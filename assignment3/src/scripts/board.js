@@ -27,14 +27,19 @@ othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
 };
 
 
+/**
+ * Get the number of pieces of a specified type.
+ * @param {othello.Piece} piece the side to check.
+ * @return {number} the number of pieces.
+ */
 othello.Board.prototype.getNumberOfPieces = function(piece) {
   // TODO refactor to use polymorphism
   if (piece instanceof othello.LightPiece) {
-    return this.getNumberOfLightPieces(); 
-  } else if (piece instanceof othello.DarkPiece) { 
+    return this.getNumberOfLightPieces();
+  } else if (piece instanceof othello.DarkPiece) {
     return this.getNumberOfDarkPieces();
- }
- throw new Error("Meaningless to calculate number of empty pieces");
+  }
+  throw new Error('Meaningless to calculate number of empty pieces');
 };
 
 
@@ -122,9 +127,9 @@ othello.Board.prototype.findPossibleMoves = function(piece) {
   /** @const */ var self = this;
   return othello.utils.flatMap(rows, function(row) {
     /** @const */ var pointsOnRow =
-      _.map(_.range(0, self.board[0].length), function(column) {
-        return new othello.Point(row, column);
-      });
+        _.map(_.range(0, self.board[0].length), function(column) {
+      return new othello.Point(row, column);
+    });
     return _(pointsOnRow).filter(function(point) {
       return self.placementIsValid(piece, point.getX(), point.getY());
     });
@@ -196,7 +201,8 @@ othello.Board.prototype.findPiecesToFlip =
   var currentX = initialX + deltaX;
   var currentY = initialY + deltaY;
   // But don't forget to add the coordinates we just stepped over.
-  /** @const */ var firstStepCoordinates = new othello.Point(currentX, currentY);
+  /** @const */ var firstStepCoordinates =
+      new othello.Point(currentX, currentY);
   /** @const */ var captured = [firstStepCoordinates];
   while (true) {
     next = this.nextSquare(currentX, currentY, deltaX, deltaY);
@@ -210,7 +216,8 @@ othello.Board.prototype.findPiecesToFlip =
       return captured;
     } else {
       // add the location of the piece we're passing over to captured
-      /** @const */ var currentCoordinates = new othello.Point(currentX, currentY);
+      /** @const */ var currentCoordinates =
+          new othello.Point(currentX, currentY);
       captured.push(currentCoordinates);
       currentX += deltaX;
       currentY += deltaY;
@@ -416,9 +423,9 @@ othello.Board.Builder.prototype.build = function() {
   _.each(_.range(0, self.board.length), function(i) {
     _.each(_.range(0, self.board[0].length), function(j) {
       if (self.board[i][j] === othello.LightPiece.instance) {
-        lightPieces++; 
+        lightPieces++;
       } else if (self.board[i][j] === othello.DarkPiece.instance) {
-        darkPieces++; 
+        darkPieces++;
       }
     });
   });

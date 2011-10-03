@@ -1,3 +1,6 @@
+
+
+
 /**
  * Constructor for Point, a simple data object with x and y coordinates.
  * @param {number} xCoordinate the x coordinate.
@@ -9,6 +12,7 @@ othello.Point = function(xCoordinate, yCoordinate) {
   /** @const */ this.xCoordinate = xCoordinate;
   /** @const */ this.yCoordinate = yCoordinate;
 };
+
 
 /**
  * Getter for xCoordinate.
@@ -27,6 +31,7 @@ othello.Point.prototype.getY = function() {
   return this.yCoordinate;
 };
 
+
 /**
  * Compare equality, for testing.
  * @param {*} other the object to test against.
@@ -34,7 +39,7 @@ othello.Point.prototype.getY = function() {
  */
 othello.Point.prototype.equals = function(other) {
   if (!(other instanceof othello.Point)) {
-    return false; 
+    return false;
   }
   return this.xCoordinate === other.getX() &&
          this.yCoordinate === other.getY();
