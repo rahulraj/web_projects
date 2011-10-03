@@ -90,13 +90,21 @@ othello.AiPlayer.randomMakeMove = function(piece, board) {
  */
 othello.AiPlayer.greedyMakeMove = function(piece, board) {
   /** @const */ var possibleMoves = board.findPossibleMoves(piece);
-  return _(possibleMoves).reduce(function(bestSoFar, current) {
-    /** @const */ var bestSoFarBoard = board.makeMove(piece, bestSoFar.getX(),
-        bestSoFar.getY());
-    /** @const */ var currentBoard = board.makeMove(piece, current.getX(),
-        current.getY());
-    /** @const */ var bestSoFarScore = bestSoFarBoard.getNumberOfPieces(piece);
-    /** @const */ var currentScore = currentBoard.getNumberOfPieces(piece);
-    return bestSoFarScore >= currentScore ? bestSoFarScore : currentScore;
-  }, possibleMoves[0]);
+
+  /** @const */ var newBoards = _(possibleMoves).map(function(move) {
+    return board.makeMove(piece, move.getX(), move.getY());
+  });
+  /** @const */ var scores = _(newBoards).map(function(newBoard) {
+    return newBoard.getNumberOfPieces(piece);
+  });
+
+  /** @const */ var boardsAndScores = _.zip(newBoards, scores);
+
+  return _(boardsAndScores).reduce(function(bestSoFar, current) {
+    /** @const */ var bestSoFarBoard = bestSoFar[0];
+    /** @const */ var bestSoFarScore = bestSoFar[1];
+    /** @const */ var currentBoard = current[0];
+    /** @const */ var currentScore = current[1];
+    return bestSoFarScore >= currentScore ? bestSoFarBoard : currentBoard;
+  }, boardsAndScores[0][0]);
 };
