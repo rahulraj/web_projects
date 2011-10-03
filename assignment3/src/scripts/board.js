@@ -2,19 +2,52 @@
 
 
 /**
- * Constructor for an Othello board
+ * Constructor for an Othello board. Client code should not
+ * call this constructor directly; use the Builder instead.
+ * Using the Builder pattern in this case has the following advantages:
+ *   - Allows multi-step construction.
+ *   - Cleaner syntax for creating a board, hiding the 2D array implementation.
+ *   - Allows Boards to be immutable; all mutability is contained in Builders.
+ * Representation Invariants:
+ *   - Immutable - every move should create a new board.
+ *     Use the Builder to creat boards more easily.
+ *   - All squares must contain an othello.Piece, it may not
+ *     be null or some other type.
  * @param {Array.<Array.<othello.Piece>>} board a 2D array
  *     representing the board.
+ * @param {number} numberOfLightPieces the number of light pieces.
+ * @param {number} numberOfDarkPieces the number of dark pieces.
  * @constructor
  * @const
  */
-othello.Board = function(board) {
+othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
   /** @const */ this.board = board;
+  /** @const */ this.numberOfLightPieces = numberOfLightPieces;
+  /** @const */ this.numberOfDarkPieces = numberOfDarkPieces;
+};
+
+
+/**
+ * Getter function for the number of light pieces
+ * @return {number} this.numberOfLightPieces.
+ */
+othello.Board.prototype.getNumberOfLightPieces = function() {
+  return this.numberOfLightPieces;
+};
+
+
+/**
+ * Getter function for the number of dark pieces
+ * @return {number} this.numberOfDarkPieces.
+ */
+othello.Board.prototype.getNumberOfDarkPieces = function() {
+  return this.numberOfDarkPieces;
 };
 
 
 /**
  * Retrieve the piece at a given location.
+ * Do not access board directly, use this function instead.
  * @param {number} row the row.
  * @param {number} column the column.
  * @return {othello.Piece} the Piece at that location.
@@ -28,7 +61,7 @@ othello.Board.prototype.pieceAt = function(row, column) {
  * A client-facing method that makes one move in the game,
  * placing piece at (x, y) and returning the new Board that results.
  * Does not mutate this.board, creates a new Board instead.
- * @param {piece} piece the piece being placed.
+ * @param {othello.Piece} piece the piece being placed.
  * @param {number} x the x coordinate to place it on.
  * @param {number} y the y coordinate to place it on.
  * @return {othello.Board} the new board that results.
@@ -365,5 +398,18 @@ othello.Board.Builder.createRow = function() {
  * @return {othello.Board} the board created from this Builder.
  */
 othello.Board.Builder.prototype.build = function() {
-  return new othello.Board(this.board);
+  // calculate the number of pieces, and pass that through.
+  var lightPieces = 0;
+  var darkPieces = 0;
+  /** @const */ var self = this;
+  _.each(_.range(0, self.board.length), function(i) {
+    _.each(_.range(0, self.board[0].length), function(j) {
+      if (self.board[i][j] === othello.LightPiece.instance) {
+        lightPieces++; 
+      } else if (self.board[i][j] === othello.DarkPiece.instance) {
+        darkPieces++; 
+      }
+    });
+  });
+  return new othello.Board(this.board, lightPieces, darkPieces);
 };

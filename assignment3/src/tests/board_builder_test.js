@@ -43,3 +43,10 @@ BoardBuilderTest.prototype.testBuilderTemplate = function() {
   assertEquals('The original board should be unchanged',
       first.pieceAt(1, 1), othello.EmptyPiece.instance);
 };
+
+BoardBuilderTest.prototype.testPieceCount = function() {
+  /** @const */ var board = othello.Board.Builder.initialGame().build();
+
+  assertEquals(2, board.getNumberOfDarkPieces());
+  assertEquals(2, board.getNumberOfLightPieces());
+};
