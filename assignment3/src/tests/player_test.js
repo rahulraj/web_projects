@@ -45,3 +45,21 @@ PlayerTest.prototype.testGreedyPlayerPicksBetterChoice = function() {
 
   assertEquals(othello.DarkPiece.instance, newBoard.pieceAt(0, 0));
 };
+
+PlayerTest.prototype.testPlayersReturnNoneWhenNoMoves = function() {
+  // Test the ending of the Vlasakova-Schotte game, at whichh no moves
+  // could be made. Players should return None, indicating a pass.
+  /** @const */ var boardTest = new BoardTest();
+  /** @const */ var vlasakovaSchotteBoard =
+      boardTest.createVlasakovaSchotteBoard();
+
+  /** @const */ var whitePlayer =
+      othello.AiPlayer.createRandomAi(othello.LightPiece.instance);
+  assertEquals(othello.utils.None.instance, 
+      whitePlayer.makeMove(vlasakovaSchotteBoard));
+
+  /** @const */ var darkPlayer =
+      othello.AiPlayer.createGreedyAi(othello.DarkPiece.instance);
+  assertEquals(othello.utils.None.instance, 
+      darkPlayer.makeMove(vlasakovaSchotteBoard));
+}

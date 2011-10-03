@@ -201,14 +201,7 @@ BoardTest.prototype.testNoMovesOnFilledBoard = function() {
   assertEquals(0, darkMoves.length);
 };
 
-BoardTest.prototype.testNoMovesVlasakovaSchotte2011Game = function() {
-  // Tests the position in the Vlasakova-Schotte game from the European
-  // Grand Prix Prague 2011. See the Reversi Wikipedia article for an image.
-  // This is an example of a game that ends even though the board isn't full.
-  
-  // There is a dark piece at (7, 5). There are empty squares at
-  // (7, 3), (7, 4), (7, 6), (6, 5), and (6, 4). All other squares
-  // have white pieces. 
+BoardTest.prototype.createVlasakovaSchotteBoard = function() {
   /** @const */ var allWhiteBoard = this.createAllWhitePiecesBoard();
   
   /** @const */ var vlasakovaSchotteBoard = 
@@ -219,6 +212,18 @@ BoardTest.prototype.testNoMovesVlasakovaSchotte2011Game = function() {
         at(7, 6).place(othello.EmptyPiece.instance).
         at(6, 5).place(othello.EmptyPiece.instance).
         at(6, 4).place(othello.EmptyPiece.instance).build();
+  return vlasakovaSchotteBoard;
+};
+
+BoardTest.prototype.testNoMovesVlasakovaSchotte2011Game = function() {
+  // Tests the position in the Vlasakova-Schotte game from the European
+  // Grand Prix Prague 2011. See the Reversi Wikipedia article for an image.
+  // This is an example of a game that ends even though the board isn't full.
+  
+  // There is a dark piece at (7, 5). There are empty squares at
+  // (7, 3), (7, 4), (7, 6), (6, 5), and (6, 4). All other squares
+  // have white pieces. 
+  /** @const */ var vlasakovaSchotteBoard = this.createVlasakovaSchotteBoard();
 
   /** @const */ var lightMoves =
       vlasakovaSchotteBoard.findPossibleMoves(othello.LightPiece.instance);
