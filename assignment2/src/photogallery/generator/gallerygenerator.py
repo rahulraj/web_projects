@@ -42,6 +42,21 @@ class GalleryGenerator(object):
     copier.copy_javascript(self.static_files_directory, self.output_directory)
     # Also grab a copy of directory_image.jpg
     copier.copy_jpegs(self.static_files_directory, self.output_directory)
+    # And make a symlink for browsing convenience.
+    self.symlink_index(self.output_directory,
+        top_jpeg_directory.get_output_file_name())
+
+  def symlink_index(self, output_directory, file_name):
+    """
+    Symlink "index.html" to file_name. Presumably, file_name is the top-level
+    page. This way, the page will appear when someone navigates to the directory
+    in a web browser.
+
+    Args:
+      file_name the name of the file to symlink to.
+    """
+    full_link_name = os.path.join(output_directory, 'index.html')
+    os.symlink(file_name, full_link_name)
 
 
 def create_gallery_generator(command_line_arguments, css_directory):
