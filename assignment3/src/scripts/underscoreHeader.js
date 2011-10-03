@@ -17,6 +17,7 @@ var _ = _ || function() {};
 /** @const */ _.value = _.value || {};
 /** @const */ _.reject = _.reject || {};
 /** @const */ _.filter = _.filter || {};
+/** @const */ _.reduce = _.reduce || {};
 
 /** @const */ othello.underscore = othello.underscore || {};
 /** @const */ othello.underscore.header = othello.underscore.header || {};
@@ -44,3 +45,5 @@ othello.underscore.header.RichArray = function() {};
     _.each || function() {};
 /** @const */ othello.underscore.header.RichArray.prototype.filter =
     _.filter || function() {};
+/** @const */ othello.underscore.header.RichArray.prototype.reduce =
+    _.reduce || function() {};

@@ -2,12 +2,16 @@
 /**
  * Interface of a Player. It could be a human or AI.
  * @interface
+ * @const
  */
 othello.Player = function() {};
 
 /**
  * Abstract method, to decide the next move.
- * @param {othello.Board} the board to move on.
+ * @param {othello.Board} board the board to move on.
+ * @return {othello.Board} a new board object representing the state after the
+ *     move.
+ * @const
  */
 othello.Player.prototype.makeMove = function(board) {};
 
@@ -17,26 +21,59 @@ othello.Player.prototype.makeMove = function(board) {};
  * @param {othello.Piece} piece the side this object is on.
  * @param {function(othello.Piece, othello.Board): othello.Board} playerStrategy
  *     a pluggable strategy function that determines the next move.
+ * @constructor
+ * @implements {othello.Player}
+ * @const
  */
-othello.Player.AiPlayer = function(piece, playerStrategy) {
+othello.AiPlayer = function(piece, playerStrategy) {
   /** @const */ this.piece = piece;
   /** @const */ this.playerStrategy = playerStrategy;
 };
 
 
-othello.Player.AiPlayer.prototype.makeMove = function(board) {
-  return this.playerStrategy.call(null, this.piece, board);
+/**
+ * Decide the next move through playerStrategy.
+ * @param {othello.Board} board the board to move on.
+ * @return {othello.Board} a new Board object representing the state after the
+ *     move.
+ * @const
+ */
+othello.AiPlayer.prototype.makeMove = function(board) {
+  return this.playerStrategy(this.piece, board);
+};
+
+
+/**
+ * Factory function to create a random AI
+ * @param {othello.Piece} piece the side the AI is on.
+ * @return {othello.AiPlayer} an AI player configured to randomly move.
+ * @const
+ */
+othello.AiPlayer.createRandomAi = function(piece) {
+  return new othello.AiPlayer(piece, othello.AiPlayer.randomMakeMove);
+};
+
+
+/**
+ * Factory function to create a greedy AI
+ * @param {othello.Piece} piece the side the AI is on.
+ * @return {othello.AiPlayer} an AI player configured with a greedy algorithm.
+ * @const
+ */
+othello.AiPlayer.createGreedyAi = function(piece) {
+  return new othello.AiPlayer(piece, othello.AiPlayer.greedyMakeMove);
 };
 
 
 /**
  * Simple AI strategy - randomly pick a move and make it.
  * @param {othello.Piece} piece the piece representing this player's side.
- * @param {othello.Board} baord the board to move on.
+ * @param {othello.Board} board the board to move on.
  * @return {othello.Board} the board after the move, leaving the old board
  *     unchanged.
+ * @const
  */
-othello.Player.AiPlayer.randomMakeMove = function(piece, board) {
+othello.AiPlayer.randomMakeMove = function(piece, board) {
   /** @const */ var possibleMoves = board.findPossibleMoves(piece);
   /** @const */ var index = Math.floor(Math.random() * possibleMoves.length);
   /** @const */ var locationOfMove = possibleMoves[index];
@@ -46,11 +83,12 @@ othello.Player.AiPlayer.randomMakeMove = function(piece, board) {
 /**
  * Greedy AI strategy - at each step, make the move that has the highest gain.
  * @param {othello.Piece} piece the piece representing this player's side.
- * @param {othello.Board} baord the board to move on.
+ * @param {othello.Board} board the board to move on.
  * @return {othello.Board} the board after the move, leaving the old board
  *     unchanged.
+ * @const
  */
-othello.Player.AiPlayer.greedyMakeMove = function(piece, board) {
+othello.AiPlayer.greedyMakeMove = function(piece, board) {
   /** @const */ var possibleMoves = board.findPossibleMoves(piece);
   return _(possibleMoves).reduce(function(bestSoFar, current) {
     /** @const */ var bestSoFarBoard = board.makeMove(piece, bestSoFar.getX(),

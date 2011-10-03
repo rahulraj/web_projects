@@ -27,7 +27,7 @@ othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
 };
 
 
-othello.Board..prototype.getNumberOfPieces = function(piece) {
+othello.Board.prototype.getNumberOfPieces = function(piece) {
   // TODO refactor to use polymorphism
   if (piece instanceof othello.LightPiece) {
     return this.getNumberOfLightPieces(); 
