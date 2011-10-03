@@ -27,6 +27,17 @@ othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
 };
 
 
+othello.Board..prototype.getNumberOfPieces = function(piece) {
+  // TODO refactor to use polymorphism
+  if (piece instanceof othello.LightPiece) {
+    return this.getNumberOfLightPieces(); 
+  } else if (piece instanceof othello.DarkPiece) { 
+    return this.getNumberOfDarkPieces();
+ }
+ throw new Error("Meaningless to calculate number of empty pieces");
+};
+
+
 /**
  * Getter function for the number of light pieces
  * @return {number} this.numberOfLightPieces.
