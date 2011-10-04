@@ -117,6 +117,16 @@ othello.Board.prototype.placementIsValid = function(piece, x, y) {
 
 
 /**
+ * Convenience method that tells if a player can move
+ * @param {othello.Piece} piece the Piece for the player trying to move.
+ * @return {boolean} true if that player has moves.
+ */
+othello.Board.prototype.canMove = function(piece) {
+  return this.findPossibleMoves(piece).length !== 0;
+};
+
+
+/**
  * Find the possible moves that a player can make.
  * @param {othello.Piece} piece the piece representing the player's color.
  * @return {Array.<othello.Point>} an array of the available Points

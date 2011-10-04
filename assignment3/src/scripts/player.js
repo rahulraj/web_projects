@@ -28,6 +28,14 @@ othello.Player.prototype.makeMove = function(board) {};
 othello.Player.prototype.readyToMove = function() {};
 
 
+/**
+ * Getter for the side this player is on
+ * @return {othello.Piece} the Piece this player uses.
+ * @const
+ */
+othello.Player.prototype.getPiece = function() {};
+
+
 
 /**
  * Implmentation of Player that programatically decides moves.
@@ -68,6 +76,16 @@ othello.AiPlayer.prototype.readyToMove = function() {
 
 
 /**
+ * Getter for this.piece
+ * @return {othello.Piece} this.piece
+ * @const
+ */
+othello.AiPlayer.prototype.getPiece = function() {
+  return this.piece;
+};
+
+
+/**
  * Factory function to create a random AI
  * @param {othello.Piece} piece the side the AI is on.
  * @return {othello.AiPlayer} an AI player configured to randomly move.
@@ -99,7 +117,7 @@ othello.AiPlayer.createGreedyAi = function(piece) {
  */
 othello.AiPlayer.randomMakeMove = function(piece, board) {
   /** @const */ var possibleMoves = board.findPossibleMoves(piece);
-  if (possibleMoves.length === 0) {
+  if (!(board.canMove(piece))) {
     return othello.utils.None.instance;
   }
   /** @const */ var index = Math.floor(Math.random() * possibleMoves.length);
@@ -119,7 +137,7 @@ othello.AiPlayer.randomMakeMove = function(piece, board) {
  */
 othello.AiPlayer.greedyMakeMove = function(piece, board) {
   /** @const */ var possibleMoves = board.findPossibleMoves(piece);
-  if (possibleMoves.length === 0) {
+  if (!(board.canMove(piece))) {
     return othello.utils.None.instance;
   }
 
@@ -190,9 +208,6 @@ othello.HumanPlayer.prototype.readyToMove = function() {
 };
 
 
-/** @const */ othello.HumanPlayer.delayInterval = 500;
-
-
 /**
  * Makes a move based on what the player inputted.
  * @param {othello.Board} board the board to move on.
@@ -221,4 +236,14 @@ othello.HumanPlayer.prototype.makeMove = function(board) {
     this.clearBuffer();
     return new othello.utils.Some(newBoard);
   }
+};
+
+
+/**
+ * Getter for this.piece
+ * @return {othello.Piece} this.piece
+ * @const
+ */
+othello.HumanPlayer.prototype.getPiece = function() {
+  return this.piece;
 };
