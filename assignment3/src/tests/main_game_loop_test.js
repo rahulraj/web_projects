@@ -20,28 +20,6 @@ MainGameLoopTest.SlowAiPlayer.prototype.makeMove = function(board) {
   return this.player.makeMove(board);
 };
 
-MainGameLoopTest.StubPlayer = function(piece, moves) {
-  /** @const */ this.piece = piece;
-  /** @const */ this.moves = moves;
-  this.moveIndex = 0;
-};
-
-MainGameLoopTest.StubPlayer.prototype.getPiece = function() {
-  return this.piece;
-};
-
-MainGameLoopTest.StubPlayer.prototype.readyToMove = function() {
-  return this.moveIndex < this.moves.length;
-};
-
-MainGameLoopTest.StubPlayer.prototype.makeMove = function(board) {
-  /** @const */ var move = this.moves[this.moveIndex];
-  /** @const */ var result =
-      board.makeMove(this.piece, move.getX(), move.getY());
-  this.moveIndex++;
-  return new othello.utils.Some(result);
-};
-
 
 MainGameLoopTest.prototype.testFullAiGame = function(queue) {
   var gameEnded = false;
