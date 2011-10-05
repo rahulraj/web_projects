@@ -9,7 +9,7 @@
  * @param {function(othello.Board)} onGameFinish a function to call when the
  *     game ends, with the final Board as an argument.
  * @param {number} opt_delayInterval an optional interval to "sleep" if a
- *     Player is not ready. Defaults to 500.
+ *     Player is not ready. Defaults to 500 milliseconds.
  * @constructor
  * @const
  */

@@ -4,6 +4,7 @@ MainGameLoopTest.SlowAiPlayer = function(player) {
   // Simulate a human player, who can't move until the user provides input.
   /** @const */ this.player = player;
   this.ready = false;
+  this.numberOfMoves = 0;
 };
 
 MainGameLoopTest.SlowAiPlayer.prototype.getPiece = function() {
@@ -17,6 +18,7 @@ MainGameLoopTest.SlowAiPlayer.prototype.readyToMove = function() {
 };
 
 MainGameLoopTest.SlowAiPlayer.prototype.makeMove = function(board) {
+  this.numberOfMoves++;
   return this.player.makeMove(board);
 };
 
@@ -48,6 +50,8 @@ MainGameLoopTest.prototype.testFullAiGame = function(queue) {
   });
 };
 
+/** @const */ MainGameLoopTest.yieldInterval = 0.00001;
+
 MainGameLoopTest.prototype.testHumanVsAiGame = function(queue) {
   var gameEnded = false;
 
@@ -63,11 +67,13 @@ MainGameLoopTest.prototype.testHumanVsAiGame = function(queue) {
     /** @const */ var onLoopFinish = callbacks.add(function(board) {
       assertFalse(board.canMove(othello.LightPiece.instance));
       assertFalse(board.canMove(othello.DarkPiece.instance));
+
       gameEnded = true;
     });
 
     /** @const */ var loop =
-        new othello.MainGameLoop(whitePlayer, blackPlayer, onLoopFinish, 1);
+        new othello.MainGameLoop(whitePlayer, blackPlayer, onLoopFinish,
+                                 MainGameLoopTest.yieldInterval);
 
     loop.run(board, blackPlayer);
   });
@@ -94,11 +100,19 @@ MainGameLoopTest.prototype.testHumanVsHumanGame = function(queue) {
     /** @const */ var onLoopFinish = callbacks.add(function(board) {
       assertFalse(board.canMove(othello.LightPiece.instance));
       assertFalse(board.canMove(othello.DarkPiece.instance));
+
+      /** @const */ var moveDifference = Math.abs(whitePlayer.numberOfMoves -
+          blackPlayer.numberOfMoves)
+      /** @const */ var message = 'Players should have alternated turns. ' +
+        'moveDifference is: ' + moveDifference
+      assertTrue(message, moveDifference <= 1);
+
       gameEnded = true;
     });
 
     /** @const */ var loop =
-        new othello.MainGameLoop(whitePlayer, blackPlayer, onLoopFinish, 1);
+        new othello.MainGameLoop(whitePlayer, blackPlayer, onLoopFinish,
+                                 MainGameLoopTest.yieldInterval);
 
     loop.run(board, blackPlayer);
   });
