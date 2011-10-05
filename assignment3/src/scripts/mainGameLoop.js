@@ -8,30 +8,19 @@
  * @param {othello.Player} blackPlayer the player with the black pieces.
  * @param {function(othello.Board)} onGameFinish a function to call when the
  *     game ends, with the final Board as an argument.
+ * @param {number} opt_delayInterval an optional interval to "sleep" if a
+ *     Player is not ready. Defaults to 500.
  * @constructor
  * @const
  */
 othello.MainGameLoop =
-    function(whitePlayer, blackPlayer, onGameFinish) {
+    function(whitePlayer, blackPlayer, onGameFinish, opt_delayInterval) {
   /** @const */ this.whitePlayer = whitePlayer;
   /** @const */ this.blackPlayer = blackPlayer;
   this.onGameFinish = onGameFinish;
+  this.delayInterval = opt_delayInterval || 500;
 };
 
-
-/**
- * Named constructor that creates a standard game (using Board's initialGame
- * and making the player with the black pieces go first).
- * @param {othello.Player} whitePlayer the player with the white pieces.
- * @param {othello.Player} blackPlayer the player with the black pieces.
- * @return {othello.MainGameLoop} a default main game loop.
- * @const
- */
-//othello.MainGameLoop.createStandardMainGameLoop =
- //   function(whitePlayer, blackPlayer) {
-  //return new othello.MainGameLoop(othello.Board.Builder.initialGame().build(),
-   //   whitePlayer, blackPlayer, blackPlayer);
-//};
 
 /** @const */ othello.MainGameLoop.delayInterval = 500;
 
@@ -53,7 +42,7 @@ othello.MainGameLoop.prototype.run = function(board, currentTurnPlayer) {
     /** @const */ var self = this;
     window.setTimeout(function() {
       self.run(board, currentTurnPlayer); 
-    }, othello.MainGameLoop.delayInterval);
+    }, self.delayInterval);
     return;
   } else {
     // Run a turn, then recurse asynchronously.  
