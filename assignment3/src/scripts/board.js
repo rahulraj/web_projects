@@ -299,7 +299,7 @@ othello.Board.size = 8;
  * @const
  */
 othello.Board.Builder = function(board) {
-  this.board = board;
+  /** @const */ this.board = board;
 };
 
 
@@ -359,12 +359,12 @@ othello.Board.Builder.initialGame = function() {
  * @param {number} row the value for the row.
  * @param {number} column the value for the column.
  * @return {{place: function(othello.Piece): othello.Board.Builder,
- *          placeLightPiece: function(): othello.Board.Builder,
- *          placeDarkPiece: function(): othello.Board.Builder,
- *          flip: function(): othello.Board.Builder}} an object wrapping
- *          functions that can be called after calling at. They make the
- *          necessary placements, using closures to access row, column, and
- *          the Builder, which is returned afterwards for further changes.
+ *           placeLightPiece: function(): othello.Board.Builder,
+ *           placeDarkPiece: function(): othello.Board.Builder,
+ *           flip: function(): othello.Board.Builder}} an object wrapping
+ *           functions that can be called after calling at. They make the
+ *           necessary placements, using closures to access row, column, and
+ *           the Builder, which is returned afterwards for further changes.
  * @const
  */
 othello.Board.Builder.prototype.at = function(row, column) {
