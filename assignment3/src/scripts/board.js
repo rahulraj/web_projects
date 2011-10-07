@@ -31,9 +31,10 @@ othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
    * @param {number} row the row.
    * @param {number} column the column.
    * @return {othello.Piece} the Piece at that location.
+   * @const
    */
-  /** @const */ this.pieceAt = function(row, column) {
-    return board[row][column]; 
+  this.pieceAt = function(row, column) {
+    return board[row][column];
   };
 
 
@@ -368,24 +369,26 @@ othello.Board.Builder.initialGame = function() {
  */
 othello.Board.Builder.prototype.at = function(row, column) {
   /** @const */ var builder = this;
+  /**
+   * Add an arbitrary piece to the board
+   * @param {othello.Piece} piece the piece to add.
+   * @return {othello.Board.Builder} the Builder for chaining.
+   * @const
+   */
+  var placePiece = function(piece) {
+    builder.board[row][column] = piece;
+    return builder;
+  };
+
   return {
-    /**
-     * Add an arbitrary piece to the board
-     * @param {othello.Piece} piece the piece to add.
-     * @return {othello.Board.Builder} the Builder for chaining.
-     * @const
-     */
-    place: function(piece) {
-      builder.board[row][column] = piece;
-      return builder;
-    },
+    place: placePiece,
     /**
      * Add a light piece to the board
      * @return {othello.Board.Builder} the Builder for chaining.
      * @const
      */
     placeLightPiece: function() {
-      return this.place(othello.LightPiece.instance);
+      return placePiece(othello.LightPiece.instance);
     },
     /**
      * Add a dark piece to the board
@@ -393,7 +396,7 @@ othello.Board.Builder.prototype.at = function(row, column) {
      * @const
      */
     placeDarkPiece: function() {
-      return this.place(othello.DarkPiece.instance);
+      return placePiece(othello.DarkPiece.instance);
     },
     /**
      * Flip a piece, at the place specified by row and column (set with at)
@@ -401,9 +404,9 @@ othello.Board.Builder.prototype.at = function(row, column) {
      * @const
      */
     flip: function() {
-      return this.place(builder.board[row][column].flip());
+      return placePiece(builder.board[row][column].flip());
     }
-  }
+  };
 };
 
 
