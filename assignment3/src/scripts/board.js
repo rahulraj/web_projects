@@ -21,7 +21,22 @@
  * @const
  */
 othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
-  /** @const */ this.board = board;
+  /**
+   * Retrieve the piece at a given location. Closes over board to
+   * accomplish this. Board is not stored as a field, to guard
+   * against representation exposure and more easily guarantee immutability.
+   * Most methods are attached to othello.Board.prototype for performance
+   * reasons. In this case, an exception was made because this function
+   * is cruicial towards the goal of achieving immutability.
+   * @param {number} row the row.
+   * @param {number} column the column.
+   * @return {othello.Piece} the Piece at that location.
+   */
+  /** @const */ this.pieceAt = function(row, column) {
+    return board[row][column]; 
+  };
+
+
   /** @const */ this.numberOfLightPieces = numberOfLightPieces;
   /** @const */ this.numberOfDarkPieces = numberOfDarkPieces;
 };
@@ -58,18 +73,6 @@ othello.Board.prototype.getNumberOfLightPieces = function() {
  */
 othello.Board.prototype.getNumberOfDarkPieces = function() {
   return this.numberOfDarkPieces;
-};
-
-
-/**
- * Retrieve the piece at a given location.
- * Do not access board directly, use this function instead.
- * @param {number} row the row.
- * @param {number} column the column.
- * @return {othello.Piece} the Piece at that location.
- */
-othello.Board.prototype.pieceAt = function(row, column) {
-  return this.board[row][column];
 };
 
 
@@ -133,11 +136,11 @@ othello.Board.prototype.canMove = function(piece) {
  *     on which the piece can be legally placed. Empty if no Points exist.
  */
 othello.Board.prototype.findPossibleMoves = function(piece) {
-  /** @const */ var rows = _.range(0, this.board.length);
+  /** @const */ var rows = _.range(0, othello.Board.size);
   /** @const */ var self = this;
   return othello.utils.flatMap(rows, function(row) {
     /** @const */ var pointsOnRow =
-        _.map(_.range(0, self.board[0].length), function(column) {
+        _.map(_.range(0, othello.Board.size), function(column) {
       return new othello.Point(row, column);
     });
     return _(pointsOnRow).filter(function(point) {
@@ -243,7 +246,7 @@ othello.Board.prototype.findPiecesToFlip =
  * @return {boolean} true if the square is occupied.
  */
 othello.Board.prototype.isOccupiedAt = function(x, y) {
-  return this.board[x][y] !== othello.EmptyPiece.instance;
+  return this.pieceAt(x, y) !== othello.EmptyPiece.instance;
 };
 
 
@@ -260,7 +263,7 @@ othello.Board.prototype.nextSquare = function(row, column, deltaX, deltaY) {
   /** @const */ var newRow = row + deltaX;
   /** @const */ var newColumn = column + deltaY;
   if (this.inBounds(newRow, newColumn)) {
-    return new othello.utils.Some(this.board[newRow][newColumn]);
+    return new othello.utils.Some(this.pieceAt(newRow, newColumn));
   } else {
     return othello.utils.None.instance;
   }
@@ -275,8 +278,8 @@ othello.Board.prototype.nextSquare = function(row, column, deltaX, deltaY) {
  *     the given coordinates.
  */
 othello.Board.prototype.inBounds = function(x, y) {
-  return x >= 0 && x < this.board.length &&
-         y >= 0 && y < this.board[0].length;
+  return x >= 0 && x < othello.Board.size &&
+         y >= 0 && y < othello.Board.size;
 };
 
 
@@ -322,10 +325,9 @@ othello.Board.Builder.emptyBoard = function() {
  */
 othello.Board.Builder.templatedBy = function(board) {
   /** @const */ var builder = othello.Board.Builder.emptyBoard();
-  /** @const */ var oldArray = board.board;
-  _.each(_.range(0, oldArray.length), function(i) {
-    _.each(_.range(0, oldArray[0].length), function(j) {
-      builder.at(i, j).place(oldArray[i][j]);
+  _.each(_.range(0, othello.Board.size), function(i) {
+    _.each(_.range(0, othello.Board.size), function(j) {
+      builder.at(i, j).place(board.pieceAt(i, j));
     });
   });
   return builder;
