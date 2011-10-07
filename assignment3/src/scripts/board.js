@@ -296,8 +296,6 @@ othello.Board.size = 8;
  */
 othello.Board.Builder = function(board) {
   this.board = board;
-  this.row = 0;
-  this.column = 0;
 };
 
 
@@ -349,62 +347,61 @@ othello.Board.Builder.initialGame = function() {
 
 
 /**
- * Position this.row and this.column
+ * Position row and column before modifying a square. Used to make
+ * the interface more fluent. That is, client code can write
+ * builder.at(3, 3).placeLightPiece() instead of
+ * builder.placeLightPiece(3, 3). The former is more readable.
+ * This syntax also avoids a possible bug by requiring that the client
+ * specify a row and column before placing a piece.
  * @param {number} row the value for the row.
  * @param {number} column the value for the column.
- * @return {othello.Board.Builder} this for chaining.
+ * @return {{place: function(othello.Piece): othello.Board.Builder,
+ *          placeLightPiece: function(): othello.Board.Builder,
+ *          placeDarkPiece: function(): othello.Board.Builder,
+ *          flip: function(): othello.Board.Builder}} an object wrapping
+ *          functions that can be called after calling at. They make the
+ *          necessary placements, using closures to access row, column, and
+ *          the Builder, which is returned afterwards for further changes.
  * @const
  */
 othello.Board.Builder.prototype.at = function(row, column) {
-  this.row = row;
-  this.column = column;
-  return this;
-};
-
-
-/**
- * Add a light piece to the board
- * @return {othello.Board.Builder} this for chaining.
- * @const
- */
-othello.Board.Builder.prototype.placeLightPiece = function() {
-  this.place(othello.LightPiece.instance);
-  return this;
-};
-
-
-/**
- * Add a dark piece to the board
- * @return {othello.Board.Builder} this for chaining.
- * @const
- */
-othello.Board.Builder.prototype.placeDarkPiece = function() {
-  this.place(othello.DarkPiece.instance);
-  return this;
-};
-
-
-/**
- * Add a piece to the board
- * @param {othello.Piece} piece the piece to add.
- * @return {othello.Board.Builder} this for chaining.
- * @const
- */
-othello.Board.Builder.prototype.place = function(piece) {
-  this.board[this.row][this.column] = piece;
-  return this;
-};
-
-
-/**
- * Flip a piece, at the place specified by row and column (set with at)
- * @return {othello.Board.Builder} this for chaining.
- * @const
- */
-othello.Board.Builder.prototype.flip = function() {
-  /** @const */ var piece = this.board[this.row][this.column];
-  this.place(piece.flip());
-  return this;
+  /** @const */ var builder = this;
+  return {
+    /**
+     * Add an arbitrary piece to the board
+     * @param {othello.Piece} piece the piece to add.
+     * @return {othello.Board.Builder} the Builder for chaining.
+     * @const
+     */
+    place: function(piece) {
+      builder.board[row][column] = piece;
+      return builder;
+    },
+    /**
+     * Add a light piece to the board
+     * @return {othello.Board.Builder} the Builder for chaining.
+     * @const
+     */
+    placeLightPiece: function() {
+      return this.place(othello.LightPiece.instance);
+    },
+    /**
+     * Add a dark piece to the board
+     * @return {othello.Board.Builder} the Builder for chaining.
+     * @const
+     */
+    placeDarkPiece: function() {
+      return this.place(othello.DarkPiece.instance);
+    },
+    /**
+     * Flip a piece, at the place specified by row and column (set with at)
+     * @return {othello.Board.Builder} the Builder for chaining.
+     * @const
+     */
+    flip: function() {
+      return this.place(builder.board[row][column].flip());
+    }
+  }
 };
 
 
