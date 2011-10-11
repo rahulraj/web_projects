@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="style/othelloStyle.css">
   <title>Othello</title>
   </head>
   <body>
@@ -9,7 +10,59 @@
       <h1>Othello</h1>
     </header>
     <section>
+
+    <form>
+      <fieldset>
+        <legend>White Player</legend>
+        <input type="radio" name="whitePlayer" id="whiteHuman" />
+        <label for="whiteHuman">Human</label>
+
+        <input type="radio" name="whitePlayer" id="whiteEasyAi" />
+        <label for="whiteEasyAi">Easy AI</label>
+
+        <input type="radio" name="whitePlayer" id="whiteMediumAi" checked="checked" />
+        <label for="whiteMediumAi">Medium AI</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Black Player</legend>
+        <input type="radio" name="blackPlayer" id="blackHuman" checked="checked"/>
+        <label for="blackHuman">Human</label>
+
+        <input type="radio" name="blackPlayer" id="blackEasyAi" />
+        <label for="blackEasyAi">Easy AI</label>
+
+        <input type="radio" name="blackPlayer" id="blackMediumAi" />
+        <label for="blackMediumAi">Medium AI</label>
+      </fieldset>
+
+      <input type="button" value="Play!" />
+    </form>
+
+    <table>
+      <tr>
+        <td class="light-square">0,0</td>
+        <td class="dark-square">1,0</td>
+      </tr>
+      <tr>
+        <td class="dark-square">0,1</td>
+        <td class="light-square">1,1</td>
+      </tr>
+    </table>
     
     </section>
+
+    <script type="text/javascript" src="scripts/lib/underscore.js"></script>
+    <script type="text/javascript" src="scripts/lib/jquery-1.6.4.min.js"></script>
+    <script type="text/javascript" src="scripts/othello.js"></script>
+    <script type="text/javascript" src="scripts/underscoreHeader.js"></script>
+    <script type="text/javascript" src="scripts/utils/utils.js"></script>
+    <script type="text/javascript" src="scripts/utils/flatMap.js"></script>
+    <script type="text/javascript" src="scripts/utils/option.js"></script>
+    <script type="text/javascript" src="scripts/point.js"></script>
+    <script type="text/javascript" src="scripts/piece.js"></script>
+    <script type="text/javascript" src="scripts/board.js"></script>
+    <script type="text/javascript" src="scripts/player.js"></script>
+    <script type="text/javascript" src="scripts/mainGameLoop.js"></script>
   </body>
 </html>

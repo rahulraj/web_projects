@@ -1,0 +1,13 @@
+table {
+  border-collapse: collapse;
+}
+td {
+  border: 1px solid #666666;
+  border-style: solid;
+}
+.light-square {
+  background-color: #F8F8F8;
+}
+.dark-square {
+  background-color: #383838;
+}
