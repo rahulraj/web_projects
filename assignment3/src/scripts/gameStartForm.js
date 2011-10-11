@@ -68,7 +68,7 @@ othello.PlayerFieldset.createPlayerFieldset = function(legendName, color) {
   return new othello.PlayerFieldset.Builder().
       legend(legendName).
       radioButtonSetNamed(color + 'Player').
-          radioButton(color + 'Human').withLabel('Human').
+          radioButton(color + 'Human').checked().withLabel('Human').
           radioButton(color + 'EasyAi').withLabel('Easy AI').
           radioButton(color + 'MediumAi').withLabel('Medium AI').build();
 };
@@ -99,30 +99,43 @@ othello.PlayerFieldset.Builder.prototype.legend = function(legendName) {
  * Creates a set of radio buttons. Uses nested closures to provide
  * a more fluent interface. Usage:
  * builder.radioButtonSetNamed('whitePlayer').
- *     radioButton('whiteHuman').withLabel('Human').
+ *     radioButton('whiteHuman').checked().withLabel('Human').
  *     radioButton('whiteEasyAi').withLabel('Easy AI').
  *     radioButton('whiteMediumAi').withLabel('Medium AI').build();
  */
 othello.PlayerFieldset.Builder.prototype.radioButtonSetNamed =
     function(buttonName) {
   /** @const */ var fieldsetElement = this.fieldsetElement;
+  var checked = false;
   /** @const */ var radioButtonBuilder = {
       radioButton: function(buttonId) {
-        return {
+        /** @const */ var buttonDetailBuilder = {
+          checked: function() {
+            checked = true;
+            return buttonDetailBuilder;
+          },
+
           withLabel: function(labelHtml) {
-            /** @const */ var radioElement = $('<input>', {
+            /** @const */ var radioButtonAttributes = {
                 type: 'radio',
                 name: buttonName,
                 id: buttonId
-            });
+            };
+            if (checked) {
+              radioButtonAttributes['checked'] = 'checked';
+              checked = false;
+            }
+            /** @const */ var radioElement = $('<input>',
+                radioButtonAttributes);
             /** @const */ var labelElement = $('<label>', {
                 'for': buttonId,
                 html: labelHtml
             });
             fieldsetElement.append(radioElement).append(labelElement);
             return radioButtonBuilder;
-          },
+          }
         };
+        return buttonDetailBuilder;
       },
           
       build: function() {
