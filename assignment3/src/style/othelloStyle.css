@@ -6,8 +6,23 @@ td {
   border-style: solid;
 }
 .light-square {
-  background-color: #F8F8F8;
+  background-color: #C0C0C0;
 }
 .dark-square {
   background-color: #383838;
+}
+.piece {
+  display: block;
+  width: 40px;
+  height: 40px;
+
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+}
+.black-player {
+  background-color: #000000;
+}
+.white-player {
+  background-color: #FFFFFF;
 }
