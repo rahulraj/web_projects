@@ -1,9 +1,15 @@
 table {
   border-collapse: collapse;
+  box-shadow: 5px 5px 5px #888;
+  -moz-box-shadow: 5px 5px 5px #888;
+  -webkit-box-shadow: 5px 5px 5px #888;
 }
 td {
   border: 1px solid #666666;
   border-style: solid;
+  width: 40px;
+  height: 40px;
+  background-color: #009933;
 }
 .light-square {
   background-color: #C0C0C0;
@@ -13,12 +19,16 @@ td {
 }
 .piece {
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 
-  border-radius: 20px;
-  -moz-border-radius: 20px;
-  -webkit-border-radius: 20px;
+  border-radius: 18px;
+  -moz-border-radius: 18px;
+  -webkit-border-radius: 18px;
+
+  box-shadow: 2px 2px 2px #000;
+  -moz-box-shadow: 2px 2px 2px #000;
+  -webkit-box-shadow: 2px 2px 2px #000;
 }
 .black-player {
   background-color: #000000;

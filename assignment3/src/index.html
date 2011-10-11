@@ -11,8 +11,8 @@
     </header>
     <section>
 
-      <form>
         <!--
+      <form>
         <fieldset>
           <legend>White Player</legend>
           <input type="radio" name="whitePlayer" id="whiteHuman" />
@@ -38,27 +38,27 @@
         </fieldset>
 
         <input type="button" value="Play!" />
-        -->
       </form>
+        -->
 
+      <!--
       <table>
         <tr>
-          <td class="light-square">
+          <td>
             <span class="piece black-player"></span>
           </td>
-          <td class="dark-square">
-            <span class="piece black-player"></span> 
+          <td>
+            <span class="piece white-player"></span> 
           </td>
         </tr>
         <tr>
-          <td class="dark-square">
-            <span class="piece white-player"</span>
+          <td>
           </td>
-          <td class="light-square">
-            <span class="piece white-player"</span>
+          <td>
           </td>
         </tr>
       </table>
+      -->
     
     </section>
 
@@ -75,12 +75,16 @@
     <script type="text/javascript" src="scripts/player.js"></script>
     <script type="text/javascript" src="scripts/mainGameLoop.js"></script>
     <script type="text/javascript" src="scripts/gameStartForm.js"></script>
+    <script type="text/javascript" src="scripts/boardTableView.js"></script>
     <script type="text/javascript">
       $(function() {
 
         var form = othello.GameStartForm.createDefaultStartForm();
-
         form.attachTo($('section'));
+
+        var boardView = othello.BoardTableView.of(
+            othello.Board.Builder.initialGame().build());
+        boardView.attachTo($('section'));
       });
     </script>
   </body>
