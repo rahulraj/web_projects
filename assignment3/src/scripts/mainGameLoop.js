@@ -19,8 +19,19 @@ othello.MainGameLoop =
   /** @const */ this.blackPlayer = blackPlayer;
   this.onGameFinish = onGameFinish;
   this.delayInterval = opt_delayInterval || 500;
+  this.observers = [];
 };
 
+othello.MainGameLoop.prototype.addObserver = function(observer) {
+  this.observers.push(observer);
+};
+
+othello.MainGameLoop.prototype.notifyObservers =
+    function(board, currentTurnPlayer) {
+  _(this.observers).each(function(observer) {
+    observer.onModelChange(board, currentTurnPlayer);
+  });
+};
 
 /** @const */ othello.MainGameLoop.delayInterval = 500;
 
@@ -53,6 +64,7 @@ othello.MainGameLoop.prototype.run = function(board, currentTurnPlayer) {
         getOrElse(othello.Board.Builder.templatedBy(board).build());
     /** @const */ var nextPlayer = currentTurnPlayer === this.whitePlayer ?
         this.blackPlayer : this.whitePlayer;
+    this.notifyObservers(nextBoard, nextPlayer);
     /** @const */ var self = this;
     window.setTimeout(function() {
       self.run(nextBoard, nextPlayer);
