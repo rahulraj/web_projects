@@ -11,12 +11,6 @@ td {
   height: 40px;
   background-color: #009933;
 }
-.light-square {
-  background-color: #C0C0C0;
-}
-.dark-square {
-  background-color: #383838;
-}
 .piece {
   display: block;
   width: 36px;
