@@ -13,11 +13,11 @@ def index():
 
 @app.route('/get_time')
 def get_time():
-    '''
-    return local time at server, and send back request timestamp
-    so client can measure round trip time
-    insert random delays to simulate network delays
-    '''
+	'''
+	return local time at server, and send back request timestamp
+	so client can measure round trip time
+	insert random delays to simulate network delays
+	'''
 	random_delay()
 	request_time = request.args.get('request_time')
 	seconds = time.time()
