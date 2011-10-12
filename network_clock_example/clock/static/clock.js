@@ -62,7 +62,7 @@ var NetworkClock = function (element, tolerance) {
 			continuation();
 		};
 		var params = {request_time: getClientTime()};
-		$.getJSON("/get_time", params, callback);
+		$.getJSON("get_time", params, callback);
 	};
 
 	// update display using difference between server and client time
