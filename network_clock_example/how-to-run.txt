@@ -1,0 +1,10 @@
+How to run network clock
+-- cd to this directory
+-- execute the command
+	python runserver.py
+-- you should now have a server running at http://127.0.0.1:5000
+-- open a browser and load the page at this url
+
+Now
+-- the page should display the time in GMT, and should refresh it continually
+-- you can click on the time element to stop and start the refreshing
