@@ -2,8 +2,7 @@
 
 
 /**
- * Top-level view class.
- * @param {othello.GameStartForm} startForm the form for starting the game.
+ * Top-level view class for the main game.
  * @param {othello.BoardTableView} boardView the view for the board. Can
  *     mutate as the game changes.
  * @param {jQuery} undoButton the button to undo, wrapped in jQuery
@@ -12,11 +11,21 @@
  * @implements {othello.Observer}
  * @const
  */
-othello.GameView = function(startForm, boardView, undoButton, parentElement) {
-  /** @const */ this.startForm = startForm;
+othello.GameView = function(boardView, undoButton, parentElement) {
   this.boardView = boardView;
   /** @const */ this.undoButton = undoButton;
   /** @const */ this.parentElement = parentElement;
+};
+
+
+/**
+ * Attach events to this view's elements that call methods on a controller.
+ * @param {othello.GameController} controller the controller that reacts to
+ *     the events.
+ * @const
+ */
+othello.GameView.prototype.addControllerEvents = function(controller) {
+
 };
 
 
@@ -38,22 +47,4 @@ othello.GameView.prototype.updatePage = function() {
 othello.GameView.prototype.onModelChange = function(board, playerWhoMoved) {
   this.boardView = othello.BoardTableView.of(board, playerWhoMoved);
   this.updatePage();
-};
-
-/**
- * Factory function to create a view, and add it to the HTML document.
- * @param {jQuery} parentElement the parent for the view.
- * @return {othello.GameView} the view created.
- */
-othello.GameView.createDefaultViewOnPage = function(parentElement) {
-  /** @const */ var form = othello.GameStartForm.createDefaultStartForm();
-  /** @const */ var initialBoard =
-      othello.BoardTableView.of(othello.Board.Builder.initialGame().build(),
-      othello.DarkPiece.instance);
-  /** @const */ var undoButton = $('<input>', {
-      type: 'button', value: 'Undo Last Move'}); 
-  /** @const */ var view = new othello.GameView(form, initialBoard, undoButton,
-      parentElement);
-  view.updatePage();
-  return view;
 };
