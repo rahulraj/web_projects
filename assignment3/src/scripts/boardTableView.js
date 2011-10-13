@@ -26,28 +26,50 @@ othello.BoardTableView.prototype.attachTo = function(parentElement) {
  * Named constructor. Given an othello.Board, create a table view
  * that can be displayed.
  * @param {othello.Board} board the board to display.
+ * @param {othello.Piece} sideToMove the side that can move.
  * @return {othello.BoardTableView} a view of that board.
  * @const
  */
-othello.BoardTableView.of = function(board) {
+othello.BoardTableView.of = function(board, sideToMove) {
   /** @const */ var builder = new
       othello.BoardTableView.Builder().ofSize(othello.Board.size);
   _.each(_.range(0, othello.Board.size), function(i) {
     _.each(_.range(0, othello.Board.size), function(j) {
-      /** @const */ var playerClass;
-      if (board.pieceAt(i, j) === othello.DarkPiece.instance) {
-        playerClass = 'black-player';
-      } else if (board.pieceAt(i, j) === othello.LightPiece.instance) {
-        playerClass = 'white-player';
-      }
-      if (playerClass) {
+      /** @const */ var piece = board.pieceAt(i, j);
+      if (piece !== othello.EmptyPiece.instance) {
+        /** @const */ var playerClass =
+            othello.BoardTableView.classOfPiece(piece); 
         /** @const */ var pieceContainer = $('<span>',
             {'class': 'piece ' + playerClass});
         builder.at(i, j).append(pieceContainer);
       }
     });
   });
+
+  /** @const */ var possibleMoveColorClass =
+      othello.BoardTableView.classOfPiece(sideToMove);
+  /** @const */ var moves = board.findPossibleMoves(sideToMove);
+  _(moves).each(function(move) {
+    /** @const */ var markerContainer = $('<span>',
+        {'class': possibleMoveColorClass + ' possible-move'});
+    builder.at(move.getX(), move.getY()).append(markerContainer);
+  });
+
   return builder.build();
+};
+
+
+/**
+ * Helper function that converts a piece to a class string
+ * @param {othello.Piece} piece the piece to convert.
+ * @return {string} a class name to style the piece.
+ */
+othello.BoardTableView.classOfPiece = function(piece) {
+  if (piece === othello.DarkPiece.instance) {
+    return 'black-player';
+  } else {
+    return 'white-player';
+  }
 };
 
 

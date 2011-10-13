@@ -1,4 +1,20 @@
+/*
+#whiteFieldset {
+  position: relative;
+  float: left;
+}
+#blackFieldset {
+  position: relative;
+  float: right;
+}
+button {
+  position: relative;
+  clear: both;
+}
+*/
 table {
+  position: relative;
+  clear: both;
   border-collapse: collapse;
   box-shadow: 5px 5px 5px #888;
   -moz-box-shadow: 5px 5px 5px #888;
@@ -10,6 +26,10 @@ td {
   width: 40px;
   height: 40px;
   background-color: #009933;
+}
+span {
+  margin-left: auto;
+  margin-right: auto;
 }
 .piece {
   display: block;
@@ -29,4 +49,17 @@ td {
 }
 .white-player {
   background-color: #FFFFFF;
+}
+.possible-move {
+  display: block;
+  width: 14px;
+  height: 14px;
+
+  border-radius: 7px;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+
+  box-shadow: 1px 1px 1px #000;
+  -moz-box-shadow: 1px 1px 1px #000;
+  -webkit-box-shadow: 1px 1px 1px #000;
 }
