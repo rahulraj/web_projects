@@ -127,7 +127,7 @@ othello.PlayerFieldset.createBlackPlayerFieldset = function() {
  * @param {string} color either 'white' or 'black'. 
  */
 othello.PlayerFieldset.createPlayerFieldset = function(legendName, color) {
-  return new othello.PlayerFieldset.Builder().
+  return new othello.PlayerFieldset.Builder().id(color + 'Fieldset').
       legend(legendName).
       radioButtonSetNamed(color + 'Player').
           radioButton(color + 'Human').checked().withLabel('Human').
@@ -145,6 +145,18 @@ othello.PlayerFieldset.createPlayerFieldset = function(legendName, color) {
 othello.PlayerFieldset.Builder = function() {
   /** @const */ this.fieldsetElement = $('<fieldset>');
 };
+
+
+/**
+ * Set the ID of this.fieldsetElement
+ * @param {string} idForFieldset the value for the ID.
+ * @return {othello.PlayerFieldset.Builder} the Builder for chaining.
+ */
+othello.PlayerFieldset.Builder.prototype.id = function(idForFieldset) {
+  this.fieldsetElement.attr('id', idForFieldset);
+  return this;
+};
+
 
 /**
  * Add a legend to the top.
