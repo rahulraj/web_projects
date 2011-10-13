@@ -3,7 +3,7 @@
 
 /**
  * Controller to handle all input events for the game.
- * @param {othello.GameModel} model the model that this controller 
+ * @param {othello.GameModel} model the model that this controller
  *    interacts with.
  * @param {othello.GameView} view the view that this controller controls.
  * @constructor
@@ -14,6 +14,7 @@ othello.GameController = function(model, view) {
   /** @const */ this.view = view;
 };
 
-othello.GameController.onPlayButtonClicked = function() {
-  
-};
+
+/**
+ * Function to invoke when a button on the board is clicked.
+ */

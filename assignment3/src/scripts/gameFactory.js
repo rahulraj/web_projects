@@ -10,43 +10,43 @@
 othello.GameFactory.createGameMvcAndRun =
     function(whitePlayerSelection, blackPlayerSelection) {
 
-  /** @const */ var initialBoard = othello.Board.Builder.initialGame().build(); 
+  /** @const */ var initialBoard = othello.Board.Builder.initialGame().build();
   /** @const */ var startingPiece = othello.DarkPiece.instance;
   /** @const */ var gameModel = new othello.GameModel(initialBoard,
       startingPiece);
 
   /** @const */ var whitePlayer;
   switch (whitePlayerSelection) {
-    case "whiteHuman":
+    case 'whiteHuman':
       whitePlayer = new othello.HumanPlayer(othello.LightPiece.instance);
       break;
-    case "whiteEasyAi":
+    case 'whiteEasyAi':
       whitePlayer = othello.AiPlayer.createRandomAi(
           gameModel, othello.LightPiece.instance);
       break;
-    case "whiteMediumAi":
+    case 'whiteMediumAi':
       whitePlayer = othello.AiPlayer.createGreedyAi(
           gameModel, othello.LightPiece.instance);
       break;
     default:
-      throw new Error("Invalid player choice");
+      throw new Error('Invalid player choice');
   }
 
   /** @const */ var blackPlayer;
   switch (blackPlayerSelection) {
-    case "blackHuman":
+    case 'blackHuman':
       blackPlayer = new othello.HumanPlayer(othello.DarkPiece.instance);
       break;
-    case "blackEasyAi":
+    case 'blackEasyAi':
       blackPlayer = othello.AiPlayer.createRandomAi(
           gameModel, othello.DarkPiece.instance);
       break;
-    case "blackMediumAi":
+    case 'blackMediumAi':
       blackPlayer = othello.AiPlayer.createGreedyAi(
           gameModel, othello.DarkPiece.instance);
       break;
     default:
-      throw new Error("Invalid player choice");
+      throw new Error('Invalid player choice');
   }
 
   /** @const */ var undoStack = new othello.UndoStack();
@@ -54,7 +54,7 @@ othello.GameFactory.createGameMvcAndRun =
   /** @const */ var initialBoardTableView =
       othello.BoardTableView.of(initialBoard, startingPiece);
   /** @const */ var undoButton = $('<input>', {
-      type: 'button', value: 'Undo Last Move'}); 
+    type: 'button', value: 'Undo Last Move'});
   /** @const */ var parentElement = $('section');
   /** @const */ var gameView = new othello.GameView(
       initialBoardTableView, undoButton, parentElement);
@@ -65,7 +65,7 @@ othello.GameFactory.createGameMvcAndRun =
   gameModel.addObserver(blackPlayer);
 
   /** @const */ var gameController = new othello.GameController(gameModel,
-                                                                gameView)
+                                                                gameView);
   gameView.addControllerEvents(gameController);
 
   // all hooked up, now start the game with the initial cascade of events.

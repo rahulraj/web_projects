@@ -27,11 +27,22 @@ othello.GameStartForm.prototype.attachTo = function(parentElement) {
 };
 
 
+/**
+ * Add a click handler for the play button
+ * @param {function()} handler the function to call.
+ * @const
+ */
 othello.GameStartForm.prototype.addPlayButtonClickHandler =
     function(handler) {
   this.playButton.click(handler);
-}
+};
 
+
+/**
+ * Get the string associated with the user's choice for the black player.
+ * @return {string} the choice the user made.
+ * @const
+ */
 othello.GameStartForm.prototype.blackPlayerSelection = function() {
   /** @const */ var selected = $('input').filter(function() {
     /** @const */ var element = $(this);
@@ -42,6 +53,12 @@ othello.GameStartForm.prototype.blackPlayerSelection = function() {
   return selected.attr('id');
 };
 
+
+/**
+ * Get the string associated with the user's choice for the white player.
+ * @return {string} the choice the user made.
+ * @const
+ */
 othello.GameStartForm.prototype.whitePlayerSelection = function() {
   /** @const */ var selected = $('input').filter(function() {
     /** @const */ var element = $(this);
@@ -132,7 +149,7 @@ othello.GameStartForm.Builder.prototype.build = function() {
   /** @const */ var playButton = /** @type {jQueryObject} */
       (this.playButtonElement.getOrElse(null));
   if (!playButton) {
-    throw new Error("Tried to build a start form without a play button");
+    throw new Error('Tried to build a start form without a play button');
   }
   return new othello.GameStartForm(this.formElement, playButton);
 };
@@ -208,10 +225,10 @@ othello.PlayerFieldset.createPlayerFieldset = function(legendName, color) {
  * @const
  */
 othello.PlayerFieldset.Builder = function() {
-  /** 
-   * @const 
+  /**
+   * @const
    * @type {jQueryObject}
-   */ 
+   */
   this.fieldsetElement = $('<fieldset>');
 };
 
@@ -258,13 +275,29 @@ othello.PlayerFieldset.Builder.prototype.radioButtonSetNamed =
   /** @const */ var fieldsetElement = this.fieldsetElement;
   var checked = false;
   /** @const */ var radioButtonBuilder = {
+    /**
+     * Add a radio button
+     * @return {*} a buttonDetailBuilder.
+     * @const
+     */
     radioButton: function(buttonId) {
       /** @const */ var buttonDetailBuilder = {
+        /**
+         * Check the radio button. Not used right now, it appears
+         * to mess up further selection by not unchecking the first button.
+         * @return {*} the buttonDetailBuilder.
+         * @const
+         */
         checked: function() {
           checked = true;
           return buttonDetailBuilder;
         },
 
+        /**
+         * Add a label to a button.
+         * @return {*} the radioButtonBuilder.
+         * @const
+         */
         withLabel: function(labelHtml) {
           /** @const */ var radioButtonAttributes = {
             type: 'radio',
@@ -288,6 +321,11 @@ othello.PlayerFieldset.Builder.prototype.radioButtonSetNamed =
       return buttonDetailBuilder;
     },
 
+    /**
+     * Build the fieldset
+     * @return {othello.PlayerFieldset} the new Fieldset.
+     * @const
+     */
     build: function() {
       return new othello.PlayerFieldset(fieldsetElement);
     }

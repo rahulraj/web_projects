@@ -5,7 +5,7 @@
  * Top-level view class for the main game.
  * @param {othello.BoardTableView} boardView the view for the board. Can
  *     mutate as the game changes.
- * @param {jQueryObject} undoButton the button to undo, wrapped in jQuery
+ * @param {jQueryObject} undoButton the button to undo, wrapped in jQuery.
  * @param {jQueryObject} parentElement the parent for this view.
  * @constructor
  * @implements {othello.Observer}
@@ -39,8 +39,11 @@ othello.GameView.prototype.updatePage = function() {
   this.parentElement.append(this.undoButton);
 };
 
+
 /**
  * When the board changes, refresh its view.
+ * @param {othello.Board} board the board.
+ * @param {othello.Piece} playerWhoMoved the player who moved last.
  * @const
  */
 othello.GameView.prototype.onModelChange = function(board, playerWhoMoved) {

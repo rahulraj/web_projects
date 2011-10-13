@@ -7,12 +7,14 @@
  */
 var jQueryObject = function() {};
 jQueryObject.prototype.append = function(arg) {};
+
+
 //jQueryObject.prototype.attr = function(arg1) {}
 /**
  * @param {*} arg1
- * @param {*=} arg2
+ * @param {*=} opt_arg2
  */
-jQueryObject.prototype.attr = function(arg1, arg2) {};
+jQueryObject.prototype.attr = function(arg1, opt_arg2) {};
 jQueryObject.prototype.html = function(arg1) {};
 jQueryObject.prototype.html = function(arg1, arg2) {};
 jQueryObject.prototype.filter = function(arg1) {};

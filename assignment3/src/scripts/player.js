@@ -89,6 +89,12 @@ othello.AiPlayer.prototype.getPiece = function() {
 };
 
 
+/**
+ * Function that the observable can call on this. An AI Player will
+ * make a move if it can.
+ * @param {othello.Board} board the board.
+ * @param {othello.Piece} playerWhoMoved the player who just moved.
+ */
 othello.AiPlayer.prototype.onModelChange = function(board, playerWhoMoved) {
   if (playerWhoMoved === this.piece) {
     // this change was caused by my last move

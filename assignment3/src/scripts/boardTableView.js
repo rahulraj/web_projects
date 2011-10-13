@@ -38,7 +38,7 @@ othello.BoardTableView.of = function(board, sideToMove) {
       /** @const */ var piece = board.pieceAt(i, j);
       if (piece !== othello.EmptyPiece.instance) {
         /** @const */ var playerClass =
-            othello.BoardTableView.classOfPiece(piece); 
+            othello.BoardTableView.classOfPiece(piece);
         /** @const */ var pieceContainer = $('<span>',
             {'class': 'piece ' + playerClass});
         builder.at(i, j).append(pieceContainer);
@@ -117,7 +117,7 @@ othello.BoardTableView.Builder.createRow = function(rowLength) {
  * @param {number} row the row.
  * @param {number} column the column.
  * @return {{append: function(jQueryObject): othello.BoardTableView.Builder,
- *           addClickHandler: function(function()): 
+ *           addClickHandler: function(function()):
  *               othello.BoardTableView.Builder}}
  *         An object containing functions operating on the division at
  *         the set position.
