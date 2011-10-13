@@ -4,6 +4,7 @@
 /**
  * Interface of a Player. It could be a human or AI.
  * @interface
+ * @implements {othello.Observer}
  * @const
  */
 othello.Player = function() {};
@@ -40,7 +41,7 @@ othello.Player.prototype.getPiece = function() {};
 
 /**
  * Implmentation of Player that programatically decides moves.
- * TODO Make this observe the board.
+ * @param {othello.GameModel} model the model class running the game.
  * @param {othello.Piece} piece the side this object is on.
  * @param {function(othello.Piece, othello.Board): othello.utils.Option}
  *     playerStrategy a pluggable strategy function that determines
@@ -49,7 +50,8 @@ othello.Player.prototype.getPiece = function() {};
  * @implements {othello.Player}
  * @const
  */
-othello.AiPlayer = function(piece, playerStrategy) {
+othello.AiPlayer = function(model, piece, playerStrategy) {
+  /** @const */ this.model = model;
   /** @const */ this.piece = piece;
   /** @const */ this.playerStrategy = playerStrategy;
 };
@@ -84,6 +86,17 @@ othello.AiPlayer.prototype.readyToMove = function() {
  */
 othello.AiPlayer.prototype.getPiece = function() {
   return this.piece;
+};
+
+
+othello.AiPlayer.prototype.onModelChange = function(board, playerWhoMoved) {
+  if (playerWhoMoved === this.piece) {
+    // this change was caused by my last move
+    return;
+  }
+  // it's my turn
+  /** @const */ var move = this.makeMove(board);
+  this.model.makeMove(move);
 };
 
 
@@ -249,3 +262,12 @@ othello.HumanPlayer.prototype.makeMove = function(board) {
 othello.HumanPlayer.prototype.getPiece = function() {
   return this.piece;
 };
+
+
+/**
+ * The human acts through the GUI, so this is a no-op
+ * @param {othello.Board} unused_board the board after change.
+ * @param {othello.Piece} unused_playerWhoMoved the player who last moved.
+ */
+othello.HumanPlayer.prototype.onModelChange =
+    function(unused_board, unused_playerWhoMoved) {};

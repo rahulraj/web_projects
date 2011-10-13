@@ -3,9 +3,9 @@
 
 /**
  * Constructor for a GameStartForm
- * @param {*} formElement the jQuery element wrapping
+ * @param {jQuery} formElement the jQuery element wrapping
  *     the form.
- * @param {*} playButton the jQuery element wrapping
+ * @param {jQuery} playButton the jQuery element wrapping
  *     the button that starts the game.
  * @constructor
  * @const
@@ -19,11 +19,37 @@ othello.GameStartForm = function(formElement, playButton) {
 /**
  * Attach this form to a parent element, presumably to add it to
  * the document being displayed
- * @param {*} parentElement the parent for this form.
+ * @param {jQuery} parentElement the parent for this form.
  * @const
  */
 othello.GameStartForm.prototype.attachTo = function(parentElement) {
   parentElement.append(this.formElement);
+};
+
+
+othello.GameStartForm.prototype.addPlayButtonClickHandler =
+    function(handler) {
+  this.playButton.click(handler);
+}
+
+othello.GameStartForm.prototype.blackPlayerSelection = function() {
+  /** @const */ var selected = $('input').filter(function() {
+    /** @const */ var element = $(this);
+    return element.attr('type') === 'radio' &&
+           element.attr('name') === 'blackPlayer' &&
+           element.attr('checked') === 'checked';
+  });
+  return selected.attr('id');
+};
+
+othello.GameStartForm.prototype.whitePlayerSelection = function() {
+  /** @const */ var selected = $('input').filter(function() {
+    /** @const */ var element = $(this);
+    return element.attr('type') === 'radio' &&
+           element.attr('name') === 'whitePlayer' &&
+           element.attr('checked') === 'checked';
+  });
+  return selected.attr('id');
 };
 
 
@@ -161,7 +187,7 @@ othello.PlayerFieldset.createPlayerFieldset = function(legendName, color) {
   return new othello.PlayerFieldset.Builder().id(color + 'Fieldset').
       legend(legendName).
       radioButtonSetNamed(color + 'Player').
-          radioButton(color + 'Human').checked().withLabel('Human').
+          radioButton(color + 'Human').withLabel('Human').
           radioButton(color + 'EasyAi').withLabel('Easy AI').
           radioButton(color + 'MediumAi').withLabel('Medium AI').build();
 };
