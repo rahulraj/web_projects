@@ -39,6 +39,7 @@ othello.Player.prototype.getPiece = function() {};
 
 /**
  * Implmentation of Player that programatically decides moves.
+ * TODO Make this observe the board.
  * @param {othello.Piece} piece the side this object is on.
  * @param {function(othello.Piece, othello.Board): othello.utils.Option}
  *     playerStrategy a pluggable strategy function that determines
