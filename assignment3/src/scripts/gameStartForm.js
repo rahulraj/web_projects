@@ -3,9 +3,9 @@
 
 /**
  * Constructor for a GameStartForm
- * @param {jQuery} formElement the jQuery element wrapping
+ * @param {jQueryObject} formElement the jQuery element wrapping
  *     the form.
- * @param {jQuery} playButton the jQuery element wrapping
+ * @param {jQueryObject} playButton the jQuery element wrapping
  *     the button that starts the game.
  * @constructor
  * @const
@@ -19,7 +19,7 @@ othello.GameStartForm = function(formElement, playButton) {
 /**
  * Attach this form to a parent element, presumably to add it to
  * the document being displayed
- * @param {jQuery} parentElement the parent for this form.
+ * @param {jQueryObject} parentElement the parent for this form.
  * @const
  */
 othello.GameStartForm.prototype.attachTo = function(parentElement) {
@@ -129,7 +129,12 @@ othello.GameStartForm.Builder.prototype.playButton = function() {
  * @const
  */
 othello.GameStartForm.Builder.prototype.build = function() {
-  return new othello.GameStartForm(this.formElement, this.playButtonElement);
+  /** @const */ var playButton = /** @type {jQueryObject} */
+      (this.playButtonElement.getOrElse(null));
+  if (!playButton) {
+    throw new Error("Tried to build a start form without a play button");
+  }
+  return new othello.GameStartForm(this.formElement, playButton);
 };
 
 
@@ -203,7 +208,11 @@ othello.PlayerFieldset.createPlayerFieldset = function(legendName, color) {
  * @const
  */
 othello.PlayerFieldset.Builder = function() {
-  /** @const */ this.fieldsetElement = $('<fieldset>');
+  /** 
+   * @const 
+   * @type {jQueryObject}
+   */ 
+  this.fieldsetElement = $('<fieldset>');
 };
 
 

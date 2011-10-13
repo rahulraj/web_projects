@@ -3,7 +3,7 @@
 
 /**
  * A view class displaying the board as a HTML table
- * @param {jQuery} tableElement the element with the table.
+ * @param {jQueryObject} tableElement the element with the table.
  * @constructor
  * @const
  */
@@ -14,7 +14,7 @@ othello.BoardTableView = function(tableElement) {
 
 /**
  * Attach this element to a parent
- * @param {jQuery} parentElement this element's future parent.
+ * @param {jQueryObject} parentElement this element's future parent.
  * @const
  */
 othello.BoardTableView.prototype.attachTo = function(parentElement) {
@@ -102,7 +102,7 @@ othello.BoardTableView.Builder.prototype.ofSize = function(size) {
 /**
  * Helper function to create a table row.
  * @param {number} rowLength the length of the row.
- * @return {Array.<jQuery>} the table divisions in an array.
+ * @return {Array.<jQueryObject>} the table divisions in an array.
  * @const
  */
 othello.BoardTableView.Builder.createRow = function(rowLength) {
@@ -116,8 +116,9 @@ othello.BoardTableView.Builder.createRow = function(rowLength) {
  * Set the Builder's position
  * @param {number} row the row.
  * @param {number} column the column.
- * @return {{append: function(jQuery}: BoardTableView.Builder,
- *           addClickHandler: function(function()): BoardTableView.Builder}}
+ * @return {{append: function(jQueryObject): othello.BoardTableView.Builder,
+ *           addClickHandler: function(function()): 
+ *               othello.BoardTableView.Builder}}
  *         An object containing functions operating on the division at
  *         the set position.
  * @const

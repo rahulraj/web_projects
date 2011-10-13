@@ -4,7 +4,7 @@
 /**
  * Interface of a Player. It could be a human or AI.
  * @interface
- * @implements {othello.Observer}
+ * @extends {othello.Observer}
  * @const
  */
 othello.Player = function() {};
@@ -96,29 +96,31 @@ othello.AiPlayer.prototype.onModelChange = function(board, playerWhoMoved) {
   }
   // it's my turn
   /** @const */ var move = this.makeMove(board);
-  this.model.makeMove(move);
+  this.model.step(move);
 };
 
 
 /**
  * Factory function to create a random AI
+ * @param {othello.GameModel} model the game model.
  * @param {othello.Piece} piece the side the AI is on.
  * @return {othello.AiPlayer} an AI player configured to randomly move.
  * @const
  */
-othello.AiPlayer.createRandomAi = function(piece) {
-  return new othello.AiPlayer(piece, othello.AiPlayer.randomMakeMove);
+othello.AiPlayer.createRandomAi = function(model, piece) {
+  return new othello.AiPlayer(model, piece, othello.AiPlayer.randomMakeMove);
 };
 
 
 /**
  * Factory function to create a greedy AI
+ * @param {othello.GameModel} model the game model.
  * @param {othello.Piece} piece the side the AI is on.
  * @return {othello.AiPlayer} an AI player configured with a greedy algorithm.
  * @const
  */
-othello.AiPlayer.createGreedyAi = function(piece) {
-  return new othello.AiPlayer(piece, othello.AiPlayer.greedyMakeMove);
+othello.AiPlayer.createGreedyAi = function(model, piece) {
+  return new othello.AiPlayer(model, piece, othello.AiPlayer.greedyMakeMove);
 };
 
 

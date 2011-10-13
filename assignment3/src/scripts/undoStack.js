@@ -45,7 +45,7 @@ othello.UndoStack.prototype.hasBoards = function() {
 /**
  * When the board changes, push the new board onto the stack.
  * @param {othello.Board} board the newly changed board.
- * @param {othello.Player} unused_playerWhoMoved the player who just moved.
+ * @param {othello.Piece} unused_playerWhoMoved the player who just moved.
  */
 othello.UndoStack.prototype.onModelChange =
     function(board, unused_playerWhoMoved) {
