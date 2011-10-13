@@ -13,8 +13,8 @@ othello.Piece = function() {};
 
 /**
  * Flips to the opposite type of piece.
- * @const
  * @return {othello.Piece} the opposite type of piece.
+ * @const
  */
 othello.Piece.prototype.flip = function() {};
 

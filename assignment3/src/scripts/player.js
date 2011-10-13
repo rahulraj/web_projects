@@ -24,6 +24,7 @@ othello.Player.prototype.makeMove = function(board) {};
  * Report whether the Player's state is consistent enough such that
  * makeMove will return a valid result.
  * @return {boolean} true if it is safe to call makeMove.
+ * @const
  */
 othello.Player.prototype.readyToMove = function() {};
 
