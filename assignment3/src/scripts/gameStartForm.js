@@ -114,11 +114,11 @@ othello.GameStartForm.Builder.prototype.blackPlayerFieldset = function() {
  * @const
  */
 othello.GameStartForm.Builder.prototype.playButton = function() {
-  this.playButtonElement = $('<input>', {
+  this.playButtonElement = new othello.utils.Some($('<input>', {
     type: 'button',
     value: 'Play!'
-  });
-  this.formElement.append(this.playButtonElement);
+  }));
+  this.formElement.append(this.playButtonElement.getOrElse(null));
   return this;
 };
 
