@@ -8,7 +8,7 @@
  * @param {othello.Player} blackPlayer the player with the black pieces.
  * @param {function(othello.Board)} onGameFinish a function to call when the
  *     game ends, with the final Board as an argument.
- * @param {number} opt_delayInterval an optional interval to "sleep" if a
+ * @param {number=} opt_delayInterval an optional interval to "sleep" if a
  *     Player is not ready. Defaults to 500 milliseconds.
  * @constructor
  * @const
@@ -44,7 +44,7 @@ othello.MainGameLoop.prototype.notifyObservers =
  * @const
  */
 othello.MainGameLoop.prototype.run = function(board, currentTurnPlayer) {
-  if (!(board.canMove(this.whitePlayer.getPiece())) && 
+  if (!(board.canMove(this.whitePlayer.getPiece())) &&
       !(board.canMove(this.blackPlayer.getPiece()))) {
     this.onGameFinish(board);
   } else if (!(currentTurnPlayer.readyToMove())) {
@@ -52,11 +52,11 @@ othello.MainGameLoop.prototype.run = function(board, currentTurnPlayer) {
     // Yield control to allow them to send input.
     /** @const */ var self = this;
     window.setTimeout(function() {
-      self.run(board, currentTurnPlayer); 
+      self.run(board, currentTurnPlayer);
     }, self.delayInterval);
     return;
   } else {
-    // Run a turn, then recurse asynchronously.  
+    // Run a turn, then recurse asynchronously.
     // if they pass, nextBoard is the same as board.
     // TODO Push boards onto an undo stack.
     // TODO Figure out how to disable this loop while the user is rewinding.
@@ -68,6 +68,6 @@ othello.MainGameLoop.prototype.run = function(board, currentTurnPlayer) {
     /** @const */ var self = this;
     window.setTimeout(function() {
       self.run(nextBoard, nextPlayer);
-    }, 0)
+    }, 0);
   }
 };

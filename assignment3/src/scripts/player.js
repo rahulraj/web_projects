@@ -77,7 +77,7 @@ othello.AiPlayer.prototype.readyToMove = function() {
 
 /**
  * Getter for this.piece
- * @return {othello.Piece} this.piece
+ * @return {othello.Piece} this.piece.
  * @const
  */
 othello.AiPlayer.prototype.getPiece = function() {
@@ -241,7 +241,7 @@ othello.HumanPlayer.prototype.makeMove = function(board) {
 
 /**
  * Getter for this.piece
- * @return {othello.Piece} this.piece
+ * @return {othello.Piece} this.piece.
  * @const
  */
 othello.HumanPlayer.prototype.getPiece = function() {

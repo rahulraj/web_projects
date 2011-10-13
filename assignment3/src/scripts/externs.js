@@ -1,3 +1,6 @@
+
+
+
 /**
  * @const
  * @constructor
@@ -10,17 +13,18 @@ jQueryObject.prototype.attr = function(arg1, arg2) {};
 /**
  * Extern function for jQuery
  * @param {*} element the first argument.
- * @param {*|null|undefined} opt_attributes optional attributes.
+ * @param {*|null|undefined=} opt_attributes optional attributes.
  * @return {jQueryObject} a jQuery object
  * @const
  */
-function $ (element, opt_attributes) {};
+function $(element, opt_attributes) {}
 
 
-/** 
- * @const 
+
+/**
+ * @const
  * @constructor
- */ 
+ */
 var Underscore = function() {};
 Underscore.prototype.each = function(arg) {};
 Underscore.prototype.map = function(arg) {};
@@ -34,7 +38,7 @@ Underscore.prototype.reject = function(arg) {};
  * @param {*} arg1 the first argument.
  * @return {Underscore} an underscore-enhanced list.
  */
-function _ (arg1) {};
+function _(arg1) {}
 _.each = function(arg1, arg2) {};
 _.map = function(arg1, arg2) {};
 _.range = function(arg1, arg2) {};
