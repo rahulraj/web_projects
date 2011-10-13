@@ -34,7 +34,8 @@
         form.attachTo($('section'));
 
         var boardView = othello.BoardTableView.of(
-            othello.Board.Builder.initialGame().build());
+            othello.Board.Builder.initialGame().build(),
+            othello.DarkPiece.instance);
         boardView.attachTo($('section'));
       });
     </script>
