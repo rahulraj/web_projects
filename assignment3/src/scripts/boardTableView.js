@@ -4,8 +4,8 @@
 /**
  * A view class displaying the board as a HTML table
  * @param {jQuery} tableElement the element with the table.
- * @const
  * @constructor
+ * @const
  */
 othello.BoardTableView = function(tableElement) {
   /** @const */ this.tableElement = tableElement;
