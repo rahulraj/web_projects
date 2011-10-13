@@ -214,8 +214,8 @@ othello.PlayerFieldset.Builder.prototype.legend = function(legendName) {
  *     radioButton('whiteHuman').checked().withLabel('Human').
  *     radioButton('whiteEasyAi').withLabel('Easy AI').
  *     radioButton('whiteMediumAi').withLabel('Medium AI').build();
- * TODO Name some of the anonymous objects to make the code cleaner.
  * @param {string} buttonName the name of the button.
+ * @return {*} an object supporting the functions from the given example.
  * @const
  */
 othello.PlayerFieldset.Builder.prototype.radioButtonSetNamed =
