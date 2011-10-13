@@ -1,8 +1,9 @@
 /**
  * Constructor for a GameStartForm
- * @param {jQuery} formElement the jQuery element wrapping the form.
- * @param {jQuery} playButton the jQuery element wrapping the
- *     button that starts the game.
+ * @param {*} formElement the jQuery element wrapping
+ *     the form.
+ * @param {*} playButton the jQuery element wrapping 
+ *     the button that starts the game.
  * @constructor
  */
 othello.GameStartForm = function(formElement, playButton) {
@@ -13,7 +14,7 @@ othello.GameStartForm = function(formElement, playButton) {
 /**
  * Attach this form to a parent element, presumably to add it to
  * the document being displayed
- * @param {jQuery} parentElement the parent for this form.
+ * @param {*} parentElement the parent for this form.
  */
 othello.GameStartForm.prototype.attachTo = function(parentElement) {
   parentElement.append(this.formElement);
@@ -89,7 +90,7 @@ othello.GameStartForm.Builder.prototype.build = function() {
 
 /**
  * Class to represent a fieldset to choose who will play a side.
- * @param {jQuery} fieldsetElement the element containing the
+ * @param {*} fieldsetElement the element containing the
  *     fieldset, as a jQuery object.
  * @constructor
  */
@@ -99,7 +100,7 @@ othello.PlayerFieldset = function(fieldsetElement) {
 
 /**
  * Attach this fieldset to a parent 
- * @param {jQuery} parentElement the parent for this fieldset.
+ * @param {*} parentElement the parent for this fieldset.
  */
 othello.PlayerFieldset.prototype.attachTo = function(parentElement) {
   parentElement.append(this.fieldsetElement);
