@@ -3,6 +3,7 @@
 
 /**
  * A class to keep track of old boards for the undo feature.
+ * TODO Add redo (instead of removing undone boards, just move a pointer)
  * @constructor
  * @const
  */
