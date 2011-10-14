@@ -62,3 +62,18 @@ othello.UndoStack.prototype.onModelChange =
 othello.UndoStack.prototype.onInitialMessage = function(board, unused_piece) {
   this.push(board);
 };
+
+
+/**
+ * Act on the game end. Dont allow any more undos, it's not fair
+ * to the winning player.
+ * @param {othello.Board} unused_board the ending board.
+ * @param {othello.Piece} unused_piece the ending piece.
+ * @const
+ */
+othello.UndoStack.prototype.onGameEnd = function(unused_board, unused_piece) {
+  // empty the stack
+  while (this.boards.length > 0) {
+    this.boards.pop();
+  }
+};
