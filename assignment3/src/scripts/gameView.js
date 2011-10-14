@@ -27,24 +27,14 @@ othello.GameView = function(boardView, undoButton, passButton, parentElement) {
  * @const
  */
 othello.GameView.prototype.addControllerEvents = function(controller) {
-  if (!controller) {
-    return;  
-  }
+  this.controller = controller; 
+  this.addClickHandlersToTableDivisions(controller);
+};
 
-  if (!this.controller) {
-    this.controller = controller; 
-  }
-
+othello.GameView.prototype.addClickHandlersToTableDivisions =
+    function(controller) {
   this.boardView.addClickHandlersToTableDivisions(function(row, column) {
     controller.onBoardButtonClicked(row, column);
-  });
-
-  this.undoButton.click(function() {
-    controller.onUndoButtonClicked();
-  });
-
-  this.passButton.click(function() {
-    controller.onPassButtonClicked(); 
   });
 };
 
@@ -54,7 +44,7 @@ othello.GameView.prototype.addControllerEvents = function(controller) {
  * @const
  */
 othello.GameView.prototype.updatePage = function() {
-  this.addControllerEvents(this.controller);
+  this.addClickHandlersToTableDivisions(this.controller);
   this.parentElement.html('');
   this.boardView.attachTo(this.parentElement);
   this.parentElement.append(this.undoButton);

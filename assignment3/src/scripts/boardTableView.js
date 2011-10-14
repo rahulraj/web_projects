@@ -26,7 +26,7 @@ othello.BoardTableView.prototype.addClickHandlersToTableDivisions =
   /** @const */ var self = this;
   _.each(_.range(0, self.tableDivisions.length), function(i) {
     _.each(_.range(0, self.tableDivisions[i].length), function(j) {
-      self.tableDivisions[i][j].click(function() {
+      self.tableDivisions[i][j].bind('click', function(event) {
         handler(i, j);
       });
     });

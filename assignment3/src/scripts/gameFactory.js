@@ -59,6 +59,7 @@ othello.GameFactory.createGameMvcAndRun =
       type: 'button', value: 'Undo Last Move'});
   /** @const */ var passButton = $('<input>', {
       type: 'button', value: 'Pass'});
+
   /** @const */ var parentElement = $('section');
   /** @const */ var gameView = new othello.GameView(
       initialBoardTableView, undoButton, passButton, parentElement);
@@ -69,7 +70,22 @@ othello.GameFactory.createGameMvcAndRun =
   gameModel.addObserver(blackPlayer);
 
   /** @const */ var gameController = new othello.GameController(gameModel,
-                                                                gameView);
+      gameView);
+
+  // jQuery clicks it once, ignore that click
+  var first = true;
+  $('input').live('click', function(event) {
+    if (first) {
+      first = false; 
+      return;
+    }
+    if ($(this).val() === 'Undo Last Move') {
+      gameController.onUndoButtonClicked(); 
+    } else {
+      gameController.onPassButtonClicked(); 
+    }
+  });
+
   gameView.addControllerEvents(gameController);
 
   // all hooked up, now start the game with the initial cascade of events.

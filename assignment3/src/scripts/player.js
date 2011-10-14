@@ -11,26 +11,6 @@ othello.Player = function() {};
 
 
 /**
- * Abstract method, to decide the next move.
- * @param {othello.Board} board the board to move on.
- * @return {othello.utils.Option} a new Board object inside an Option
- *    representing the state of the game after the move. Will be None
- *    if the player had to pass.
- * @const
- */
-othello.Player.prototype.makeMove = function(board) {};
-
-
-/**
- * Report whether the Player's state is consistent enough such that
- * makeMove will return a valid result.
- * @return {boolean} true if it is safe to call makeMove.
- * @const
- */
-othello.Player.prototype.readyToMove = function() {};
-
-
-/**
  * Getter for the side this player is on
  * @return {othello.Piece} the Piece this player uses.
  * @const
@@ -69,14 +49,6 @@ othello.AiPlayer.prototype.makeMove = function(board) {
   return this.playerStrategy(this.piece, board);
 };
 
-
-/**
- * AI players are always ready.
- * @return {boolean} true if it is safe to call makeMove.
- */
-othello.AiPlayer.prototype.readyToMove = function() {
-  return true;
-};
 
 
 /**
@@ -238,37 +210,6 @@ othello.HumanPlayer.prototype.clearBuffer = function() {
  */
 othello.HumanPlayer.prototype.readyToMove = function() {
   return this.moveBuffer !== null;
-};
-
-
-/**
- * Makes a move based on what the player inputted.
- * @param {othello.Board} board the board to move on.
- * @return {othello.utils.Option} a new Board object inside an Option
- *    representing the state of the game after the move. Will be None
- *    if the player had to pass.
- * @const
- */
-othello.HumanPlayer.prototype.makeMove = function(board) {
-  if (!(this.readyToMove())) {
-    // Yield control and give the user time to input a move.
-    // Block until this.moveBuffer has something in it.
-    ///** @const */ var self = this;
-    //window.setTimeout(function() {
-    // this.makeMove(board);
-    //}, othello.HumanPlayer.delayInterval);
-    throw new Error('Human tried to move before being ready!');
-  } else if (this.moveBuffer === othello.utils.None.instance) {
-    // pass
-    return othello.utils.None.instance;
-  } else {
-    // move should never be null
-    /** @const */ var move = this.moveBuffer.getOrElse(null);
-    /** @const */ var newBoard = board.makeMove(
-        this.piece, move.getX(), move.getY());
-    this.clearBuffer();
-    return new othello.utils.Some(newBoard);
-  }
 };
 
 

@@ -22,7 +22,6 @@ othello.GameController = function(model, view) {
  * @const
  */
 othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
-  console.log('click on ' + row + ', ' + column);
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (!(this.model.moveIsValid(currentTurnPlayer, row, column))) {
     return;
@@ -41,7 +40,7 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
 othello.GameController.prototype.onPassButtonClicked = function() {
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (this.model.canMove(currentTurnPlayer)) {
-    // TODO Tell the player they can't pass
+    window.alert("Sorry, you can't pass when you have available move(s)");
     return;
   }
   this.model.step(othello.utils.None.instance);
