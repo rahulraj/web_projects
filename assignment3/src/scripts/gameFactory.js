@@ -1,8 +1,35 @@
 /** @const */ othello.GameFactory = {};
 
+/**
+ * Helper method to take a user choice and create the appropriate player.
+ * @param {othello.GameModel} gameModel the model.
+ * @param {string} input the user input.
+ */
+othello.GameFactory.playerFromString = function(gameModel, input) {
+  /** @const */ var size = 'white'.length; // 'black'.length is the same
+  /** @const */ var color = input.slice(0, size);
+  /** @const */ var piece;
+  if (color === 'white') {
+    piece = othello.LightPiece.instance; 
+  } else {
+    piece = othello.DarkPiece.instance; 
+  }
+  /** @const */ var description = input.slice(size);
+  switch (description) {
+    case 'Human':
+      return new othello.HumanPlayer(piece);
+    case 'EasyAi':
+      return othello.AiPlayer.createRandomAi(gameModel, piece);
+    case 'MediumAi':
+      return othello.AiPlayer.createGreedyAi(gameModel, piece);
+    default:
+      throw new Error('Invalid player choice');
+  }
+};
+
 
 /**
- * After the start form is filled, wire up the application.
+ * After the start form is filled, wire up the game and start it.
  * @param {string} whitePlayerSelection the input for who should play white.
  * @param {string} blackPlayerSelection the input for who should play black.
  * @const
@@ -15,39 +42,11 @@ othello.GameFactory.createGameMvcAndRun =
   /** @const */ var gameModel = new othello.GameModel(initialBoard,
       startingPiece);
 
-  /** @const */ var whitePlayer;
-  switch (whitePlayerSelection) {
-    case 'whiteHuman':
-      whitePlayer = new othello.HumanPlayer(othello.LightPiece.instance);
-      break;
-    case 'whiteEasyAi':
-      whitePlayer = othello.AiPlayer.createRandomAi(
-          gameModel, othello.LightPiece.instance);
-      break;
-    case 'whiteMediumAi':
-      whitePlayer = othello.AiPlayer.createGreedyAi(
-          gameModel, othello.LightPiece.instance);
-      break;
-    default:
-      throw new Error('Invalid player choice');
-  }
+  /** @const */ var whitePlayer = othello.GameFactory.playerFromString(
+      gameModel, whitePlayerSelection);
 
-  /** @const */ var blackPlayer;
-  switch (blackPlayerSelection) {
-    case 'blackHuman':
-      blackPlayer = new othello.HumanPlayer(othello.DarkPiece.instance);
-      break;
-    case 'blackEasyAi':
-      blackPlayer = othello.AiPlayer.createRandomAi(
-          gameModel, othello.DarkPiece.instance);
-      break;
-    case 'blackMediumAi':
-      blackPlayer = othello.AiPlayer.createGreedyAi(
-          gameModel, othello.DarkPiece.instance);
-      break;
-    default:
-      throw new Error('Invalid player choice');
-  }
+  /** @const */ var blackPlayer = othello.GameFactory.playerFromString(
+      gameModel, blackPlayerSelection);
 
   gameModel.setDelayInterval(100);
 
