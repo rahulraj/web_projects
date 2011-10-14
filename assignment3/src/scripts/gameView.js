@@ -25,6 +25,14 @@ othello.GameView = function(boardView, undoButton, parentElement) {
  * @const
  */
 othello.GameView.prototype.addControllerEvents = function(controller) {
+  if (!controller) {
+    return;  
+  }
+
+  if (!this.controller) {
+    this.controller = controller; 
+  }
+
   this.boardView.addClickHandlersToTableDivisions(function(row, column) {
     controller.onBoardButtonClicked(row, column);
   });
@@ -40,6 +48,7 @@ othello.GameView.prototype.addControllerEvents = function(controller) {
  * @const
  */
 othello.GameView.prototype.updatePage = function() {
+  this.addControllerEvents(this.controller);
   this.parentElement.html('');
   this.boardView.attachTo(this.parentElement);
   this.parentElement.append(this.undoButton);
