@@ -173,16 +173,29 @@ othello.GameModel.prototype.step = function(move) {
 };
 
 
+/**
+ *  Reports whether the state is undoing
+ *  @return {boolean} true if we are undoing.
+ *  @const
+ */
 othello.GameModel.prototype.isUndoing = function() {
   return this.gameState === othello.GameModel.State.undoing;
 };
 
+
+/**
+ * Reports whether the state is undoing
+ * @return {boolean} true if we are undoing.
+ * @const
+ */
 othello.GameModel.prototype.canUndo = function() {
   return this.undoStack.hasBoards();
 };
 
+
 /**
 * Undo moves
+* @const
 */
 othello.GameModel.prototype.undo = function() {
   if (!this.canUndo()) {
@@ -196,6 +209,11 @@ othello.GameModel.prototype.undo = function() {
   this.notifyObservers();
 };
 
+
+/**
+ * Resume after done undoing
+ * @const
+ */
 othello.GameModel.prototype.resumeGame = function() {
   if (this.gameState !== othello.GameModel.State.undoing) {
     throw new Error('Should only resume if undoing');

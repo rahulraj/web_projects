@@ -63,10 +63,4 @@ othello.GameController.prototype.onUndoButtonClicked = function() {
     return;
   }
   this.model.undo();
-  /*
-  if (!this.undoStack.hasBoards()) {
-    window.alert("Can't undo, at the beginning of the game.");
-    return;
-  }
-  /** @const */ //var lastBoard = this.undoStack.pop();
 };
