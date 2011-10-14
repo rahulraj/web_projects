@@ -4,13 +4,17 @@
 /**
  * Constructor for an Othello board. Client code should not
  * call this constructor directly; use the Builder instead.
+ * Boards are created O(n) times, so for performance reasons, most
+ * functions are shared through the prototype. However, the constructor
+ * does create the necessary functions to hide the representation.
  * Using the Builder pattern in this case has the following advantages:
  *   - Allows multi-step construction.
  *   - Cleaner syntax for creating a board, hiding the 2D array implementation.
  *   - Allows Boards to be immutable; all mutability is contained in Builders.
  * Representation Invariants:
  *   - Immutable - every move should create a new board.
- *     Use the Builder to creat boards more easily.
+ *     Use the Builder to create boards more easily, and avoid
+ *     directly manipulating a 2D array.
  *   - All squares must contain an othello.Piece, it may not
  *     be null or some other type.
  * @param {Array.<Array.<othello.Piece>>} board a 2D array
@@ -21,8 +25,21 @@
  * @const
  */
 othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
+  // Defensively copy board to avoid representation exposure.
+  // It would be nice if JavaScript provided immutable arrays, but...
+  /** @const */ var copyArray = function(array) {
+    return _(array).map(function(element) {
+      return element; 
+    });
+  };
+
+  /** @const */ var boardCopy = [];
+  _(board).each(function(column) {
+    boardCopy.push(copyArray(column));
+  });
+
   /**
-   * Retrieve the piece at a given location. Closes over board to
+   * Retrieve the piece at a given location. Closes over boardCopy to
    * accomplish this. Board is not stored as a field, to guard
    * against representation exposure and more easily guarantee immutability.
    * Most methods are attached to othello.Board.prototype for performance
@@ -34,7 +51,7 @@ othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
    * @const
    */
   this.pieceAt = function(row, column) {
-    return board[row][column];
+    return boardCopy[row][column];
   };
 
 
