@@ -35,7 +35,7 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
       this.model.resumeGame();
     } else {
       window.alert("This is the AI's turn, and you can't move on its " +
-                   "behalf. Hit Undo again to make it your turn.");
+                   "behalf. Hit Undo or Redo to make it your turn.");
       return;
     }
   }
@@ -53,7 +53,7 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
 othello.GameController.prototype.onPassButtonClicked = function() {
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (this.model.canMove(currentTurnPlayer)) {
-    window.alert("Sorry, you can't pass when you have available move(s)");
+    window.alert("You can't pass when you have available move(s)");
     return;
   }
   if (this.model.isUndoing()) {
@@ -61,7 +61,7 @@ othello.GameController.prototype.onPassButtonClicked = function() {
       this.model.resumeGame(); 
     } else {
       window.alert("This is the AI's turn, and you can't move on its " +
-                   "behalf. Hit Undo again to make it your turn.");
+                   "behalf. Hit Undo or Redo to make it your turn.");
       return;
     }
   }
@@ -92,4 +92,13 @@ othello.GameController.prototype.onRedoButtonClicked = function() {
     return;
   }
   this.model.redo();
+};
+
+
+/**
+ * Restart the game.
+ * @const
+ */
+othello.GameController.prototype.onRestartButtonClicked = function() {
+  window.location.reload();
 };

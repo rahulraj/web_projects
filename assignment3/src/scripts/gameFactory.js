@@ -29,6 +29,13 @@ othello.GameFactory.playerFromString = function(gameModel, input) {
 
 
 /**
+ * @const
+ * @type {string}
+ */
+othello.GameFactory.parentElementSelector = 'section';
+
+
+/**
  * After the start form is filled, wire up the game and start it.
  * @param {string} whitePlayerSelection the input for who should play white.
  * @param {string} blackPlayerSelection the input for who should play black.
@@ -57,10 +64,13 @@ othello.GameFactory.createGameMvcAndRun =
       type: 'button', value: othello.GameView.passButtonValue});
   /** @const */ var redoButton = $('<input>', {
       type: 'button', value: othello.GameView.redoButtonValue});
+  /** @const */ var restartButton = $('<input>', {
+      type: 'button', value: othello.GameView.restartButtonValue});
 
-  /** @const */ var parentElement = $('section');
+  /** @const */ var parentElement =
+      $(othello.GameFactory.parentElementSelector);
   /** @const */ var gameView = new othello.GameView(initialBoardTableView,
-      undoButton, passButton, redoButton, parentElement);
+      undoButton, passButton, redoButton, restartButton, parentElement);
 
   gameModel.addObserver(gameView);
   gameModel.addObserver(whitePlayer);
@@ -91,8 +101,10 @@ othello.GameFactory.createGameMvcAndRun =
       gameController.onUndoButtonClicked(); 
     } else if (value === othello.GameView.passButtonValue) {
       gameController.onPassButtonClicked(); 
-    } else {
+    } else if (value === othello.GameView.redoButtonValue) {
       gameController.onRedoButtonClicked();
+    } else if (value === othello.GameView.restartButtonValue) {
+      gameController.onRestartButtonClicked(); 
     }
   });
 

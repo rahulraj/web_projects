@@ -4,7 +4,7 @@
 /**
  * A class to keep track of old boards for the undo/redo feature.
  * Representation invariant: Should always have at least one element.
- * @param {othello.Board} initial board the initial board
+ * @param {othello.Board} initialBoard the initial board
  * @constructor
  * @const
  */

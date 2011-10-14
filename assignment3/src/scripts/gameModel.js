@@ -151,7 +151,8 @@ othello.GameModel.prototype.step = function(move) {
     return;
   }
 
-  /** @const */ var nextBoard = move.getOrElse(null);
+  /** @const */ var nextBoard = /** @type {othello.Board} */
+      (move.getOrElse(null));
   if (!nextBoard) {
     if (this.lastPlayerPassed) {
       // two passes in a row; the game has ended 

@@ -8,17 +8,20 @@
  * @param {jQueryObject} undoButton the button to undo, wrapped in jQuery.
  * @param {jQueryObject} passButton the button to pass, wrapped in jQuery.
  * @param {jQueryObject} resumeButton the button to resume, wrapped in jQuery.
+ * @param {jQueryObject} restartButton the button to restart, wrapped in jQuery.
  * @param {jQueryObject} parentElement the parent for this view.
  * @constructor
  * @implements {othello.Observer}
  * @const
  */
-othello.GameView =
-    function(boardView, undoButton, passButton, resumeButton, parentElement) {
+othello.GameView = 
+    function(boardView, undoButton, passButton, resumeButton,
+             restartButton, parentElement) {
   this.boardView = boardView;
   /** @const */ this.undoButton = undoButton;
   /** @const */ this.passButton = passButton;
   /** @const */ this.resumeButton = resumeButton;
+  /** @const */ this.restartButton = restartButton;
   /** @const */ this.parentElement = parentElement;
 };
 
@@ -42,6 +45,13 @@ othello.GameView.passButtonValue = 'Pass';
  * @type {string}
  */
 othello.GameView.redoButtonValue = 'Redo';
+
+
+/**
+ * @const
+ * @type {string}
+ */
+othello.GameView.restartButtonValue = 'Restart';
 
 
 /**
@@ -80,6 +90,7 @@ othello.GameView.prototype.updatePage = function() {
   this.parentElement.append(this.passButton);
   this.parentElement.append(this.undoButton);
   this.parentElement.append(this.resumeButton);
+  this.parentElement.append(this.restartButton);
 };
 
 
