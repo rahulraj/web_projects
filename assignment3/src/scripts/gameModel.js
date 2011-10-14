@@ -5,7 +5,8 @@
  * Top-level class for the game model.
  * @param {othello.Board} initialBoard the initial board.
  * @param {othello.Piece} initialPiece the initial player to move.
- * @param {number} delayInterval the number of milliseconds to delay.
+ * @param {number} delayInterval the number of milliseconds to delay
+ *     notifying AI Players.
  * @constructor
  * @implements {othello.Observable}
  * @const
@@ -152,7 +153,5 @@ othello.GameModel.prototype.step = function(move) {
   // if no move made, just reuse the old board.
   this.currentTurnPlayer = this.currentTurnPlayer.flip();
   /** @const */ var self = this;
-  _.defer(function() {
-    self.notifyObservers(); 
-  }, this.delayInterval);
+  this.notifyObservers();
 };
