@@ -25,7 +25,13 @@ othello.GameView = function(boardView, undoButton, parentElement) {
  * @const
  */
 othello.GameView.prototype.addControllerEvents = function(controller) {
+  this.boardView.addClickHandlersToTableDivisions(function(row, column) {
+    controller.onBoardButtonClicked(row, column);
+  });
 
+  this.undoButton.click(function() {
+    controller.onUndoButtonClicked();
+  });
 };
 
 

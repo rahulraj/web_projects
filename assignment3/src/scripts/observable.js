@@ -23,6 +23,7 @@ othello.Observable.prototype.addObserver = function(observer) {};
  */
 othello.Observable.prototype.notifyObservers = function() {};
 
+
 /**
  * Let the observers know the game has started.
  * @const

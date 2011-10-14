@@ -4,11 +4,33 @@
 /**
  * A view class displaying the board as a HTML table
  * @param {jQueryObject} tableElement the element with the table.
+ * @param {Array.<Array.<jQueryObject>>} tableDivisions a 2D array
+ *     of the TD's in this table.
  * @constructor
  * @const
  */
-othello.BoardTableView = function(tableElement) {
+othello.BoardTableView = function(tableElement, tableDivisions) {
   /** @const */ this.tableElement = tableElement;
+  /** @const */ this.tableDivisions = tableDivisions;
+};
+
+
+/**
+ * Add onclick handlers to each of the divisions in this table.
+ * @param {function(number, number)} handler a handler function that takes
+ *     the row and column of the division.
+ * @const
+ */
+othello.BoardTableView.prototype.addClickHandlersToTableDivisions =
+    function(handler) {
+  /** @const */ var self = this;
+  _.each(_.range(0, self.tableDivisions.length), function(i) {
+    _.each(_.range(0, self.tableDivisions[i].length), function(j) {
+      this.tableDivisions[i][j].click(function() {
+        handler(i, j);
+      });
+    });
+  });
 };
 
 
@@ -153,5 +175,5 @@ othello.BoardTableView.Builder.prototype.build = function() {
     });
     buildersTableElement.append(tableRow);
   });
-  return new othello.BoardTableView(buildersTableElement);
+  return new othello.BoardTableView(buildersTableElement, this.tableDivisions);
 };

@@ -24,7 +24,7 @@ othello.GameController = function(model, view) {
 othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (!(this.model.moveIsValid(currentTurnPlayer, row, column))) {
-    return; 
+    return;
   }
   // This is a valid move for the human.
   /** @const */ var moveInSome = new othello.utils.Some(
@@ -41,7 +41,7 @@ othello.GameController.prototype.onPassButtonClicked = function() {
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (this.model.canMove(currentTurnPlayer)) {
     // TODO Tell the player they can't pass
-    return; 
+    return;
   }
   this.model.step(othello.utils.None.instance);
 };

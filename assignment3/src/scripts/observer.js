@@ -16,7 +16,8 @@ othello.Observer = function() {};
  *    whose turn it is.
  * @const
  */
-othello.Observer.prototype.onModelChange = function(board, currentTurnPlayer) {};
+othello.Observer.prototype.onModelChange =
+    function(board, currentTurnPlayer) {};
 
 
 /**

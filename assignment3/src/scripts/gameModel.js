@@ -12,7 +12,7 @@
 othello.GameModel = function(initialBoard, initialPiece) {
   this.board = initialBoard;
   this.currentTurnPlayer = initialPiece;
-  this.delayInterval = 0; 
+  this.delayInterval = 0;
   /** @const */ this.observers = [];
 };
 
@@ -20,6 +20,7 @@ othello.GameModel = function(initialBoard, initialPiece) {
 /**
  * Set the optional delay interval parameter. This should be set to some
  * nonzero value if playing an AI vs. AI game.
+ * @param {number} delayInterval the number of milliseconds to delay.
  * @const
  */
 othello.GameModel.prototype.setDelayInterval = function(delayInterval) {
@@ -43,6 +44,7 @@ othello.GameModel.prototype.canMove = function(piece) {
  * @param {othello.Piece} piece the side moving.
  * @param {number} row the row.
  * @param {number} column the column.
+ * @return {boolean} true if the placement is valid.
  */
 othello.GameModel.prototype.moveIsValid = function(piece, row, column) {
   return this.board.placementIsValid(piece, row, column);
@@ -55,6 +57,7 @@ othello.GameModel.prototype.moveIsValid = function(piece, row, column) {
  * @param {othello.Piece} piece the side moving.
  * @param {number} row the row.
  * @param {number} column the column.
+ * @return {othello.Board} the resulting board.
  */
 othello.GameModel.prototype.makeMove = function(piece, row, column) {
   return this.board.makeMove(piece, row, column);
@@ -88,7 +91,7 @@ othello.GameModel.prototype.addObserver = function(observer) {
 othello.GameModel.prototype.notifyObservers = function() {
   /** @const */ var self = this;
   _(this.observers).each(function(observer) {
-    /** @const */ var delay = observer instanceof othello.AiPlayer ? 
+    /** @const */ var delay = observer instanceof othello.AiPlayer ?
         self.delayInterval : 0;
     window.setTimeout(function() {
       observer.onModelChange(self.board, self.currentTurnPlayer);
