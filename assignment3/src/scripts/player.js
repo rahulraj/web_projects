@@ -94,7 +94,8 @@ othello.AiPlayer.prototype.onInitialMessage = function(board, piece) {
  * @param {othello.Piece} unused_piece the ending piece.
  * @const
  */
-othello.AiPlayer.prototype.onGameEnd = function(board, piece) {};
+othello.AiPlayer.prototype.onGameEnd =
+    function(unused_board, unused_piece) {};
 
 
 /**

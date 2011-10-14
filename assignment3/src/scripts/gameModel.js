@@ -154,15 +154,15 @@ othello.GameModel.prototype.step = function(move) {
   this.undoStack.push(this.board);
   /** @const */ var nextBoard = move.getOrElse(null);
   if (!nextBoard) {
-    if (lastPlayerPassed) {
+    if (this.lastPlayerPassed) {
       // two passes in a row; the game has ended 
       this.publishFinalMessage();
       return;
     } else {
-      lastPlayerPassed = true; 
+      this.lastPlayerPassed = true; 
     }
   } else {
-    lastPlayerPassed = false; 
+    this.lastPlayerPassed = false; 
     this.board = nextBoard;
   }
 

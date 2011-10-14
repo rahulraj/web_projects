@@ -7,6 +7,8 @@
  */
 var jQueryObject = function() {};
 jQueryObject.prototype.append = function(arg) {};
+jQueryObject.prototype.live = function(arg1, arg2) {};
+jQueryObject.prototype.val = function() {};
 
 
 //jQueryObject.prototype.attr = function(arg1) {}

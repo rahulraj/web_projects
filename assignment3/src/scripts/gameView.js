@@ -58,7 +58,7 @@ othello.GameView.prototype.addControllerEvents = function(controller) {
 
 /**
  * Adds click handlers to the divisions in the table
- * @param {othello.Controller} controller the controller handling the input.
+ * @param {othello.GameController} controller the controller handling the input.
  * @const
  */
 othello.GameView.prototype.addClickHandlersToTableDivisions =
