@@ -5,7 +5,7 @@
  * Top-level class for the game model.
  * @param {othello.Board} initialBoard the initial board.
  * @param {othello.Piece} initialPiece the initial player to move.
- * @param {othello.UndoStack} undoStack the undo stack.
+ * @param {othello.BoardHistory} boardHistory the history logger.
  * @param {number} delayInterval the number of milliseconds to delay
  *     notifying AI Players.
  * @constructor
@@ -13,10 +13,10 @@
  * @const
  */
 othello.GameModel =
-    function(initialBoard, initialPiece, undoStack, delayInterval) {
+    function(initialBoard, initialPiece, boardHistory, delayInterval) {
   this.board = initialBoard;
   this.currentTurnPlayer = initialPiece;
-  /** @const */ this.undoStack = undoStack;
+  /** @const */ this.boardHistory = boardHistory;
   /** @const */ this.delayInterval = delayInterval;
   /** @const */ this.observers = [];
   this.lastPlayerPassed = false;
@@ -151,7 +151,6 @@ othello.GameModel.prototype.step = function(move) {
     return;
   }
 
-  this.undoStack.push(this.board);
   /** @const */ var nextBoard = move.getOrElse(null);
   if (!nextBoard) {
     if (this.lastPlayerPassed) {
@@ -165,6 +164,7 @@ othello.GameModel.prototype.step = function(move) {
     this.lastPlayerPassed = false; 
     this.board = nextBoard;
   }
+  this.boardHistory.push(this.board);
 
   // if no move made, just reuse the old board.
   this.currentTurnPlayer = this.currentTurnPlayer.flip();
@@ -188,7 +188,7 @@ othello.GameModel.prototype.isUndoing = function() {
  * @const
  */
 othello.GameModel.prototype.canUndo = function() {
-  return this.undoStack.hasBoards();
+  return this.boardHistory.canUndo();
 };
 
 
@@ -203,7 +203,7 @@ othello.GameModel.prototype.undo = function() {
   }
 
   this.gameState = othello.GameModel.State.undoing;
-  this.board = this.undoStack.pop();
+  this.board = this.boardHistory.undo();
   this.currentTurnPlayer = this.currentTurnPlayer.flip();
   this.notifyObservers();
 };
