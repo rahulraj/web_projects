@@ -140,7 +140,6 @@ othello.GameModel.prototype.publishFinalMessage = function() {
  * @const
  */
 othello.GameModel.prototype.step = function(move) {
-  console.log("in step");
   if (this.gameState === othello.GameModel.State.finished ||
       this.gameState === othello.GameModel.State.undoing) {
     return; 
