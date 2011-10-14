@@ -29,3 +29,10 @@ othello.Observable.prototype.notifyObservers = function() {};
  * @const
  */
 othello.Observable.prototype.publishInitialMessage = function() {};
+
+
+/**
+ * Let the observers know the game has ended.
+ * @const
+ */
+othello.Observable.prototype.publishFinalMessage = function() {};
