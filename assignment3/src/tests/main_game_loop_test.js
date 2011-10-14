@@ -23,7 +23,7 @@ MainGameLoopTest.SlowAiPlayer.prototype.makeMove = function(board) {
 };
 
 
-MainGameLoopTest.prototype.testFullAiGame = function(queue) {
+MainGameLoopTest.prototype.disabled_testFullAiGame = function(queue) {
   var gameEnded = false;
 
   queue.call('Start the game', function(callbacks) {
@@ -52,7 +52,7 @@ MainGameLoopTest.prototype.testFullAiGame = function(queue) {
 
 /** @const */ MainGameLoopTest.yieldInterval = 0.00001;
 
-MainGameLoopTest.prototype.testHumanVsAiGame = function(queue) {
+MainGameLoopTest.prototype.disabled_testHumanVsAiGame = function(queue) {
   var gameEnded = false;
 
   queue.call('Start the game', function(callbacks) {
@@ -83,7 +83,7 @@ MainGameLoopTest.prototype.testHumanVsAiGame = function(queue) {
   });
 };
 
-MainGameLoopTest.prototype.testHumanVsHumanGame = function(queue) {
+MainGameLoopTest.prototype.disabled_testHumanVsHumanGame = function(queue) {
   var gameEnded = false;
 
   queue.call('Start the game', function(callbacks) {

@@ -14,18 +14,18 @@ PlayerTest.prototype.runOneMoveOnAiPlayer = function(aiPlayer) {
 
 };
 
-PlayerTest.prototype.testRandomPlayerOneMove = function() {
+PlayerTest.prototype.disabled_testRandomPlayerOneMove = function() {
   /** @const */ var randomAi = othello.AiPlayer.createRandomAi(
       othello.DarkPiece.instance);
   this.runOneMoveOnAiPlayer(randomAi);
 };
 
-PlayerTest.prototype.testGreedyPlayerOneMove = function() {
+PlayerTest.prototype.disabled_testGreedyPlayerOneMove = function() {
   this.runOneMoveOnAiPlayer(
       othello.AiPlayer.createGreedyAi(othello.DarkPiece.instance));
 };
 
-PlayerTest.prototype.testGreedyPlayerPicksBetterChoice = function() {
+PlayerTest.prototype.disabled_testGreedyPlayerPicksBetterChoice = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard().
     at(4, 4).placeLightPiece().
     at(5, 4).placeDarkPiece();
@@ -46,7 +46,7 @@ PlayerTest.prototype.testGreedyPlayerPicksBetterChoice = function() {
   assertEquals(othello.DarkPiece.instance, newBoard.pieceAt(0, 0));
 };
 
-PlayerTest.prototype.testPlayersReturnNoneWhenNoMoves = function() {
+PlayerTest.prototype.disabled_testPlayersReturnNoneWhenNoMoves = function() {
   // Test the ending of the Vlasakova-Schotte game, at whichh no moves
   // could be made. Players should return None, indicating a pass.
   /** @const */ var boardTest = new BoardTest();

@@ -22,6 +22,7 @@ othello.GameController = function(model, view) {
  * @const
  */
 othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
+  console.log('click on ' + row + ', ' + column);
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (!(this.model.moveIsValid(currentTurnPlayer, row, column))) {
     return;

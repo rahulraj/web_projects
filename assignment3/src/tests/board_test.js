@@ -266,3 +266,33 @@ BoardTest.prototype.testMakeMoveThrowsOnInvalidMove = function() {
     fail();
   } catch (expectedInvalidMoveError) {}
 };
+
+BoardTest.prototype.testMakeMoveOn2Chain = function() {
+  /** @const */ var board = othello.Board.Builder.emptyBoard().
+      at(4, 1).placeLightPiece().
+      at(3, 2).placeLightPiece().
+      at(2, 3).placeDarkPiece().build();
+
+  /** @const */ var next = board.makeMove(othello.DarkPiece.instance, 5, 0);
+
+  assertEquals(othello.DarkPiece.instance, next.pieceAt(4, 1));
+  assertEquals(othello.DarkPiece.instance, next.pieceAt(3, 2));
+};
+
+BoardTest.prototype.testMakeMoveOnFullyPopulatedBoard = function() {
+  // position from an actual game from manual testing. I encountered a bug,
+  // so this is part of the method to pinpoint it.
+  /** @const */ var board = othello.Board.Builder.emptyBoard().
+      at(5, 0).placeDarkPiece().at(4, 1).placeLightPiece().
+      at(5, 1).placeDarkPiece().at(5, 2).placeLightPiece().
+      at(2, 2).placeLightPiece().at(3, 2).placeLightPiece().
+      at(4, 2).placeLightPiece().at(5, 2).placeDarkPiece().
+      at(2, 3).placeDarkPiece().at(3, 3).placeDarkPiece().
+      at(4, 3).placeDarkPiece().at(3, 4).placeDarkPiece().
+      at(4, 4).placeLightPiece().build();
+
+  /** @const */ var  next = board.makeMove(othello.LightPiece.instance, 3, 5);
+
+  assertEquals(othello.LightPiece.instance, next.pieceAt(3, 3));
+  assertEquals(othello.LightPiece.instance, next.pieceAt(3, 4));
+};

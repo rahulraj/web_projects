@@ -49,10 +49,7 @@ othello.GameFactory.createGameMvcAndRun =
       throw new Error('Invalid player choice');
   }
 
-  if (whitePlayer instanceof othello.AiPlayer &&
-      blackPlayer instanceof othello.AiPlayer) {
-    gameModel.setDelayInterval(50);
-  }
+  gameModel.setDelayInterval(100);
 
   /** @const */ var undoStack = new othello.UndoStack();
 

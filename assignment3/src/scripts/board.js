@@ -230,9 +230,9 @@ othello.Board.prototype.findPiecesToFlip =
       return captured;
     } else {
       // add the location of the piece we're passing over to captured
-      /** @const */ var currentCoordinates =
-          new othello.Point(currentX, currentY);
-      captured.push(currentCoordinates);
+      /** @const */ var newlyCapturedCoordinates =
+          new othello.Point(currentX + deltaX, currentY + deltaY);
+      captured.push(newlyCapturedCoordinates);
       currentX += deltaX;
       currentY += deltaY;
     }
