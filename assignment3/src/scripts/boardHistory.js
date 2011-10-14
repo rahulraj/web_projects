@@ -19,12 +19,16 @@ othello.BoardHistory = function() {
  * @const
  */
 othello.BoardHistory.prototype.push = function(board) {
+  if (this.boardIndex === 0 && this.boards.length === 0) {
+    this.boards = []; 
+  } else {
   /** @const */ var self = this;
-  this.boards = _.map(_.range(0, this.boardIndex + 1), function(index) {
-    return self.boards[index];
-  });
+    this.boards = _.map(_.range(0, this.boardIndex + 1), function(index) {
+      return self.boards[index];
+    });
+  }
   this.boards.push(board);
-  this.boardIndex++;
+  this.boardIndex = this.boards.length - 1;
 };
 
 
@@ -45,7 +49,7 @@ othello.BoardHistory.prototype.undo = function() {
  * @const
  */
 othello.BoardHistory.prototype.canUndo = function() {
-  return this.boardIndex > 0;
+  return (this.boardIndex - 1) >= 0;
 };
 
 

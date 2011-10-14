@@ -47,3 +47,13 @@ BoardHistoryTest.prototype.testNewPushesDeleteRedos = function() {
 
   assertEquals(2, this.history.undo());
 }
+
+BoardHistoryTest.prototype.testBeginningUndo = function() {
+  /** @const */ history = new othello.BoardHistory();
+  assertFalse(history.canUndo());
+  history.push(1);
+  history.push(2);
+  assertTrue(history.canUndo());
+  assertEquals(1, history.undo());
+  assertFalse(history.canUndo());
+};
