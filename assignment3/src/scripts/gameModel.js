@@ -17,7 +17,19 @@ othello.GameModel = function(initialBoard, initialPiece, delayInterval) {
   /** @const */ this.delayInterval = delayInterval;
   /** @const */ this.observers = [];
   this.lastPlayerPassed = false;
-  this.gameIsOver = false;
+  this.gameState = othello.GameModel.State.progressing;
+};
+
+
+/**
+ * The possible states of the game
+ * @enum {string}
+ * @const
+ */
+othello.GameModel.State = {
+  progressing: 'progressing',
+  undoing: 'undoing',
+  finished: 'finished'
 };
 
 
@@ -110,7 +122,7 @@ othello.GameModel.prototype.publishInitialMessage = function() {
  * @const
  */
 othello.GameModel.prototype.publishFinalMessage = function() {
-  this.gameIsOver = true;
+  this.gameState = othello.GameModel.State.finished;
   /** @const */ var self = this;
   _(this.observers).each(function(observer) {
     observer.onGameEnd(self.board, self.currentTurnPlayer);
@@ -126,7 +138,7 @@ othello.GameModel.prototype.publishFinalMessage = function() {
  */
 othello.GameModel.prototype.step = function(move) {
   console.log("in step");
-  if (this.gameIsOver) {
+  if (this.gameState === othello.GameModel.State.finished) {
     return; 
   }
 
