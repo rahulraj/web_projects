@@ -43,10 +43,21 @@ othello.GameView.prototype.updatePage = function() {
 /**
  * When the board changes, refresh its view.
  * @param {othello.Board} board the board.
- * @param {othello.Piece} playerWhoMoved the player who moved last.
+ * @param {othello.Piece} currentTurnPlayer the player whose turn it is.
  * @const
  */
-othello.GameView.prototype.onModelChange = function(board, playerWhoMoved) {
-  this.boardView = othello.BoardTableView.of(board, playerWhoMoved);
+othello.GameView.prototype.onModelChange = function(board, currentTurnPlayer) {
+  this.boardView = othello.BoardTableView.of(board, currentTurnPlayer);
   this.updatePage();
+};
+
+
+/**
+ * Act on the initial message. Initialize the game view.
+ * @param {othello.Board} board the starting board.
+ * @param {othello.Piece} piece the starting piece.
+ * @const
+ */
+othello.GameView.prototype.onInitialMessage = function(board, piece) {
+  this.onModelChange(board, othello.DarkPiece.instance);
 };

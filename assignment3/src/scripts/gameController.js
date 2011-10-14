@@ -17,4 +17,9 @@ othello.GameController = function(model, view) {
 
 /**
  * Function to invoke when a button on the board is clicked.
+ * @param {number} row the button row.
+ * @param {number} column the button column.
  */
+othello.GameController.onButtonClicked = function(row, column) {
+
+};

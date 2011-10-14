@@ -93,16 +93,26 @@ othello.AiPlayer.prototype.getPiece = function() {
  * Function that the observable can call on this. An AI Player will
  * make a move if it can.
  * @param {othello.Board} board the board.
- * @param {othello.Piece} playerWhoMoved the player who just moved.
+ * @param {othello.Piece} currentTurnPlayer the player whose turn it is.
  */
-othello.AiPlayer.prototype.onModelChange = function(board, playerWhoMoved) {
-  if (playerWhoMoved === this.piece) {
-    // this change was caused by my last move
+othello.AiPlayer.prototype.onModelChange = function(board, currentTurnPlayer) {
+  if (currentTurnPlayer !== this.piece) {
     return;
   }
   // it's my turn
   /** @const */ var move = this.makeMove(board);
   this.model.step(move);
+};
+
+
+/**
+ * Act on the initial message. If I am black, make the first move.
+ * @param {othello.Board} board the starting board.
+ * @param {othello.Piece} piece the starting piece.
+ * @const
+ */
+othello.AiPlayer.prototype.onInitialMessage = function(board, piece) {
+  this.onModelChange(board, piece);
 };
 
 
@@ -279,3 +289,13 @@ othello.HumanPlayer.prototype.getPiece = function() {
  */
 othello.HumanPlayer.prototype.onModelChange =
     function(unused_board, unused_playerWhoMoved) {};
+
+
+/**
+ * For humans, this is also a no-op.
+ * @param {othello.Board} unused_board the starting board.
+ * @param {othello.Piece} unused_piece the starting piece.
+ * @const
+ */
+othello.HumanPlayer.prototype.onInitialMessage =
+    function(unused_board, unused_piece) {};

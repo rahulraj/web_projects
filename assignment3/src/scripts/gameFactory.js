@@ -49,6 +49,11 @@ othello.GameFactory.createGameMvcAndRun =
       throw new Error('Invalid player choice');
   }
 
+  if (whitePlayer instanceof othello.AiPlayer &&
+      blackPlayer instanceof othello.AiPlayer) {
+    gameModel.setDelayInterval(50);
+  }
+
   /** @const */ var undoStack = new othello.UndoStack();
 
   /** @const */ var initialBoardTableView =
@@ -69,5 +74,5 @@ othello.GameFactory.createGameMvcAndRun =
   gameView.addControllerEvents(gameController);
 
   // all hooked up, now start the game with the initial cascade of events.
-  gameModel.notifyObservers();
+  gameModel.publishInitialMessage();
 };

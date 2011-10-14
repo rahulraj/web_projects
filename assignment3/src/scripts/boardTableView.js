@@ -26,11 +26,11 @@ othello.BoardTableView.prototype.attachTo = function(parentElement) {
  * Named constructor. Given an othello.Board, create a table view
  * that can be displayed.
  * @param {othello.Board} board the board to display.
- * @param {othello.Piece} sideToMove the side that can move.
+ * @param {othello.Piece} currentTurnPlayer the side that can move.
  * @return {othello.BoardTableView} a view of that board.
  * @const
  */
-othello.BoardTableView.of = function(board, sideToMove) {
+othello.BoardTableView.of = function(board, currentTurnPlayer) {
   /** @const */ var builder = new
       othello.BoardTableView.Builder().ofSize(othello.Board.size);
   _.each(_.range(0, othello.Board.size), function(i) {
@@ -47,8 +47,8 @@ othello.BoardTableView.of = function(board, sideToMove) {
   });
 
   /** @const */ var possibleMoveColorClass =
-      othello.BoardTableView.classOfPiece(sideToMove);
-  /** @const */ var moves = board.findPossibleMoves(sideToMove);
+      othello.BoardTableView.classOfPiece(currentTurnPlayer);
+  /** @const */ var moves = board.findPossibleMoves(currentTurnPlayer);
   _(moves).each(function(move) {
     /** @const */ var markerContainer = $('<span>',
         {'class': possibleMoveColorClass + ' possible-move'});
