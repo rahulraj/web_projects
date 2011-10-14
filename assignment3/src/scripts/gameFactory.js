@@ -56,10 +56,12 @@ othello.GameFactory.createGameMvcAndRun =
   /** @const */ var initialBoardTableView =
       othello.BoardTableView.of(initialBoard, startingPiece);
   /** @const */ var undoButton = $('<input>', {
-    type: 'button', value: 'Undo Last Move'});
+      type: 'button', value: 'Undo Last Move'});
+  /** @const */ var passButton = $('<input>', {
+      type: 'button', value: 'Pass'});
   /** @const */ var parentElement = $('section');
   /** @const */ var gameView = new othello.GameView(
-      initialBoardTableView, undoButton, parentElement);
+      initialBoardTableView, undoButton, passButton, parentElement);
 
   gameModel.addObserver(undoStack);
   gameModel.addObserver(gameView);

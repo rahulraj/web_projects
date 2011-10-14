@@ -6,14 +6,16 @@
  * @param {othello.BoardTableView} boardView the view for the board. Can
  *     mutate as the game changes.
  * @param {jQueryObject} undoButton the button to undo, wrapped in jQuery.
+ * @param {jQueryObject} passButton the button to pass, wrapped in jQuery.
  * @param {jQueryObject} parentElement the parent for this view.
  * @constructor
  * @implements {othello.Observer}
  * @const
  */
-othello.GameView = function(boardView, undoButton, parentElement) {
+othello.GameView = function(boardView, undoButton, passButton, parentElement) {
   this.boardView = boardView;
   /** @const */ this.undoButton = undoButton;
+  /** @const */ this.passButton = passButton;
   /** @const */ this.parentElement = parentElement;
 };
 
@@ -40,6 +42,10 @@ othello.GameView.prototype.addControllerEvents = function(controller) {
   this.undoButton.click(function() {
     controller.onUndoButtonClicked();
   });
+
+  this.passButton.click(function() {
+    controller.onPassButtonClicked(); 
+  });
 };
 
 
@@ -52,6 +58,7 @@ othello.GameView.prototype.updatePage = function() {
   this.parentElement.html('');
   this.boardView.attachTo(this.parentElement);
   this.parentElement.append(this.undoButton);
+  this.parentElement.append(this.passButton);
 };
 
 
