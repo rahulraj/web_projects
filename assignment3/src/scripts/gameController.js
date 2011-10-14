@@ -6,12 +6,15 @@
  * @param {othello.GameModel} model the model that this controller
  *    interacts with.
  * @param {othello.GameView} view the view that this controller controls.
+ * @param {function(othello.Piece): boolean} isHuman a function that takes
+ *     a Piece and reports whether the player playing that piece is a human.
  * @constructor
  * @const
  */
-othello.GameController = function(model, view) {
+othello.GameController = function(model, view, isHuman) {
   /** @const */ this.model = model;
   /** @const */ this.view = view;
+  /** @const */ this.isHuman = isHuman;
 };
 
 
@@ -22,12 +25,18 @@ othello.GameController = function(model, view) {
  * @const
  */
 othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
-  if (this.model.isUndoing()) {
-    throw new Error('not implemented');
-  }
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (!(this.model.moveIsValid(currentTurnPlayer, row, column))) {
     return;
+  }
+  if (this.model.isUndoing()) {
+    if (this.isHuman(currentTurnPlayer)) {
+      // The human is trying to resume. 
+      this.model.resumeGame();
+    } else {
+      window.alert("You can't move on behalf of the AI");
+      return;
+    }
   }
   // This is a valid move for the human.
   /** @const */ var moveInSome = new othello.utils.Some(
@@ -41,13 +50,18 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
  * @const
  */
 othello.GameController.prototype.onPassButtonClicked = function() {
-  if (this.model.isUndoing()) {
-    throw new Error('not implemented');
-  }
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (this.model.canMove(currentTurnPlayer)) {
     window.alert("Sorry, you can't pass when you have available move(s)");
     return;
+  }
+  if (this.model.isUndoing()) {
+    if (this.isHuman(currentTurnPlayer)) {
+      this.model.resumeGame(); 
+    } else {
+      window.alert("You can't move on behalf of the AI");
+      return;
+    }
   }
   this.model.step(othello.utils.None.instance);
 };

@@ -219,5 +219,4 @@ othello.GameModel.prototype.resumeGame = function() {
     throw new Error('Should only resume if undoing');
   }
   this.gameState = othello.GameModel.State.progressing;
-  this.notifyObservers();
 };

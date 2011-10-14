@@ -65,8 +65,18 @@ othello.GameFactory.createGameMvcAndRun =
   gameModel.addObserver(whitePlayer);
   gameModel.addObserver(blackPlayer);
 
+  /** @const */ var isHuman = function(piece) {
+    if (piece === othello.LightPiece.instance) {
+      return whitePlayer instanceof othello.HumanPlayer; 
+    } else if (piece === othello.DarkPiece.instance) {
+      return blackPlayer instanceof othello.HumanPlayer; 
+    } else {
+      throw new Error('Tried to tell if EmptyPiece was human');
+    }
+  };
+
   /** @const */ var gameController = new othello.GameController(gameModel,
-      gameView);
+      gameView, isHuman);
 
   // jQuery clicks it once initially; ignore that click
   var first = true;
