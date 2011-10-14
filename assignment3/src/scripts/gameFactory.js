@@ -36,11 +36,12 @@ othello.GameFactory.playerFromString = function(gameModel, input) {
  */
 othello.GameFactory.createGameMvcAndRun =
     function(whitePlayerSelection, blackPlayerSelection) {
+  /** @const */ var undoStack = new othello.UndoStack();
 
   /** @const */ var initialBoard = othello.Board.Builder.initialGame().build();
   /** @const */ var startingPiece = othello.DarkPiece.instance;
   /** @const */ var gameModel = new othello.GameModel(initialBoard,
-      startingPiece, 100);
+      startingPiece, undoStack, 100);
 
   /** @const */ var whitePlayer = othello.GameFactory.playerFromString(
       gameModel, whitePlayerSelection);
@@ -48,7 +49,6 @@ othello.GameFactory.createGameMvcAndRun =
   /** @const */ var blackPlayer = othello.GameFactory.playerFromString(
       gameModel, blackPlayerSelection);
 
-  /** @const */ var undoStack = new othello.UndoStack();
 
   /** @const */ var initialBoardTableView =
       othello.BoardTableView.of(initialBoard, startingPiece);
@@ -61,7 +61,6 @@ othello.GameFactory.createGameMvcAndRun =
   /** @const */ var gameView = new othello.GameView(
       initialBoardTableView, undoButton, passButton, parentElement);
 
-  gameModel.addObserver(undoStack);
   gameModel.addObserver(gameView);
   gameModel.addObserver(whitePlayer);
   gameModel.addObserver(blackPlayer);
@@ -69,7 +68,7 @@ othello.GameFactory.createGameMvcAndRun =
   /** @const */ var gameController = new othello.GameController(gameModel,
       gameView);
 
-  // jQuery clicks it once, ignore that click
+  // jQuery clicks it once initially; ignore that click
   var first = true;
   $('input').live('click', function(event) {
     if (first) {

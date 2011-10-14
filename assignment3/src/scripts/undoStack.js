@@ -4,7 +4,6 @@
 /**
  * A class to keep track of old boards for the undo feature.
  * @constructor
- * @implements {othello.Observer}
  * @const
  */
 othello.UndoStack = function() {
@@ -39,41 +38,4 @@ othello.UndoStack.prototype.pop = function() {
  */
 othello.UndoStack.prototype.hasBoards = function() {
   return this.boards.length > 0;
-};
-
-
-/**
- * When the board changes, push the new board onto the stack.
- * @param {othello.Board} board the newly changed board.
- * @param {othello.Piece} unused_currentTurnPlayer the player whose turn it is.
- */
-othello.UndoStack.prototype.onModelChange =
-    function(board, unused_currentTurnPlayer) {
-  this.push(board);
-};
-
-
-/**
- * Act on the initial message. Push the first board on the stack.
- * @param {othello.Board} board the starting board.
- * @param {othello.Piece} unused_piece the starting piece.
- * @const
- */
-othello.UndoStack.prototype.onInitialMessage = function(board, unused_piece) {
-  this.push(board);
-};
-
-
-/**
- * Act on the game end. Dont allow any more undos, it's not fair
- * to the winning player.
- * @param {othello.Board} unused_board the ending board.
- * @param {othello.Piece} unused_piece the ending piece.
- * @const
- */
-othello.UndoStack.prototype.onGameEnd = function(unused_board, unused_piece) {
-  // empty the stack
-  while (this.boards.length > 0) {
-    this.boards.pop();
-  }
 };

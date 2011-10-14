@@ -22,6 +22,9 @@ othello.GameController = function(model, view) {
  * @const
  */
 othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
+  if (this.model.isUndoing()) {
+    throw new Error('not implemented');
+  }
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (!(this.model.moveIsValid(currentTurnPlayer, row, column))) {
     return;
@@ -38,6 +41,9 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
  * @const
  */
 othello.GameController.prototype.onPassButtonClicked = function() {
+  if (this.model.isUndoing()) {
+    throw new Error('not implemented');
+  }
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (this.model.canMove(currentTurnPlayer)) {
     window.alert("Sorry, you can't pass when you have available move(s)");
@@ -52,5 +58,15 @@ othello.GameController.prototype.onPassButtonClicked = function() {
  * @const
  */
 othello.GameController.prototype.onUndoButtonClicked = function() {
-  // TODO Implement
+  if (!this.model.canUndo()) {
+    window.alert("Can't undo, at the beginning of the game.");
+    return;
+  }
+  this.model.undo();
+  /*
+  if (!this.undoStack.hasBoards()) {
+    window.alert("Can't undo, at the beginning of the game.");
+    return;
+  }
+  /** @const */ //var lastBoard = this.undoStack.pop();
 };

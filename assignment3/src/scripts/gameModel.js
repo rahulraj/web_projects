@@ -5,15 +5,18 @@
  * Top-level class for the game model.
  * @param {othello.Board} initialBoard the initial board.
  * @param {othello.Piece} initialPiece the initial player to move.
+ * @param {othello.UndoStack} undoStack the undo stack.
  * @param {number} delayInterval the number of milliseconds to delay
  *     notifying AI Players.
  * @constructor
  * @implements {othello.Observable}
  * @const
  */
-othello.GameModel = function(initialBoard, initialPiece, delayInterval) {
+othello.GameModel =
+    function(initialBoard, initialPiece, undoStack, delayInterval) {
   this.board = initialBoard;
   this.currentTurnPlayer = initialPiece;
+  /** @const */ this.undoStack = undoStack;
   /** @const */ this.delayInterval = delayInterval;
   /** @const */ this.observers = [];
   this.lastPlayerPassed = false;
@@ -138,7 +141,8 @@ othello.GameModel.prototype.publishFinalMessage = function() {
  */
 othello.GameModel.prototype.step = function(move) {
   console.log("in step");
-  if (this.gameState === othello.GameModel.State.finished) {
+  if (this.gameState === othello.GameModel.State.finished ||
+      this.gameState === othello.GameModel.State.undoing) {
     return; 
   }
 
@@ -148,6 +152,7 @@ othello.GameModel.prototype.step = function(move) {
     return;
   }
 
+  this.undoStack.push(this.board);
   /** @const */ var nextBoard = move.getOrElse(null);
   if (!nextBoard) {
     if (lastPlayerPassed) {
@@ -164,6 +169,37 @@ othello.GameModel.prototype.step = function(move) {
 
   // if no move made, just reuse the old board.
   this.currentTurnPlayer = this.currentTurnPlayer.flip();
-  /** @const */ var self = this;
+  this.notifyObservers();
+};
+
+
+othello.GameModel.prototype.isUndoing = function() {
+  return this.gameState === othello.GameModel.State.undoing;
+};
+
+othello.GameModel.prototype.canUndo = function() {
+  return this.undoStack.hasBoards();
+};
+
+/**
+* Undo moves
+*/
+othello.GameModel.prototype.undo = function() {
+  if (!this.canUndo()) {
+    // The controller should block this beforehand
+    throw new Error('Called undo when not able to undo');
+  }
+
+  this.gameState = othello.GameModel.State.undoing;
+  this.board = this.undoStack.pop();
+  this.currentTurnPlayer = this.currentTurnPlayer.flip();
+  this.notifyObservers();
+};
+
+othello.GameModel.prototype.resumeGame = function() {
+  if (this.gameState !== othello.GameModel.State.undoing) {
+    throw new Error('Should only resume if undoing');
+  }
+  this.gameState = othello.GameModel.State.progressing;
   this.notifyObservers();
 };
