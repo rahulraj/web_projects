@@ -16,7 +16,6 @@
     <script type="text/javascript" src="lib/underscore.js"></script>
     <script type="text/javascript" src="lib/jquery-1.6.4.min.js"></script>
     <script type="text/javascript" src="scripts/othello.js"></script>
-    <script type="text/javascript" src="scripts/underscoreHeader.js"></script>
     <script type="text/javascript" src="scripts/utils/utils.js"></script>
     <script type="text/javascript" src="scripts/utils/flatMap.js"></script>
     <script type="text/javascript" src="scripts/utils/option.js"></script>
@@ -24,20 +23,24 @@
     <script type="text/javascript" src="scripts/piece.js"></script>
     <script type="text/javascript" src="scripts/board.js"></script>
     <script type="text/javascript" src="scripts/player.js"></script>
-    <script type="text/javascript" src="scripts/mainGameLoop.js"></script>
+    <script type="text/javascript" src="scripts/observer.js"></script>
+    <script type="text/javascript" src="scripts/observable.js"></script>
+    <script type="text/javascript" src="scripts/undoStack.js"></script>
     <script type="text/javascript" src="scripts/gameStartForm.js"></script>
+    <script type="text/javascript" src="scripts/startFormController.js"></script>
     <script type="text/javascript" src="scripts/boardTableView.js"></script>
+    <script type="text/javascript" src="scripts/gameView.js"></script>
+    <script type="text/javascript" src="scripts/gameModel.js"></script>
+    <script type="text/javascript" src="scripts/gameController.js"></script>
+    <script type="text/javascript" src="scripts/gameFactory.js"></script>
     <script type="text/javascript">
-      $(function() {
-
-        var form = othello.GameStartForm.createDefaultStartForm();
+      //$(function() {
+        /** @const */ var form = othello.GameStartForm.createDefaultStartForm();
+        /** @const */ var formController = new othello.StartFormController(form);
+        form.addPlayButtonClickHandler(function() {
+          formController.onPlayButtonClicked();  
+        });
         form.attachTo($('section'));
-
-        var boardView = othello.BoardTableView.of(
-            othello.Board.Builder.initialGame().build(),
-            othello.DarkPiece.instance);
-        boardView.attachTo($('section'));
-      });
     </script>
   </body>
 </html>
