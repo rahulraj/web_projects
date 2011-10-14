@@ -1,8 +1,7 @@
 BoardHistoryTest = TestCase('BoardHistoryTest');
 
 BoardHistoryTest.prototype.setUp = function() {
-  /** @const */ this.history = new othello.BoardHistory();
-  this.history.push(1);
+  /** @const */ this.history = new othello.BoardHistory(1);
   this.history.push(2);
   this.history.push(3);
 };
@@ -49,9 +48,8 @@ BoardHistoryTest.prototype.testNewPushesDeleteRedos = function() {
 }
 
 BoardHistoryTest.prototype.testBeginningUndo = function() {
-  /** @const */ history = new othello.BoardHistory();
+  /** @const */ history = new othello.BoardHistory(1);
   assertFalse(history.canUndo());
-  history.push(1);
   history.push(2);
   assertTrue(history.canUndo());
   assertEquals(1, history.undo());

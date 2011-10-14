@@ -2,12 +2,15 @@
 
 
 /**
+ * TODO DEBUG
  * A class to keep track of old boards for the undo/redo feature.
+ * Representation invariant: Should always have at least one element.
+ * @param {othello.Board} initial board the initial board
  * @constructor
  * @const
  */
-othello.BoardHistory = function() {
-  this.boards = [];
+othello.BoardHistory = function(initialBoard) {
+  this.boards = [initialBoard];
   this.boardIndex = 0;
 };
 
@@ -19,15 +22,13 @@ othello.BoardHistory = function() {
  * @const
  */
 othello.BoardHistory.prototype.push = function(board) {
-  if (this.boardIndex === 0 && this.boards.length === 0) {
-    this.boards = []; 
-  } else {
   /** @const */ var self = this;
-    this.boards = _.map(_.range(0, this.boardIndex + 1), function(index) {
-      return self.boards[index];
-    });
-  }
-  this.boards.push(board);
+  /** @const */ var result =
+      _.map(_.range(0, this.boardIndex + 1), function(index) {
+        return self.boards[index];
+      });
+  result.push(board);
+  this.boards = result;
   this.boardIndex = this.boards.length - 1;
 };
 
@@ -49,7 +50,7 @@ othello.BoardHistory.prototype.undo = function() {
  * @const
  */
 othello.BoardHistory.prototype.canUndo = function() {
-  return (this.boardIndex - 1) >= 0;
+  return this.boardIndex > 0;
 };
 
 
