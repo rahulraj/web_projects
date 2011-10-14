@@ -169,6 +169,27 @@ othello.PlayerFieldset = function(fieldsetElement) {
 
 
 /**
+ * @const
+ * @type {string}
+ */
+othello.PlayerFieldset.humanButtonId = 'Human';
+
+
+/**
+ * @const
+ * @type {string}
+ */
+othello.PlayerFieldset.easyAiButtonId = 'EasyAi';
+
+
+/**
+ * @const
+ * @type {string}
+ */
+othello.PlayerFieldset.mediumAiButtonId = 'MediumAi';
+
+
+/**
  * Attach this fieldset to a parent
  * @param {*} parentElement the parent for this fieldset.
  * @const
@@ -209,9 +230,12 @@ othello.PlayerFieldset.createPlayerFieldset = function(legendName, color) {
   return new othello.PlayerFieldset.Builder().id(color + 'Fieldset').
       legend(legendName).
       radioButtonSetNamed(color + 'Player').
-          radioButton(color + 'Human').withLabel('Human').
-          radioButton(color + 'EasyAi').withLabel('Easy AI').
-          radioButton(color + 'MediumAi').withLabel('Medium AI').build();
+          radioButton(color + othello.PlayerFieldset.humanButtonId).
+              withLabel('Human').
+          radioButton(color + othello.PlayerFieldset.easyAiButtonId).
+              withLabel('Easy AI').
+          radioButton(color + othello.PlayerFieldset.mediumAiButtonId).
+              withLabel('Medium AI').build();
 };
 
 

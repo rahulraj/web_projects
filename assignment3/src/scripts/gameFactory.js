@@ -16,11 +16,11 @@ othello.GameFactory.playerFromString = function(gameModel, input) {
   }
   /** @const */ var description = input.slice(size);
   switch (description) {
-    case 'Human':
+    case othello.PlayerFieldset.humanButtonId:
       return new othello.HumanPlayer(piece);
-    case 'EasyAi':
+    case othello.PlayerFieldset.easyAiButtonId:
       return othello.AiPlayer.createRandomAi(gameModel, piece);
-    case 'MediumAi':
+    case othello.PlayerFieldset.mediumAiButtonId:
       return othello.AiPlayer.createGreedyAi(gameModel, piece);
     default:
       throw new Error('Invalid player choice');
