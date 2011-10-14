@@ -80,3 +80,16 @@ othello.GameController.prototype.onUndoButtonClicked = function() {
   }
   this.model.undo();
 };
+
+
+/**
+ * Redo a move
+ * @const
+ */
+othello.GameController.prototype.onRedoButtonClicked = function() {
+  if (!this.model.canRedo()) {
+    window.alert("Can't redo at this point");
+    return;
+  }
+  this.model.redo();
+};

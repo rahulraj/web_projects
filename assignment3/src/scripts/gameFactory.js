@@ -55,12 +55,12 @@ othello.GameFactory.createGameMvcAndRun =
       type: 'button', value: othello.GameView.undoButtonValue});
   /** @const */ var passButton = $('<input>', {
       type: 'button', value: othello.GameView.passButtonValue});
-  /** @const */ var resumeButton = $('<input>', {
-      type: 'button', value: othello.GameView.resumeButtonValue});
+  /** @const */ var redoButton = $('<input>', {
+      type: 'button', value: othello.GameView.redoButtonValue});
 
   /** @const */ var parentElement = $('section');
   /** @const */ var gameView = new othello.GameView(initialBoardTableView,
-      undoButton, passButton, resumeButton, parentElement);
+      undoButton, passButton, redoButton, parentElement);
 
   gameModel.addObserver(gameView);
   gameModel.addObserver(whitePlayer);
@@ -92,7 +92,7 @@ othello.GameFactory.createGameMvcAndRun =
     } else if (value === othello.GameView.passButtonValue) {
       gameController.onPassButtonClicked(); 
     } else {
-      // TODO Implement 
+      gameController.onRedoButtonClicked();
     }
   });
 

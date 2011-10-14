@@ -219,3 +219,28 @@ othello.GameModel.prototype.resumeGame = function() {
   }
   this.gameState = othello.GameModel.State.progressing;
 };
+
+
+/**
+ * Report if capable of redoing
+ * @return {boolean} if we can redo
+ * @const
+ */
+othello.GameModel.prototype.canRedo = function() {
+  return this.boardHistory.canRedo();
+};
+
+
+/**
+ * Redo a move
+ * @const
+ */
+othello.GameModel.prototype.redo = function() {
+  if (!this.canRedo()) {
+    throw new Error('Called redo when not able to redo');
+  }
+
+  this.board = this.boardHistory.redo();
+  this.currentTurnPlayer = this.currentTurnPlayer.flip();
+  this.notifyObservers();
+};

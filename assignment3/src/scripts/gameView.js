@@ -41,7 +41,7 @@ othello.GameView.passButtonValue = 'Pass';
  * @const
  * @type {string}
  */
-othello.GameView.resumeButtonValue = 'Resume';
+othello.GameView.redoButtonValue = 'Redo';
 
 
 /**
