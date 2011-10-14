@@ -34,7 +34,8 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
       // The human is trying to resume. 
       this.model.resumeGame();
     } else {
-      window.alert("You can't move on behalf of the AI");
+      window.alert("This is the AI's turn, and you can't move on its " +
+                   "behalf. Hit Undo again to make it your turn.");
       return;
     }
   }
@@ -59,7 +60,8 @@ othello.GameController.prototype.onPassButtonClicked = function() {
     if (this.isHuman(currentTurnPlayer)) {
       this.model.resumeGame(); 
     } else {
-      window.alert("You can't move on behalf of the AI");
+      window.alert("This is the AI's turn, and you can't move on its " +
+                   "behalf. Hit Undo again to make it your turn.");
       return;
     }
   }
