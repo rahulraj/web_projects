@@ -40,15 +40,13 @@ othello.GameFactory.createGameMvcAndRun =
   /** @const */ var initialBoard = othello.Board.Builder.initialGame().build();
   /** @const */ var startingPiece = othello.DarkPiece.instance;
   /** @const */ var gameModel = new othello.GameModel(initialBoard,
-      startingPiece);
+      startingPiece, 100);
 
   /** @const */ var whitePlayer = othello.GameFactory.playerFromString(
       gameModel, whitePlayerSelection);
 
   /** @const */ var blackPlayer = othello.GameFactory.playerFromString(
       gameModel, blackPlayerSelection);
-
-  gameModel.setDelayInterval(100);
 
   /** @const */ var undoStack = new othello.UndoStack();
 

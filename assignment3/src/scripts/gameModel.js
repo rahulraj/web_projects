@@ -5,26 +5,18 @@
  * Top-level class for the game model.
  * @param {othello.Board} initialBoard the initial board.
  * @param {othello.Piece} initialPiece the initial player to move.
+ * @param {number} delayInterval the number of milliseconds to delay.
  * @constructor
  * @implements {othello.Observable}
  * @const
  */
-othello.GameModel = function(initialBoard, initialPiece) {
+othello.GameModel = function(initialBoard, initialPiece, delayInterval) {
   this.board = initialBoard;
   this.currentTurnPlayer = initialPiece;
-  this.delayInterval = 0;
+  /** @const */ this.delayInterval = delayInterval;
   /** @const */ this.observers = [];
-};
-
-
-/**
- * Set the optional delay interval parameter. This should be set to some
- * nonzero value if playing an AI vs. AI game.
- * @param {number} delayInterval the number of milliseconds to delay.
- * @const
- */
-othello.GameModel.prototype.setDelayInterval = function(delayInterval) {
-  this.delayInterval = delayInterval;
+  this.lastPlayerPassed = false;
+  this.gameIsOver = false;
 };
 
 
@@ -113,17 +105,54 @@ othello.GameModel.prototype.publishInitialMessage = function() {
 
 
 /**
+ * Publish the final message.
+ * @const
+ */
+othello.GameModel.prototype.publishFinalMessage = function() {
+  this.gameIsOver = true;
+  /** @const */ var self = this;
+  _(this.observers).each(function(observer) {
+    observer.onGameEnd(self.board, self.currentTurnPlayer);
+  });
+};
+
+
+/**
  * Take one player's step through the game.
  * @param {othello.utils.Option} move the move being made, or None for a pass.
  *     The Option wraps an othello.Board.
  * @const
  */
 othello.GameModel.prototype.step = function(move) {
-  this.board = move.getOrElse(this.board);
+  console.log("in step");
+  if (this.gameIsOver) {
+    return; 
+  }
+
+  if (this.board.isFull()) {
+    // Game over
+    this.publishFinalMessage();
+    return;
+  }
+
+  /** @const */ var nextBoard = move.getOrElse(null);
+  if (!nextBoard) {
+    if (lastPlayerPassed) {
+      // two passes in a row; the game has ended 
+      this.publishFinalMessage();
+      return;
+    } else {
+      lastPlayerPassed = true; 
+    }
+  } else {
+    lastPlayerPassed = false; 
+    this.board = nextBoard;
+  }
+
   // if no move made, just reuse the old board.
   this.currentTurnPlayer = this.currentTurnPlayer.flip();
   /** @const */ var self = this;
-  window.setTimeout(function() {
-    self.notifyObservers();
+  _.defer(function() {
+    self.notifyObservers(); 
   }, this.delayInterval);
 };
