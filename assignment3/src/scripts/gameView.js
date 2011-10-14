@@ -31,6 +31,12 @@ othello.GameView.prototype.addControllerEvents = function(controller) {
   this.addClickHandlersToTableDivisions(controller);
 };
 
+
+/**
+ * Adds click handlers to the divisions in the table
+ * @param {othello.Controller} controller the controller handling the input.
+ * @const
+ */
 othello.GameView.prototype.addClickHandlersToTableDivisions =
     function(controller) {
   this.boardView.addClickHandlersToTableDivisions(function(row, column) {
@@ -72,4 +78,16 @@ othello.GameView.prototype.onModelChange = function(board, currentTurnPlayer) {
  */
 othello.GameView.prototype.onInitialMessage = function(board, piece) {
   this.onModelChange(board, othello.DarkPiece.instance);
+};
+
+
+/**
+ * Act on the end of the game.
+ * @param {othello.Board} board the final board.
+ * @param {othello.Piece} piece the final piece.
+ * @const
+ */
+othello.GameView.prototype.onGameEnd = function(board, piece) {
+  // TODO something more elaborate.
+  window.alert('game is over');
 };
