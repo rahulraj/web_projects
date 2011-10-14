@@ -9,7 +9,7 @@
  * @implements {othello.Observable}
  * @const
  */
-othello.GameModel = function(initialBoard, initialPiece, opt_delayInterval) {
+othello.GameModel = function(initialBoard, initialPiece) {
   this.board = initialBoard;
   this.currentTurnPlayer = initialPiece;
   this.delayInterval = 0; 
@@ -24,6 +24,40 @@ othello.GameModel = function(initialBoard, initialPiece, opt_delayInterval) {
  */
 othello.GameModel.prototype.setDelayInterval = function(delayInterval) {
   this.delayInterval = delayInterval;
+};
+
+
+/**
+ * Convenience method that tells if a player can move
+ * @param {othello.Piece} piece the Piece for the player trying to move.
+ * @return {boolean} true if that player has moves.
+ */
+othello.GameModel.prototype.canMove = function(piece) {
+  return this.board.canMove(piece);
+};
+
+
+/**
+ * Given a proposed player, row, and column, reports whether the move
+ * is valid.
+ * @param {othello.Piece} piece the side moving.
+ * @param {number} row the row.
+ * @param {number} column the column.
+ */
+othello.GameModel.prototype.moveIsValid = function(piece, row, column) {
+  return this.board.placementIsValid(piece, row, column);
+};
+
+
+/**
+ * Given a piece, row, and column, makes the move. Forwards the call
+ * on to this.board.
+ * @param {othello.Piece} piece the side moving.
+ * @param {number} row the row.
+ * @param {number} column the column.
+ */
+othello.GameModel.prototype.makeMove = function(piece, row, column) {
+  return this.board.makeMove(piece, row, column);
 };
 
 
@@ -78,7 +112,7 @@ othello.GameModel.prototype.publishInitialMessage = function() {
 /**
  * Take one player's step through the game.
  * @param {othello.utils.Option} move the move being made, or None for a pass.
- *     The Option wrapps an othello.Board.
+ *     The Option wraps an othello.Board.
  * @const
  */
 othello.GameModel.prototype.step = function(move) {
