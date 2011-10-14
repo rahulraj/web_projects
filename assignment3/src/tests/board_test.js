@@ -39,8 +39,8 @@ BoardTest.prototype.testFindPiecesToFlipSimple = function() {
 
   assertEquals(1, toFlip.length);
   /** @const */ var coordinates = toFlip[0];
-  assertEquals(3, coordinates.xCoordinate);
-  assertEquals(3, coordinates.yCoordinate);
+  assertEquals(3, coordinates.getX());
+  assertEquals(3, coordinates.getY());
 };
 
 BoardTest.prototype.testFindPiecesToFlipLoop = function() {
