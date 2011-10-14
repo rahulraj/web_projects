@@ -89,6 +89,15 @@ othello.AiPlayer.prototype.onInitialMessage = function(board, piece) {
 
 
 /**
+ * Act on the final message. 
+ * @param {othello.Board} unused_board the ending board.
+ * @param {othello.Piece} unused_piece the ending piece.
+ * @const
+ */
+othello.AiPlayer.prototype.onGameEnd = function(board, piece) {};
+
+
+/**
  * Factory function to create a random AI
  * @param {othello.GameModel} model the game model.
  * @param {othello.Piece} piece the side the AI is on.
@@ -169,7 +178,8 @@ othello.AiPlayer.greedyMakeMove = function(piece, board) {
 
 
 /**
- * A human implmentation of Player. Moves based on user input.
+ * A human implmentation of Player. Mainly a placeholder, since an observer
+ * is expected.
  * @param {othello.Piece} piece the piece representing the side the player
  *    is on.
  * @constructor
@@ -178,38 +188,6 @@ othello.AiPlayer.greedyMakeMove = function(piece, board) {
  */
 othello.HumanPlayer = function(piece) {
   /** @const */ this.piece = piece;
-  // TODO see if there's a way other than using null AND Option
-  this.moveBuffer = null;
-};
-
-
-/**
- * Add a move to the buffer. This move should be checked for
- * validity beforehand.
- * @param {othello.utils.Option} move the Point on where to place a piece,
- *    wrapped in an Option. Some(Point) for a move, None to pass.
- * @const
- */
-othello.HumanPlayer.prototype.addMove = function(move) {
-  this.moveBuffer = move;
-};
-
-
-/**
- * Clears the buffer, setting its value to null
- * @const
- */
-othello.HumanPlayer.prototype.clearBuffer = function() {
-  this.moveBuffer = null;
-};
-
-
-/**
- * The player is ready to move if user input has filled the buffer.
- * @return {boolean} true if the buffer is filled.
- */
-othello.HumanPlayer.prototype.readyToMove = function() {
-  return this.moveBuffer !== null;
 };
 
 
@@ -239,4 +217,14 @@ othello.HumanPlayer.prototype.onModelChange =
  * @const
  */
 othello.HumanPlayer.prototype.onInitialMessage =
+    function(unused_board, unused_piece) {};
+
+
+/**
+ * End of the game is a no-op.
+ * @param {othello.Board} unused_board the ending board.
+ * @param {othello.Piece} unused_piece the ending piece.
+ * @const
+ */
+othello.HumanPlayer.prototype.onGameEnd =
     function(unused_board, unused_piece) {};
