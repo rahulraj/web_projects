@@ -5,6 +5,7 @@
  * Top-level view class for the main game.
  * @param {othello.BoardTableView} boardView the view for the board. Can
  *     mutate as the game changes.
+ * @param {jQueryObject} gameStatusDiv the div in which to report the game score.
  * @param {jQueryObject} messageToUserDiv the div in which to leave messages
  *     to the user.
  * @param {jQueryObject} undoButton the button to undo, wrapped in jQuery.
@@ -17,9 +18,10 @@
  * @const
  */
 othello.GameView =
-    function(boardView, messageToUserDiv, undoButton, passButton, resumeButton,
-             restartButton, parentElement) {
+    function(boardView, gameStatusDiv, messageToUserDiv, undoButton, 
+             passButton, resumeButton, restartButton, parentElement) {
   this.boardView = boardView;
+  /** @const */ this.gameStatusDiv = gameStatusDiv;
   /** @const */ this.messageToUserDiv = messageToUserDiv;
   /** @const */ this.undoButton = undoButton;
   /** @const */ this.passButton = passButton;
@@ -90,11 +92,24 @@ othello.GameView.prototype.updatePage = function() {
   this.addClickHandlersToTableDivisions(this.controller);
   this.parentElement.html('');
   this.boardView.attachTo(this.parentElement);
+  this.parentElement.append(this.gameStatusDiv);
   this.parentElement.append(this.messageToUserDiv);
   this.parentElement.append(this.passButton);
   this.parentElement.append(this.undoButton);
   this.parentElement.append(this.resumeButton);
   this.parentElement.append(this.restartButton);
+};
+
+
+/**
+ * Report the newest score to the user.
+ * @param {number} whiteScore the number of pieces white has.
+ * @param {number} blackScore the number of pieces black has.
+ */
+othello.GameView.prototype.updateScoreReport = function(whiteScore, blackScore) {
+  /** @const */ var scoreReport = 'White: ' + whiteScore +
+                                  '\nBlack: ' + blackScore;
+  this.gameStatusDiv.html(scoreReport);
 };
 
 
@@ -125,6 +140,9 @@ othello.GameView.prototype.clearUserMessage = function() {
  */
 othello.GameView.prototype.onModelChange = function(board, currentTurnPlayer) {
   this.boardView = othello.BoardTableView.of(board, currentTurnPlayer);
+  /** @const */ var whiteScore = board.getNumberOfLightPieces();
+  /** @const */ var blackScore = board.getNumberOfDarkPieces();
+  this.updateScoreReport(whiteScore, blackScore);
   this.updatePage();
 };
 
