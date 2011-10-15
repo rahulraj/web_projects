@@ -19,6 +19,39 @@ othello.GameController = function(model, view, isHuman) {
 
 
 /**
+ * @const
+ * @type {string}
+ */
+othello.GameController.cantMoveForAi =
+    "This is the AI's turn, and you can't move on its " +
+    'behalf. Hit Undo or Redo to make it your turn.';
+
+
+/**
+ * @const
+ * @type {string}
+ */
+othello.GameController.cantPassWhenYouHaveMoves =
+    "You can't pass when you have available move(s)"
+
+
+/**
+ * @const
+ * @type {string}
+ */
+othello.GameController.cantUndoAtGameStart =
+    "Can't undo, at the beginning of the game."
+
+
+/**
+ * @const
+ * @type {string}
+ */
+othello.GameController.cantRedoNow =
+    "Can't redo at this point"
+
+
+/**
  * Function to invoke when a button on the board is clicked.
  * @param {number} row the button row.
  * @param {number} column the button column.
@@ -34,8 +67,7 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
       // The human is trying to resume.
       this.model.resumeGame();
     } else {
-      window.alert("This is the AI's turn, and you can't move on its " +
-                   'behalf. Hit Undo or Redo to make it your turn.');
+      this.view.sendUserMessage(othello.GameController.cantMoveForAi);
       return;
     }
   }
@@ -53,15 +85,14 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
 othello.GameController.prototype.onPassButtonClicked = function() {
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
   if (this.model.canMove(currentTurnPlayer)) {
-    window.alert("You can't pass when you have available move(s)");
+    this.view.sendUserMessage(othello.GameController.cantPassWhenYouHaveMoves);
     return;
   }
   if (this.model.isUndoing()) {
     if (this.isHuman(currentTurnPlayer)) {
       this.model.resumeGame();
     } else {
-      window.alert("This is the AI's turn, and you can't move on its " +
-                   'behalf. Hit Undo or Redo to make it your turn.');
+      this.view.sendUserMessage(othello.GameController.cantMoveForAi);
       return;
     }
   }
@@ -75,7 +106,7 @@ othello.GameController.prototype.onPassButtonClicked = function() {
  */
 othello.GameController.prototype.onUndoButtonClicked = function() {
   if (!this.model.canUndo()) {
-    window.alert("Can't undo, at the beginning of the game.");
+    this.view.sendUserMessage(othello.GameController.cantUndoAtGameStart);
     return;
   }
   this.model.undo();
@@ -88,7 +119,7 @@ othello.GameController.prototype.onUndoButtonClicked = function() {
  */
 othello.GameController.prototype.onRedoButtonClicked = function() {
   if (!this.model.canRedo()) {
-    window.alert("Can't redo at this point");
+    this.view.sendUserMessage(othello.GameController.cantRedoNow);
     return;
   }
   this.model.redo();

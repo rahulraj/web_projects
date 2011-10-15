@@ -96,19 +96,21 @@ othello.GameFactory.createGameMvcAndRun =
 
   /** @const */ var initialBoardTableView =
       othello.BoardTableView.of(initialBoard, startingPiece);
+  /** @const */ var messageToUserDiv = $('<div>', {id: 'messageToUser'});
   /** @const */ var undoButton = $('<input>', {
-    type: 'button', value: othello.GameView.undoButtonValue});
+      type: 'button', value: othello.GameView.undoButtonValue});
   /** @const */ var passButton = $('<input>', {
-    type: 'button', value: othello.GameView.passButtonValue});
+      type: 'button', value: othello.GameView.passButtonValue});
   /** @const */ var redoButton = $('<input>', {
-    type: 'button', value: othello.GameView.redoButtonValue});
+      type: 'button', value: othello.GameView.redoButtonValue});
   /** @const */ var restartButton = $('<input>', {
-    type: 'button', value: othello.GameView.restartButtonValue});
+      type: 'button', value: othello.GameView.restartButtonValue});
 
   /** @const */ var parentElement =
       $(othello.GameFactory.parentElementSelector);
   /** @const */ var gameView = new othello.GameView(initialBoardTableView,
-      undoButton, passButton, redoButton, restartButton, parentElement);
+      messageToUserDiv, undoButton, passButton, redoButton,
+      restartButton, parentElement);
 
   gameModel.addObserver(gameView);
   gameModel.addObserver(whitePlayer);

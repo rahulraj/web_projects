@@ -5,6 +5,8 @@
  * Top-level view class for the main game.
  * @param {othello.BoardTableView} boardView the view for the board. Can
  *     mutate as the game changes.
+ * @param {jQueryObject} messageToUserDiv the div in which to leave messages
+ *     to the user.
  * @param {jQueryObject} undoButton the button to undo, wrapped in jQuery.
  * @param {jQueryObject} passButton the button to pass, wrapped in jQuery.
  * @param {jQueryObject} resumeButton the button to resume, wrapped in jQuery.
@@ -15,9 +17,10 @@
  * @const
  */
 othello.GameView =
-    function(boardView, undoButton, passButton, resumeButton,
+    function(boardView, messageToUserDiv, undoButton, passButton, resumeButton,
              restartButton, parentElement) {
   this.boardView = boardView;
+  /** @const */ this.messageToUserDiv = messageToUserDiv;
   /** @const */ this.undoButton = undoButton;
   /** @const */ this.passButton = passButton;
   /** @const */ this.resumeButton = resumeButton;
@@ -87,10 +90,21 @@ othello.GameView.prototype.updatePage = function() {
   this.addClickHandlersToTableDivisions(this.controller);
   this.parentElement.html('');
   this.boardView.attachTo(this.parentElement);
+  this.parentElement.append(this.messageToUserDiv);
   this.parentElement.append(this.passButton);
   this.parentElement.append(this.undoButton);
   this.parentElement.append(this.resumeButton);
   this.parentElement.append(this.restartButton);
+};
+
+
+/**
+ * Send a message to the user. This will clobber the old message.
+ * @param {string} message the message to write.
+ * @const
+ */
+othello.GameView.prototype.sendUserMessage = function(message) {
+  this.messageToUserDiv.html(message);
 };
 
 
