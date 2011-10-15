@@ -40,15 +40,6 @@ section {
   margin: auto auto;
   width: 336px;
 }
-
-table {
-  position: relative;
-  clear: both;
-  border-collapse: collapse;
-  box-shadow: 5px 5px 5px #888;
-  -moz-box-shadow: 5px 5px 5px #888;
-  -webkit-box-shadow: 5px 5px 5px #888;
-}
 .boardRow {
   clear: both;
 }
@@ -65,7 +56,6 @@ table {
   width: 336px;
   margin-bottom: 15px;
 }
-
 #gameStatus {
   clear: both;
   padding-bottom: 15px;
@@ -77,13 +67,6 @@ table {
   height: 40px;
   background-color: #009933;
   float: left;
-}
-td {
-  border: 1px solid #666666;
-  border-style: solid;
-  width: 40px;
-  height: 40px;
-  background-color: #009933;
 }
 span {
   margin-left: auto;
