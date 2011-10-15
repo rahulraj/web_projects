@@ -31,7 +31,7 @@ othello.GameModel =
  */
 othello.GameModel.State = {
   progressing: 'progressing',
-  undoing: 'undoing',
+  rewritingHistory: 'rewritingHistory',
   finished: 'finished'
 };
 
@@ -141,7 +141,7 @@ othello.GameModel.prototype.publishFinalMessage = function() {
  */
 othello.GameModel.prototype.step = function(move) {
   if (this.gameState === othello.GameModel.State.finished ||
-      this.gameState === othello.GameModel.State.undoing) {
+      this.gameState === othello.GameModel.State.rewritingHistory) {
     return;
   }
 
@@ -174,18 +174,18 @@ othello.GameModel.prototype.step = function(move) {
 
 
 /**
- *  Reports whether the state is undoing
- *  @return {boolean} true if we are undoing.
+ *  Reports whether the state is rewritingHistory
+ *  @return {boolean} true if we are rewritingHistory.
  *  @const
  */
-othello.GameModel.prototype.isUndoing = function() {
-  return this.gameState === othello.GameModel.State.undoing;
+othello.GameModel.prototype.isRewritingHistory = function() {
+  return this.gameState === othello.GameModel.State.rewritingHistory;
 };
 
 
 /**
- * Reports whether the state is undoing
- * @return {boolean} true if we are undoing.
+ * Reports whether we can make an undo..
+ * @return {boolean} true if an undo is possible.
  * @const
  */
 othello.GameModel.prototype.canUndo = function() {
@@ -203,7 +203,7 @@ othello.GameModel.prototype.undo = function() {
     throw new Error('Called undo when not able to undo');
   }
 
-  this.gameState = othello.GameModel.State.undoing;
+  this.gameState = othello.GameModel.State.rewritingHistory;
   this.board = this.boardHistory.undo();
   this.currentTurnPlayer = this.currentTurnPlayer.flip();
   this.notifyObservers();
@@ -211,12 +211,12 @@ othello.GameModel.prototype.undo = function() {
 
 
 /**
- * Resume after done undoing
+ * Resume after done undoing/redoing
  * @const
  */
 othello.GameModel.prototype.resumeGame = function() {
-  if (this.gameState !== othello.GameModel.State.undoing) {
-    throw new Error('Should only resume if undoing');
+  if (this.gameState !== othello.GameModel.State.rewritingHistory) {
+    throw new Error('Should only resume if ukkgTndoing');
   }
   this.gameState = othello.GameModel.State.progressing;
 };

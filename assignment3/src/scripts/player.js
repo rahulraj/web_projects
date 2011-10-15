@@ -121,6 +121,13 @@ othello.AiPlayer.createGreedyAi = function(model, piece) {
 };
 
 
+/**
+ * Create an AI that uses alpha-beta search
+ * @param {othello.GameModel} model the game model.
+ * @param {othello.Piece} piece the side the AI is on.
+ * @return {othello.AiPlayer} an AI player configured with an alpha-beta algorithm.
+ * @const
+ */
 othello.AiPlayer.createAlphaBetaAi = function(model, piece) {
   return new othello.AiPlayer(model, piece, othello.AiPlayer.alphaBetaMakeMove);
 };

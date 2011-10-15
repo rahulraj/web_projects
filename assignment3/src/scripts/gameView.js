@@ -147,6 +147,5 @@ othello.GameView.prototype.onInitialMessage = function(board, piece) {
  * @const
  */
 othello.GameView.prototype.onGameEnd = function(board, piece) {
-  // TODO something more elaborate.
-  window.alert('game is over');
+  this.sendUserMessage('The game is over. Press Restart to play again.');
 };

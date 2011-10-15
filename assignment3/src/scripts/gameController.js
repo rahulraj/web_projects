@@ -22,9 +22,17 @@ othello.GameController = function(model, view, isHuman) {
  * @const
  * @type {string}
  */
-othello.GameController.cantMoveForAi =
+othello.GameController.cantMoveForAiUndoing =
     "This is the AI's turn, and you can't move on its " +
     'behalf. Hit Undo or Redo to make it your turn.';
+
+
+/**
+ * @const
+ * @type {string}
+ */
+othello.GameController.cantMoveForAiProgressing =
+    "You can't move now, it's the AI's turn."
 
 
 /**
@@ -59,15 +67,18 @@ othello.GameController.cantRedoNow =
  */
 othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
   /** @const */ var currentTurnPlayer = this.model.getCurrentTurnPlayer();
+  if (!(this.isHuman(currentTurnPlayer))) {
+    this.view.sendUserMessage(othello.GameController.cantMoveForAiProgressing);
+  }
   if (!(this.model.moveIsValid(currentTurnPlayer, row, column))) {
     return;
   }
-  if (this.model.isUndoing()) {
+  if (this.model.isRewritingHistory()) {
     if (this.isHuman(currentTurnPlayer)) {
       // The human is trying to resume.
       this.model.resumeGame();
     } else {
-      this.view.sendUserMessage(othello.GameController.cantMoveForAi);
+      this.view.sendUserMessage(othello.GameController.cantMoveForAiUndoing);
       return;
     }
   }
@@ -89,11 +100,11 @@ othello.GameController.prototype.onPassButtonClicked = function() {
     this.view.sendUserMessage(othello.GameController.cantPassWhenYouHaveMoves);
     return;
   }
-  if (this.model.isUndoing()) {
+  if (this.model.isRewritingHistory()) {
     if (this.isHuman(currentTurnPlayer)) {
       this.model.resumeGame();
     } else {
-      this.view.sendUserMessage(othello.GameController.cantMoveForAi);
+      this.view.sendUserMessage(othello.GameController.cantMoveForAiUndoing);
       return;
     }
   }
