@@ -31,11 +31,11 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
   }
   if (this.model.isUndoing()) {
     if (this.isHuman(currentTurnPlayer)) {
-      // The human is trying to resume. 
+      // The human is trying to resume.
       this.model.resumeGame();
     } else {
       window.alert("This is the AI's turn, and you can't move on its " +
-                   "behalf. Hit Undo or Redo to make it your turn.");
+                   'behalf. Hit Undo or Redo to make it your turn.');
       return;
     }
   }
@@ -58,10 +58,10 @@ othello.GameController.prototype.onPassButtonClicked = function() {
   }
   if (this.model.isUndoing()) {
     if (this.isHuman(currentTurnPlayer)) {
-      this.model.resumeGame(); 
+      this.model.resumeGame();
     } else {
       window.alert("This is the AI's turn, and you can't move on its " +
-                   "behalf. Hit Undo or Redo to make it your turn.");
+                   'behalf. Hit Undo or Redo to make it your turn.');
       return;
     }
   }

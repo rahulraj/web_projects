@@ -14,7 +14,7 @@
  * @implements {othello.Observer}
  * @const
  */
-othello.GameView = 
+othello.GameView =
     function(boardView, undoButton, passButton, resumeButton,
              restartButton, parentElement) {
   this.boardView = boardView;
@@ -61,7 +61,7 @@ othello.GameView.restartButtonValue = 'Restart';
  * @const
  */
 othello.GameView.prototype.addControllerEvents = function(controller) {
-  this.controller = controller; 
+  this.controller = controller;
   this.addClickHandlersToTableDivisions(controller);
 };
 

@@ -15,8 +15,8 @@ othello.Point = function(xCoordinate, yCoordinate) {
    * @return {number} this.xCoordinate.
    * @const
    */
- this.getX = function() {
-    return xCoordinate; 
+  this.getX = function() {
+    return xCoordinate;
   };
 
 
@@ -25,7 +25,7 @@ othello.Point = function(xCoordinate, yCoordinate) {
    * @return {number} this.yCoordinate.
    */
   this.getY = function() {
-    return yCoordinate; 
+    return yCoordinate;
   }
 };
 

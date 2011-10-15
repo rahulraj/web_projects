@@ -142,7 +142,7 @@ othello.GameModel.prototype.publishFinalMessage = function() {
 othello.GameModel.prototype.step = function(move) {
   if (this.gameState === othello.GameModel.State.finished ||
       this.gameState === othello.GameModel.State.undoing) {
-    return; 
+    return;
   }
 
   if (this.board.isFull()) {
@@ -155,14 +155,14 @@ othello.GameModel.prototype.step = function(move) {
       (move.getOrElse(null));
   if (!nextBoard) {
     if (this.lastPlayerPassed) {
-      // two passes in a row; the game has ended 
+      // two passes in a row; the game has ended
       this.publishFinalMessage();
       return;
     } else {
-      this.lastPlayerPassed = true; 
+      this.lastPlayerPassed = true;
     }
   } else {
-    this.lastPlayerPassed = false; 
+    this.lastPlayerPassed = false;
     this.board = nextBoard;
   }
   this.boardHistory.push(this.board);
@@ -224,7 +224,7 @@ othello.GameModel.prototype.resumeGame = function() {
 
 /**
  * Report if capable of redoing
- * @return {boolean} if we can redo
+ * @return {boolean} if we can redo.
  * @const
  */
 othello.GameModel.prototype.canRedo = function() {

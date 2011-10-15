@@ -27,9 +27,15 @@
 othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
   // Defensively copy board to avoid representation exposure.
   // It would be nice if JavaScript provided immutable arrays, but...
-  /** @const */ var copyArray = function(array) {
+  /**
+   * Copy an array
+   * @param {Array.<othello.Piece>} array the array to copy.
+   * @return {Array.<othello.Piece>} the copy.
+   * @const
+   */
+  var copyArray = function(array) {
     return _(array).map(function(element) {
-      return element; 
+      return element;
     });
   };
 

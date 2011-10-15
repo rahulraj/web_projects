@@ -50,7 +50,6 @@ othello.AiPlayer.prototype.makeMove = function(board) {
 };
 
 
-
 /**
  * Getter for this.piece
  * @return {othello.Piece} this.piece.
@@ -89,7 +88,7 @@ othello.AiPlayer.prototype.onInitialMessage = function(board, piece) {
 
 
 /**
- * Act on the final message. 
+ * Act on the final message.
  * @param {othello.Board} unused_board the ending board.
  * @param {othello.Piece} unused_piece the ending piece.
  * @const
