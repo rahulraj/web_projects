@@ -24,6 +24,8 @@ othello.GameFactory.playerFromString = function(gameModel, input) {
       return othello.AiPlayer.createRandomAi(gameModel, piece);
     case othello.PlayerFieldset.mediumAiButtonId:
       return othello.AiPlayer.createGreedyAi(gameModel, piece);
+    case othello.PlayerFieldset.hardAiButtonId:
+      return othello.AiPlayer.createAlphaBetaAi(gameModel, piece);
     default:
       throw new Error('Invalid player choice');
   }

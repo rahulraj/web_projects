@@ -121,6 +121,11 @@ othello.AiPlayer.createGreedyAi = function(model, piece) {
 };
 
 
+othello.AiPlayer.createAlphaBetaAi = function(model, piece) {
+  return new othello.AiPlayer(model, piece, othello.AiPlayer.alphaBetaMakeMove);
+};
+
+
 /**
  * Simple AI strategy - randomly pick a move and make it.
  * @param {othello.Piece} piece the piece representing this player's side.
@@ -173,6 +178,144 @@ othello.AiPlayer.greedyMakeMove = function(piece, board) {
         return bestSoFarScore >= currentScore ? bestSoFarBoard : currentBoard;
       }, boardsAndScores[0][0]);
   return new othello.utils.Some(nextBoard);
+};
+
+
+/**
+ * Evaluate a board.
+ * @param {othello.Piece} piece the side whose perspective to take.
+ * @param {othello.Board} board the board to evaluate.
+ * @return {number} a numerical rating of the position.
+ */
+othello.AiPlayer.evaluateBoard = function(piece, board) {
+  /** @const */ var myPieces = board.getNumberOfPieces(piece);
+  /** @const */ var theirPieces = board.getNumberOfPieces(piece.flip());
+  return myPieces - theirPieces;
+};
+
+
+/**
+ * Helper function to get the next set of boards from possible moves.
+ * @param {othello.Piece} piece the piece to be placed.
+ * @param {othello.Board} board the board to move on.
+ * @return {Array.<othello.Board>} the candidate next boards.
+ */
+othello.AiPlayer.findNextBoards = function(piece, board) {
+  /** @const */ var nextMoves = board.findPossibleMoves(piece);
+ return _(nextMoves).map(function(move) {
+    return board.makeMove(piece, move.getX(), move.getY());
+  });
+};
+
+
+/**
+ * One step of alpha-beta search.
+ * @param {othello.Piece} piece the current player's piece.
+ * @param {othello.Board} board the board to start from.
+ * @param {number} depth how deep to go.
+ * @param {number} alpha the worst the maximizer can do.
+ * @param {number} beta the worst the minimizer can do.
+ * @param {boolean} lastPlayerPassed whether the last player passed.
+ */
+othello.AiPlayer.alphaBetaFindBoardValue =
+    function (piece, board, depth, alpha, beta, lastPlayerPassed) {
+  if (depth === 0 || board.isFull()) {
+    // leaf of the tree.
+    return othello.AiPlayer.evaluateBoard(piece, board);
+  }
+
+  if (!board.canMove(piece)) {
+    // Special case - we have to pass. 
+    if (lastPlayerPassed) {
+      // the game is over
+      return othello.AiPlayer.evaluateBoard(piece, board);
+    }
+    /** @const */ var newAlpha = (-1) * beta
+    /** @const */ var newBeta = (-1) * alpha
+    /** @const */ var currentValue = (-1) *
+        othello.AiPlayer.alphaBetaFindBoardValue(
+            piece.flip(), board, depth-1, newAlpha, newBeta, true);
+    if (currentValue > alpha) {
+      alpha = currentValue; 
+    }
+    return alpha;
+  }
+  
+
+  /** @const */ var nextBoards = othello.AiPlayer.findNextBoards(piece, board);
+  for (var i = 0; i < nextBoards.length; i++) {
+    if (alpha >= beta) {
+      break; 
+    }
+
+    /** @const */ var newAlpha = (-1) * beta
+    /** @const */ var newBeta = (-1) * alpha
+
+    /** @const */ var nextBoard = nextBoards[i];
+
+    /** @const */ var currentValue = (-1) *
+        othello.AiPlayer.alphaBetaFindBoardValue(
+            piece.flip(), nextBoard, depth-1, newAlpha, newBeta, false);
+    if (currentValue > alpha) {
+      alpha = currentValue; 
+    }
+  }
+  return alpha;
+};
+
+
+/**
+ * Start an alpha-beta search
+ * @param {othello.Piece} piece the piece taking a move.
+ * @param {othello.Board} board the board to move on.
+ * @param {number} depth how far down to go.
+ * @return {othello.Board} the best next board.
+ */
+othello.AiPlayer.alphaBetaSearch = function(piece, board, depth) {
+  // The player should have a move if we come here.
+  var alpha = -1000000000;
+  var beta = 1000000000;
+  var bestNextBoard = null;
+
+  // Similar to the helper function, but we want the board,
+  // not the value of alpha.
+  /** @const */ var nextBoards = othello.AiPlayer.findNextBoards(piece, board);
+  for (var i = 0; i < nextBoards.length; i++) {
+    /** @const */ var newAlpha = (-1) * beta;
+    /** @const */ var newBeta = (-1) * alpha;
+
+    /** @const */ var nextBoard = nextBoards[i];
+    /** @const */ var currentValue = (-1) *
+      othello.AiPlayer.alphaBetaFindBoardValue(
+          piece.flip(), nextBoard, depth-1, alpha, beta, false);
+
+    if (currentValue > alpha) {
+      alpha = currentValue; 
+      bestNextBoard = nextBoard; 
+    }
+  }
+  return bestNextBoard;
+};
+
+
+/**
+ * An AI player that uses minimax with alpha-beta pruning!
+ * Searches down 4 levels, it became too slow for larger trees.
+ * @param {othello.Piece} piece the piece representing this player's side.
+ * @param {othello.Board} board the board to move on.
+ * @return {othello.utils.Option} the board after the move in a Some,
+ *     or None for a pass.
+ * @const
+ */
+othello.AiPlayer.alphaBetaMakeMove = function(piece, board) {
+  if (!board.canMove(piece)) {
+    return othello.utils.None.instance; 
+  }
+
+  /** @const */ var depth = 4;
+  return new othello.utils.Some(
+      othello.AiPlayer.alphaBetaSearch(piece, board, depth));
+
 };
 
 
