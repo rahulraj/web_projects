@@ -50,4 +50,3 @@ Underscore.prototype.reject = function(arg) {};
  * @return {Underscore} an underscore-enhanced list.
  */
 function _(arg1) {}
-_.zip = function(arg1, arg2) {};
