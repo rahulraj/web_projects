@@ -20,6 +20,33 @@ table {
   -moz-box-shadow: 5px 5px 5px #888;
   -webkit-box-shadow: 5px 5px 5px #888;
 }
+.boardRow {
+  clear: both;
+}
+
+.endOfRow {
+  clear: both;
+}
+#othelloBoard {
+  position: relative;
+  clear: both;
+  box-shadow: 5px 5px 5px #888;
+  -moz-box-shadow: 5px 5px 5px #888;
+  -webkit-box-shadow: 5px 5px 5px #888;
+  width: 336px;
+}
+
+#gameStatus {
+  clear: both;
+}
+.othelloBoardSquare {
+  border: 1px solid #666666;
+  border-style: solid;
+  width: 40px;
+  height: 40px;
+  background-color: #009933;
+  float: left;
+}
 td {
   border: 1px solid #666666;
   border-style: solid;
@@ -54,7 +81,7 @@ span {
   display: block;
   width: 14px;
   height: 14px;
-
+  margin: 13px;
   border-radius: 7px;
   -moz-border-radius: 7px;
   -webkit-border-radius: 7px;

@@ -67,7 +67,7 @@ othello.GameView.restartButtonValue = 'Restart';
  */
 othello.GameView.prototype.addControllerEvents = function(controller) {
   this.controller = controller;
-  this.addClickHandlersToTableDivisions(controller);
+  this.addClickHandlers(controller);
 };
 
 
@@ -76,9 +76,8 @@ othello.GameView.prototype.addControllerEvents = function(controller) {
  * @param {othello.GameController} controller the controller handling the input.
  * @const
  */
-othello.GameView.prototype.addClickHandlersToTableDivisions =
-    function(controller) {
-  this.boardView.addClickHandlersToTableDivisions(function(row, column) {
+othello.GameView.prototype.addClickHandlers = function(controller) {
+  this.boardView.addClickHandlers(function(row, column) {
     controller.onBoardButtonClicked(row, column);
   });
 };
@@ -89,7 +88,7 @@ othello.GameView.prototype.addClickHandlersToTableDivisions =
  * @const
  */
 othello.GameView.prototype.updatePage = function() {
-  this.addClickHandlersToTableDivisions(this.controller);
+  this.addClickHandlers(this.controller);
   this.parentElement.html('');
   this.boardView.attachTo(this.parentElement);
   this.parentElement.append(this.gameStatusDiv);
@@ -139,7 +138,7 @@ othello.GameView.prototype.clearUserMessage = function() {
  * @const
  */
 othello.GameView.prototype.onModelChange = function(board, currentTurnPlayer) {
-  this.boardView = othello.BoardTableView.of(board, currentTurnPlayer);
+  this.boardView = othello.BoardDivView.of(board, currentTurnPlayer);
   /** @const */ var whiteScore = board.getNumberOfLightPieces();
   /** @const */ var blackScore = board.getNumberOfDarkPieces();
   this.updateScoreReport(whiteScore, blackScore);

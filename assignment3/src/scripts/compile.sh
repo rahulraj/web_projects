@@ -10,6 +10,7 @@ java -jar /home/rahulraj/dls/closure-compiler/compiler.jar \
   --js=utils/option.js --js=point.js --js=piece.js --js=board.js \
   --js=player.js --js=observer.js --js=observable.js \
   --js=boardHistory.js --js=gameStartForm.js --js=startFormController.js \
+  --js=boardDivView.js \
   --js=boardTableView.js --js=gameView.js --js=gameModel.js \
   --js=gameController.js --js=gameFactory.js --js=main.js \
   --externs=externs.js --warning_level=VERBOSE \
