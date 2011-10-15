@@ -148,6 +148,7 @@ othello.BoardDivView.Builder.prototype.build = function() {
     _(row).each(function(division) {
       boardRow.append(division);
     });
+    // Placeholder div used to make the CSS box shadow appear properly.
     boardRow.append($('<div>', {'class': 'endOfRow'}));
     buildersParentDiv.append(boardRow);
   });

@@ -306,6 +306,8 @@ othello.PlayerFieldset.Builder.prototype.legend = function(legendName) {
 othello.PlayerFieldset.Builder.prototype.radioButtonSetNamed =
     function(buttonName) {
   /** @const */ var fieldsetElement = this.fieldsetElement;
+  /** @const */ var fieldsetUnorderedList = $('<ul>');
+  fieldsetElement.append(fieldsetUnorderedList);
   var checked = false;
   /** @const */ var radioButtonBuilder = {
     /**
@@ -314,6 +316,8 @@ othello.PlayerFieldset.Builder.prototype.radioButtonSetNamed =
      * @const
      */
     radioButton: function(buttonId) {
+      /** @const */ var buttonListItem = $('<li>');
+      fieldsetUnorderedList.append(buttonListItem);
       /** @const */ var buttonDetailBuilder = {
         /**
          * Check the radio button. Not used right now, it appears
@@ -347,7 +351,7 @@ othello.PlayerFieldset.Builder.prototype.radioButtonSetNamed =
             'for': buttonId,
             html: labelHtml
           });
-          fieldsetElement.append(radioElement).append(labelElement);
+          buttonListItem.append(radioElement).append(labelElement);
           return radioButtonBuilder;
         }
       };

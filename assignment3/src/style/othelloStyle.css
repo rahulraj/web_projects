@@ -12,6 +12,26 @@ button {
   clear: both;
 }
 */
+body {
+  margin: 0 auto;
+}
+
+header {
+  margin: auto auto;
+  width: 336px;
+  text-align: center;
+}
+
+li {
+  list-style-type: none;
+}
+
+section {
+  position: relative;
+  margin: auto auto;
+  width: 336px;
+}
+
 table {
   position: relative;
   clear: both;
@@ -89,4 +109,19 @@ span {
   box-shadow: 1px 1px 1px #000;
   -moz-box-shadow: 1px 1px 1px #000;
   -webkit-box-shadow: 1px 1px 1px #000;
+}
+.possible-move:hover {
+  width: 36px;
+  height: 36px;
+  margin:0px;
+
+  border-radius: 18px;
+  -moz-border-radius: 18px;
+  -webkit-border-radius: 18px;
+
+  box-shadow: 2px 2px 2px #000;
+  -moz-box-shadow: 2px 2px 2px #000;
+  -webkit-box-shadow: 2px 2px 2px #000;
+  
+  opacity: 0.5;
 }
