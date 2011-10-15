@@ -33,14 +33,7 @@
     <script type="text/javascript" src="scripts/gameModel.js"></script>
     <script type="text/javascript" src="scripts/gameController.js"></script>
     <script type="text/javascript" src="scripts/gameFactory.js"></script>
-    <script type="text/javascript">
-      //$(function() {
-        /** @const */ var form = othello.GameStartForm.createDefaultStartForm();
-        /** @const */ var formController = new othello.StartFormController(form);
-        form.addPlayButtonClickHandler(function() {
-          formController.onPlayButtonClicked();  
-        });
-        form.attachTo($('section'));
+    <script type="text/javascript" src="scripts/main.js"></script>
     </script>
   </body>
 </html>

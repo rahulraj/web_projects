@@ -24,7 +24,6 @@ othello.StartFormController.prototype.onPlayButtonClicked = function() {
     alert('You need to select players!');
     return;
   }
-  console.log('blackPlayer: ' + blackPlayer + '\nwhitePlayer: ' + whitePlayer);
 
   // Start the main game.
   othello.GameFactory.createGameMvcAndRun(whitePlayer, blackPlayer);
