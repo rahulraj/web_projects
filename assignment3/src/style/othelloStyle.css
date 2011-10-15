@@ -12,14 +12,23 @@ button {
   clear: both;
 }
 */
+
+
 body {
   margin: 0 auto;
+  background-color: #FFFF33;
 }
-
+header, nav, article, footer, address {
+  display:block;
+}
 header {
   margin: auto auto;
   width: 336px;
   text-align: center;
+}
+
+h1 {
+  font-family: Arial,Verdana,sans-serif;
 }
 
 li {
@@ -54,10 +63,12 @@ table {
   -moz-box-shadow: 5px 5px 5px #888;
   -webkit-box-shadow: 5px 5px 5px #888;
   width: 336px;
+  margin-bottom: 15px;
 }
 
 #gameStatus {
   clear: both;
+  padding-bottom: 15px;
 }
 .othelloBoardSquare {
   border: 1px solid #666666;

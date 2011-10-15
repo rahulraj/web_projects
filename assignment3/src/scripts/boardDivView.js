@@ -142,8 +142,6 @@ othello.BoardDivView.Builder.prototype.at = function(row, column) {
 othello.BoardDivView.Builder.prototype.build = function() {
   /** @const */ var buildersParentDiv = this.parentDiv;
   _(this.innerDivs).each(function(row) {
-    /** @const */ var firstDivInRow = row[0];
-    firstDivInRow.addClass('firstDivInRow');
     /** @const */ var boardRow = $('<div>', {'class': 'boardRow'});
     _(row).each(function(division) {
       boardRow.append(division);
