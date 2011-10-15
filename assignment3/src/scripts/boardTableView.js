@@ -24,8 +24,8 @@ othello.BoardTableView = function(tableElement, tableDivisions) {
 othello.BoardTableView.prototype.addClickHandlersToTableDivisions =
     function(handler) {
   /** @const */ var self = this;
-  _.each(_.range(0, self.tableDivisions.length), function(i) {
-    _.each(_.range(0, self.tableDivisions[i].length), function(j) {
+  othello.utils.each(othello.utils.range(0, self.tableDivisions.length), function(i) {
+    othello.utils.each(othello.utils.range(0, self.tableDivisions[i].length), function(j) {
       self.tableDivisions[i][j].bind('click', function(event) {
         handler(i, j);
       });
@@ -55,8 +55,8 @@ othello.BoardTableView.prototype.attachTo = function(parentElement) {
 othello.BoardTableView.of = function(board, currentTurnPlayer) {
   /** @const */ var builder = new
       othello.BoardTableView.Builder().ofSize(othello.Board.size);
-  _.each(_.range(0, othello.Board.size), function(i) {
-    _.each(_.range(0, othello.Board.size), function(j) {
+  othello.utils.each(othello.utils.range(0, othello.Board.size), function(i) {
+    othello.utils.each(othello.utils.range(0, othello.Board.size), function(j) {
       /** @const */ var piece = board.pieceAt(i, j);
       if (piece !== othello.EmptyPiece.instance) {
         /** @const */ var playerClass =
@@ -71,7 +71,7 @@ othello.BoardTableView.of = function(board, currentTurnPlayer) {
   /** @const */ var possibleMoveColorClass =
       othello.BoardTableView.classOfPiece(currentTurnPlayer);
   /** @const */ var moves = board.findPossibleMoves(currentTurnPlayer);
-  _(moves).each(function(move) {
+  othello.utils.each(moves, function(move) {
     /** @const */ var markerContainer = $('<span>',
         {'class': possibleMoveColorClass + ' possible-move'});
     builder.at(move.getX(), move.getY()).append(markerContainer);
@@ -114,7 +114,7 @@ othello.BoardTableView.Builder = function() {
  * @const
  */
 othello.BoardTableView.Builder.prototype.ofSize = function(size) {
-  this.tableDivisions = _.map(_.range(0, size), function(i) {
+  this.tableDivisions = othello.utils.map(othello.utils.range(0, size), function(i) {
     return othello.BoardTableView.Builder.createRow(size);
   });
   return this;
@@ -128,7 +128,7 @@ othello.BoardTableView.Builder.prototype.ofSize = function(size) {
  * @const
  */
 othello.BoardTableView.Builder.createRow = function(rowLength) {
-  return _.map(_.range(0, rowLength), function(i) {
+  return othello.utils.map(othello.utils.range(0, rowLength), function(i) {
     return $('<td>');
   });
 };
@@ -168,9 +168,9 @@ othello.BoardTableView.Builder.prototype.at = function(row, column) {
  */
 othello.BoardTableView.Builder.prototype.build = function() {
   /** @const */ var buildersTableElement = this.tableElement;
-  _(this.tableDivisions).each(function(row) {
+  othello.utils.each(this.tableDivisions, function(row) {
     /** @const */ var tableRow = $('<tr>');
-    _(row).each(function(division) {
+    othello.utils.each(row, function(division) {
       tableRow.append(division);
     });
     buildersTableElement.append(tableRow);

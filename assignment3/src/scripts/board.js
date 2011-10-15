@@ -34,13 +34,13 @@ othello.Board = function(board, numberOfLightPieces, numberOfDarkPieces) {
    * @const
    */
   var copyArray = function(array) {
-    return _(array).map(function(element) {
+    return othello.utils.map(array, function(element) {
       return element;
     });
   };
 
   /** @const */ var boardCopy = [];
-  _(board).each(function(column) {
+  othello.utils.each(board, function(column) {
     boardCopy.push(copyArray(column));
   });
 
@@ -127,7 +127,7 @@ othello.Board.prototype.makeMove = function(piece, x, y) {
   /** @const */ var flipped = this.findAllPiecesToFlip(piece, x, y);
   /** @const */ var newBoardBuilder = othello.Board.Builder.templatedBy(this);
   newBoardBuilder.at(x, y).place(piece);
-  _(flipped).each(function(point) {
+  othello.utils.each(flipped, function(point) {
     newBoardBuilder.at(point.getX(), point.getY()).flip();
   });
   return newBoardBuilder.build();
@@ -168,11 +168,11 @@ othello.Board.prototype.canMove = function(piece) {
  *     on which the piece can be legally placed. Empty if no Points exist.
  */
 othello.Board.prototype.findPossibleMoves = function(piece) {
-  /** @const */ var rows = _.range(0, othello.Board.size);
+  /** @const */ var rows = othello.utils.range(0, othello.Board.size);
   /** @const */ var self = this;
   return othello.utils.flatMap(rows, function(row) {
     /** @const */ var pointsOnRow =
-        _.map(_.range(0, othello.Board.size), function(column) {
+        othello.utils.map(othello.utils.range(0, othello.Board.size), function(column) {
       return new othello.Point(row, column);
     });
     return _(pointsOnRow).filter(function(point) {
@@ -206,7 +206,7 @@ othello.Board.prototype.findAllPiecesToFlip = function(piece, x, y) {
  * @return {Array.<Array.<number>>} a list of deltas, as x, y tuples.
  */
 othello.Board.deltas = function() {
-  /** @const */ var allCombinations = othello.utils.flatMap(_.range(-1, 2),
+  /** @const */ var allCombinations = othello.utils.flatMap(othello.utils.range(-1, 2),
       function(item) {
         return [[-1, item], [0, item], [1, item]];
       });
@@ -341,7 +341,7 @@ othello.Board.Builder = function(board) {
  */
 othello.Board.Builder.emptyBoard = function() {
   /** @const */ var board = [];
-  _.each(_.range(0, othello.Board.size), function(i) {
+  othello.utils.each(othello.utils.range(0, othello.Board.size), function(i) {
     board.push(othello.Board.Builder.createRow());
   });
 
@@ -357,8 +357,8 @@ othello.Board.Builder.emptyBoard = function() {
  */
 othello.Board.Builder.templatedBy = function(board) {
   /** @const */ var builder = othello.Board.Builder.emptyBoard();
-  _.each(_.range(0, othello.Board.size), function(i) {
-    _.each(_.range(0, othello.Board.size), function(j) {
+  othello.utils.each(othello.utils.range(0, othello.Board.size), function(i) {
+    othello.utils.each(othello.utils.range(0, othello.Board.size), function(j) {
       builder.at(i, j).place(board.pieceAt(i, j));
     });
   });
@@ -448,7 +448,7 @@ othello.Board.Builder.prototype.at = function(row, column) {
  * @const
  */
 othello.Board.Builder.createRow = function() {
-  return _.map(_.range(0, othello.Board.size), function(i) {
+  return othello.utils.map(othello.utils.range(0, othello.Board.size), function(i) {
     return othello.EmptyPiece.instance;
   });
 };
@@ -463,8 +463,8 @@ othello.Board.Builder.prototype.build = function() {
   var lightPieces = 0;
   var darkPieces = 0;
   /** @const */ var self = this;
-  _.each(_.range(0, self.board.length), function(i) {
-    _.each(_.range(0, self.board[0].length), function(j) {
+  othello.utils.each(othello.utils.range(0, self.board.length), function(i) {
+    othello.utils.each(othello.utils.range(0, self.board[0].length), function(j) {
       if (self.board[i][j] === othello.LightPiece.instance) {
         lightPieces++;
       } else if (self.board[i][j] === othello.DarkPiece.instance) {

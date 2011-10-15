@@ -167,10 +167,11 @@ othello.AiPlayer.greedyMakeMove = function(piece, board) {
     return othello.utils.None.instance;
   }
 
-  /** @const */ var newBoards = _(possibleMoves).map(function(move) {
-    return board.makeMove(piece, move.getX(), move.getY());
-  });
-  /** @const */ var scores = _(newBoards).map(function(newBoard) {
+  /** @const */ var newBoards = 
+      othello.utils.map(possibleMoves, function(move) {
+        return board.makeMove(piece, move.getX(), move.getY());
+      });
+  /** @const */ var scores = othello.utils.map(newBoards, function(newBoard) {
     return newBoard.getNumberOfPieces(piece);
   });
 
@@ -209,7 +210,7 @@ othello.AiPlayer.evaluateBoard = function(piece, board) {
  */
 othello.AiPlayer.findNextBoards = function(piece, board) {
   /** @const */ var nextMoves = board.findPossibleMoves(piece);
- return _(nextMoves).map(function(move) {
+ return othello.utils.map(nextMoves, function(move) {
     return board.makeMove(piece, move.getX(), move.getY());
   });
 };
