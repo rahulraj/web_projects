@@ -29,6 +29,49 @@ othello.GameFactory.playerFromString = function(gameModel, input) {
 
 
 /**
+ * Set up the controller for the game, connecting it to the view and model.
+ * @param {othello.GameView} gameView the view.
+ * @param {othello.GameModel} gameModel the model.
+ * @const
+ */
+othello.GameFactory.setUpController = function(gameModel, gameView) {
+  /** @const */ var isHuman = function(piece) {
+    if (piece === othello.LightPiece.instance) {
+      return whitePlayer instanceof othello.HumanPlayer; 
+    } else if (piece === othello.DarkPiece.instance) {
+      return blackPlayer instanceof othello.HumanPlayer; 
+    } else {
+      throw new Error('Tried to tell if EmptyPiece was human');
+    }
+  };
+
+  /** @const */ var gameController = new othello.GameController(gameModel,
+      gameView, isHuman);
+
+  // jQuery clicks it once initially; ignore that click
+  var first = true;
+  $('input').live('click', function(event) {
+    if (first) {
+      first = false; 
+      return;
+    }
+    /** @const */ var value = $(this).val();
+    if (value === othello.GameView.undoButtonValue) {
+      gameController.onUndoButtonClicked(); 
+    } else if (value === othello.GameView.passButtonValue) {
+      gameController.onPassButtonClicked(); 
+    } else if (value === othello.GameView.redoButtonValue) {
+      gameController.onRedoButtonClicked();
+    } else if (value === othello.GameView.restartButtonValue) {
+      gameController.onRestartButtonClicked(); 
+    }
+  });
+
+  gameView.addControllerEvents(gameController);
+};
+
+
+/**
  * @const
  * @type {string}
  */
@@ -76,39 +119,7 @@ othello.GameFactory.createGameMvcAndRun =
   gameModel.addObserver(whitePlayer);
   gameModel.addObserver(blackPlayer);
 
-  /** @const */ var isHuman = function(piece) {
-    if (piece === othello.LightPiece.instance) {
-      return whitePlayer instanceof othello.HumanPlayer; 
-    } else if (piece === othello.DarkPiece.instance) {
-      return blackPlayer instanceof othello.HumanPlayer; 
-    } else {
-      throw new Error('Tried to tell if EmptyPiece was human');
-    }
-  };
-
-  /** @const */ var gameController = new othello.GameController(gameModel,
-      gameView, isHuman);
-
-  // jQuery clicks it once initially; ignore that click
-  var first = true;
-  $('input').live('click', function(event) {
-    if (first) {
-      first = false; 
-      return;
-    }
-    /** @const */ var value = $(this).val();
-    if (value === othello.GameView.undoButtonValue) {
-      gameController.onUndoButtonClicked(); 
-    } else if (value === othello.GameView.passButtonValue) {
-      gameController.onPassButtonClicked(); 
-    } else if (value === othello.GameView.redoButtonValue) {
-      gameController.onRedoButtonClicked();
-    } else if (value === othello.GameView.restartButtonValue) {
-      gameController.onRestartButtonClicked(); 
-    }
-  });
-
-  gameView.addControllerEvents(gameController);
+  othello.GameFactory.setUpController(gameModel, gameView);
 
   // all hooked up, now start the game with the initial cascade of events.
   gameModel.publishInitialMessage();
