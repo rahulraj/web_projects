@@ -31,7 +31,7 @@ PlayerTest.prototype.disabled_testGreedyPlayerPicksBetterChoice = function() {
     at(5, 4).placeDarkPiece();
 
   // Place light pieces along the top row.
-  othello.utils.each(_.range(1, othello.Board.size - 1), function(i) {
+  _.each(_.range(1, othello.Board.size - 1), function(i) {
     boardBuilder.at(i, 0).placeLightPiece();
   });
   boardBuilder.at(7, 0).placeDarkPiece();

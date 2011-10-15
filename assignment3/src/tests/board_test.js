@@ -45,7 +45,7 @@ BoardTest.prototype.testFindPiecesToFlipSimple = function() {
 
 BoardTest.prototype.testFindPiecesToFlipLoop = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
-  othello.utils.each(_.range(1, othello.Board.size - 1), function(i) {
+  _.each(_.range(1, othello.Board.size - 1), function(i) {
     boardBuilder.at(i, 0).placeLightPiece();
   });
   boardBuilder.at(7, 0).placeDarkPiece();
@@ -87,7 +87,7 @@ BoardTest.prototype.testFindPiecesToFlipStopsIfIsolated = function() {
 
 BoardTest.prototype.testFindPiecesToFlipStopsIfChainIsBroken = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
-  othello.utils.each(_.range(1, othello.Board.size - 1), function(i) {
+  _.each(_.range(1, othello.Board.size - 1), function(i) {
     boardBuilder.at(i, 0).placeLightPiece();
   });
   boardBuilder.at(7, 0).placeDarkPiece();
@@ -144,7 +144,7 @@ BoardTest.prototype.testDeltas = function() {
 
 BoardTest.prototype.testFindAllPiecesToFlip = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
-  othello.utils.each(_.range(1, othello.Board.size - 1), function(i) {
+  _.each(_.range(1, othello.Board.size - 1), function(i) {
     boardBuilder.at(i, 0) .placeLightPiece().
         at(0, i).placeLightPiece();
   });
@@ -183,8 +183,8 @@ BoardTest.prototype.testFindPossibleMovesNoMoves = function() {
 BoardTest.prototype.createAllWhitePiecesBoard = function() {
   /** @const */ var boardBuilder = othello.Board.Builder.emptyBoard();
 
-  othello.utils.each(_.range(0, othello.Board.size), function(i) {
-    othello.utils.each(_.range(0, othello.Board.size), function(j) {
+  _.each(_.range(0, othello.Board.size), function(i) {
+    _.each(_.range(0, othello.Board.size), function(j) {
       boardBuilder.at(i, j).placeLightPiece();
     });
   });
@@ -243,8 +243,8 @@ BoardTest.prototype.testFirstMove = function() {
   /** @const */ var nextBoard = initialBoard.makeMove(
       othello.DarkPiece.instance, 3, 2);
 
-  othello.utils.each(_.range(0, othello.Board.size), function(i) {
-    othello.utils.each(_.range(0, othello.Board.size), function(j) {
+  _.each(_.range(0, othello.Board.size), function(i) {
+    _.each(_.range(0, othello.Board.size), function(j) {
       if (i === 3 && j === 2) {
         assertFalse(initialBoard.isOccupiedAt(i, j));
         assertEquals(othello.DarkPiece.instance, nextBoard.pieceAt(i, j));

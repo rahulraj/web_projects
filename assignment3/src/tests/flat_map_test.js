@@ -10,7 +10,7 @@ FlatMapTest.prototype.testFlatMap = function() {
     }
   });
   /** @const */ var answer = [3, 4, 5, 6];
-  othello.utils.each(_.range(1, answer.length), function(i) {
+  _(_.range(1, answer.length)).each(function(i) {
     assertEquals(answer[i], result[i]);
   });
 };

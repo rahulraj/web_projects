@@ -23,7 +23,7 @@ othello.BoardHistory = function(initialBoard) {
 othello.BoardHistory.prototype.push = function(board) {
   /** @const */ var self = this;
   /** @const */ var result =
-      othello.utils.map(othello.utils.range(0, this.boardIndex + 1), function(index) {
+      _.map(_.range(0, this.boardIndex + 1), function(index) {
     return self.boards[index];
   });
   result.push(board);

@@ -98,7 +98,7 @@ othello.GameModel.prototype.addObserver = function(observer) {
  */
 othello.GameModel.prototype.notifyObservers = function() {
   /** @const */ var self = this;
-  othello.utils.each(this.observers, function(observer) {
+  _(this.observers).each(function(observer) {
     /** @const */ var delay = observer instanceof othello.AiPlayer ?
         self.delayInterval : 0;
     window.setTimeout(function() {
@@ -114,7 +114,7 @@ othello.GameModel.prototype.notifyObservers = function() {
  */
 othello.GameModel.prototype.publishInitialMessage = function() {
   /** @const */ var self = this;
-  othello.utils.each(this.observers, function(observer) {
+  _(this.observers).each(function(observer) {
     observer.onInitialMessage(self.board, self.currentTurnPlayer);
   });
 };
@@ -127,7 +127,7 @@ othello.GameModel.prototype.publishInitialMessage = function() {
 othello.GameModel.prototype.publishFinalMessage = function() {
   this.gameState = othello.GameModel.State.finished;
   /** @const */ var self = this;
-  othello.utils.each(this.observers, function(observer) {
+  _(this.observers).each(function(observer) {
     observer.onGameEnd(self.board, self.currentTurnPlayer);
   });
 };

@@ -8,7 +8,7 @@ BoardBuilderTest.prototype.testCorrectDimensions = function() {
 BoardBuilderTest.prototype.testCreateRow = function() {
   /** @const */ var row = othello.Board.Builder.createRow();
   assertEquals(othello.Board.size, row.length);
-  othello.utils.each(_.range(0, othello.Board.size), function(i) {
+  _.each(_.range(0, othello.Board.size), function(i) {
     assertEquals(othello.EmptyPiece.instance, row[i]);
   });
 };

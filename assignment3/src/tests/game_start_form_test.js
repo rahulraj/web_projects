@@ -7,11 +7,9 @@ GameStartFormTest.prototype.testPlayerFieldset = function() {
       othello.PlayerFieldset.createWhitePlayerFieldset()
   /** @const */ var innerHtml = whiteFieldset.fieldsetElement.html();
 
-  /** @const */ var regexes = [/radio/, /legend/, /White Player/,
-          /whiteHuman/, /whiteEasyAi/, /whiteMediumAi/,
-          /Human/, /Easy AI/, /Medium AI/];
-          
-  othello.utils.each(regexes, function(regex) {
+  _.each([/radio/, /legend/, /White Player/,
+          /whiteHuman/, ,/whiteEasyAi/, /whiteMediumAi/,
+          /Human/, /Easy AI/, /Medium AI/], function(regex) {
     assertTrue(regex.test(innerHtml));
   });
 };
@@ -20,7 +18,7 @@ GameStartFormTest.prototype.testGameStartForm = function() {
   /** @const */ var startForm = othello.GameStartForm.createDefaultStartForm();
   /** @const */ var innerHtml = startForm.formElement.html();
 
-  othello.utils.each([/Play/], function(regex) {
+  _.each([/Play/], function(regex) {
     assertTrue(regex.test(innerHtml));
   });
 };
