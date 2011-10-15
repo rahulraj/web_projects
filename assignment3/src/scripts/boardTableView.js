@@ -81,18 +81,6 @@ othello.BoardTableView.of = function(board, currentTurnPlayer) {
 };
 
 
-/**
- * Helper function that converts a piece to a class string
- * @param {othello.Piece} piece the piece to convert.
- * @return {string} a class name to style the piece.
- */
-othello.BoardTableView.classOfPiece = function(piece) {
-  if (piece === othello.DarkPiece.instance) {
-    return 'black-player';
-  } else {
-    return 'white-player';
-  }
-};
 
 
 

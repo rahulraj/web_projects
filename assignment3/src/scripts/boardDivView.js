@@ -56,7 +56,7 @@ othello.BoardDivView.of = function(board, currentTurnPlayer) {
       /** @const */ var piece = board.pieceAt(i, j);
       if (piece !== othello.EmptyPiece.instance) {
         /** @const */ var playerClass =
-            othello.BoardTableView.classOfPiece(piece);
+            othello.BoardDivView.classOfPiece(piece);
         /** @const */ var pieceContainer = $('<span>',
             {'class': 'piece ' + playerClass});
         builder.at(i, j).append(pieceContainer);
@@ -65,7 +65,7 @@ othello.BoardDivView.of = function(board, currentTurnPlayer) {
   });
 
   /** @const */ var possibleMoveColorClass =
-      othello.BoardTableView.classOfPiece(currentTurnPlayer);
+      othello.BoardDivView.classOfPiece(currentTurnPlayer);
   /** @const */ var moves = board.findPossibleMoves(currentTurnPlayer);
   _(moves).each(function(move) {
     /** @const */ var markerContainer = $('<span>',
@@ -74,6 +74,20 @@ othello.BoardDivView.of = function(board, currentTurnPlayer) {
   });
 
   return builder.build();
+};
+
+
+/**
+ * Helper function that converts a piece to a class string
+ * @param {othello.Piece} piece the piece to convert.
+ * @return {string} a class name to style the piece.
+ */
+othello.BoardDivView.classOfPiece = function(piece) {
+  if (piece === othello.DarkPiece.instance) {
+    return 'black-player';
+  } else {
+    return 'white-player';
+  }
 };
 
 
