@@ -72,6 +72,7 @@ othello.GameController.prototype.onBoardButtonClicked = function(row, column) {
     }
   }
   // This is a valid move for the human.
+  this.view.clearUserMessage();
   /** @const */ var moveInSome = new othello.utils.Some(
       this.model.makeMove(currentTurnPlayer, row, column));
   this.model.step(moveInSome);
@@ -96,6 +97,7 @@ othello.GameController.prototype.onPassButtonClicked = function() {
       return;
     }
   }
+  this.view.clearUserMessage();
   this.model.step(othello.utils.None.instance);
 };
 
@@ -109,6 +111,7 @@ othello.GameController.prototype.onUndoButtonClicked = function() {
     this.view.sendUserMessage(othello.GameController.cantUndoAtGameStart);
     return;
   }
+  this.view.clearUserMessage();
   this.model.undo();
 };
 
@@ -122,6 +125,7 @@ othello.GameController.prototype.onRedoButtonClicked = function() {
     this.view.sendUserMessage(othello.GameController.cantRedoNow);
     return;
   }
+  this.view.clearUserMessage();
   this.model.redo();
 };
 

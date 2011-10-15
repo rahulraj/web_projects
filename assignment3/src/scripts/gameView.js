@@ -109,6 +109,15 @@ othello.GameView.prototype.sendUserMessage = function(message) {
 
 
 /**
+ * Clear the messageToUserDiv
+ * @const
+ */
+othello.GameView.prototype.clearUserMessage = function() {
+  this.messageToUserDiv.html('');
+};
+
+
+/**
  * When the board changes, refresh its view.
  * @param {othello.Board} board the board.
  * @param {othello.Piece} currentTurnPlayer the player whose turn it is.
