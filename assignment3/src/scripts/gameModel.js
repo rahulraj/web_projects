@@ -21,6 +21,7 @@ othello.GameModel =
   /** @const */ this.observers = [];
   this.lastPlayerPassed = false;
   this.gameState = othello.GameModel.State.progressing;
+  this.latestMove = othello.utils.None.instance;
 };
 
 
@@ -216,7 +217,7 @@ othello.GameModel.prototype.undo = function() {
  */
 othello.GameModel.prototype.resumeGame = function() {
   if (this.gameState !== othello.GameModel.State.rewritingHistory) {
-    throw new Error('Should only resume if ukkgTndoing');
+    throw new Error('Should only resume if undoing');
   }
   this.gameState = othello.GameModel.State.progressing;
 };

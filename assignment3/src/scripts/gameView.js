@@ -18,7 +18,7 @@
  * @const
  */
 othello.GameView =
-    function(boardView, gameStatusDiv, messageToUserDiv, undoButton, 
+    function(boardView, gameStatusDiv, messageToUserDiv, undoButton,
              passButton, resumeButton, restartButton, parentElement) {
   this.boardView = boardView;
   /** @const */ this.gameStatusDiv = gameStatusDiv;

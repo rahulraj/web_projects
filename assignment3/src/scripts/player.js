@@ -316,6 +316,7 @@ othello.AiPlayer.alphaBetaSearch = function(piece, board, depth) {
  */
 othello.AiPlayer.alphaBetaMakeMove = function(piece, board) {
   if (!board.canMove(piece)) {
+    console.log('Player' + piece + ' passed');
     return othello.utils.None.instance; 
   }
 
