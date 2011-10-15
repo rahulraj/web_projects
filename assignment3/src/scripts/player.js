@@ -175,7 +175,7 @@ othello.AiPlayer.greedyMakeMove = function(piece, board) {
     return newBoard.getNumberOfPieces(piece);
   });
 
-  /** @const */ var boardsAndScores = othello.utils.zip(newBoards, scores);
+  /** @const */ var boardsAndScores = _.zip(newBoards, scores);
 
   /** @const */ var nextBoard = _(boardsAndScores).reduce(
       function(bestSoFar, current) {
