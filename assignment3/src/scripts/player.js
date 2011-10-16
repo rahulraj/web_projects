@@ -272,7 +272,15 @@ othello.AiPlayer.alphaBetaFindBoardValue =
 
 
 /**
- * Start an alpha-beta search
+ * Start an alpha-beta search. Inspiration for this algorithm was drawn
+ * from Lab 3 of 6.034 in Fall 2011. Its description can be found here:
+ * http://ai6034.mit.edu/fall11/index.php?title=Lab_3
+ *
+ * The alpha-beta algorithm was written by me (originally in Python for
+ * 6.034, ported to JavaScript here). It is derived from pseudocode provided
+ * in the 6.034 readings, explanations of alpha-beta search from that class,
+ * and a reference implementation of minimax search without alpha-beta pruning,
+ * written in Python.
  * @param {othello.Piece} piece the piece taking a move.
  * @param {othello.Board} board the board to move on.
  * @param {number} depth how far down to go.
