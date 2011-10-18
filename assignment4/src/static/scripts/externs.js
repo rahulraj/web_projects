@@ -7,11 +7,11 @@
  */
 var jQueryObject = function() {};
 jQueryObject.prototype.append = function(arg) {};
+jQueryObject.prototype.bind = function(arg1, arg2) {};
+jQueryObject.prototype.offset = function(arg) {};
 jQueryObject.prototype.live = function(arg1, arg2) {};
 jQueryObject.prototype.val = function() {};
 
-
-//jQueryObject.prototype.attr = function(arg1) {}
 /**
  * @param {*} arg1
  * @param {*=} opt_arg2

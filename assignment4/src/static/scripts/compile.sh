@@ -7,6 +7,7 @@
 
 java -jar /home/rahulraj/dls/closure-compiler/compiler.jar \
   --js=networkStickies.js --js=note.js \
+  --js=noteController.js --js=noteView.js \
   --externs=externs.js --warning_level=VERBOSE \
   --compilation_level=SIMPLE_OPTIMIZATIONS \
   > /dev/null # We only care about the error output
