@@ -12,6 +12,7 @@ jQueryObject.prototype.offset = function(arg) {};
 jQueryObject.prototype.live = function(arg1, arg2) {};
 jQueryObject.prototype.val = function() {};
 
+
 /**
  * @param {*} arg1
  * @param {*=} opt_arg2
