@@ -1,3 +1,6 @@
+
+
+
 /**
  * Constructor for a view of a single note.
  * @param {jQueryObject} noteElement the element holding the note.
@@ -8,6 +11,12 @@ networkStickies.NoteView = function(noteElement) {
   /** @const */ this.noteElement = noteElement;
 };
 
+
+/**
+ * Attach this view to a parent element.
+ * @param {jQueryObject} parentElement this element's future parent.
+ * @const
+ */
 networkStickies.NoteView.prototype.attachTo = function(parentElement) {
   parentElement.append(this.noteElement);
 };
@@ -21,17 +30,19 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
  *     offset function uses.
  * @param {networkStickies.NoteController} controller the controller handling
  *     on click events.
+ * @return {networkStickies.NoteView} the newly created view.
  * @const
  */
 networkStickies.NoteView.of = function(note, coordinates, controller) {
   return new networkStickies.NoteView.Builder().
       offsetBy(coordinates).
       body(note.body()).
-      editButton().
-      deleteButton().
+      withEditButton().
+      withDeleteButton().
       clicksHandledBy(controller).
       build();
 };
+
 
 
 /**
@@ -40,7 +51,7 @@ networkStickies.NoteView.of = function(note, coordinates, controller) {
  * @const
  */
 networkStickies.NoteView.Builder = function() {
-  /** @const */ this.noteElement = $('<div>' {'class': 'note'});
+  /** @const */ this.noteElement = $('<div>', {'class': 'note'});
   this.editButton = null;
   this.deleteButton = null;
 };
@@ -48,11 +59,11 @@ networkStickies.NoteView.Builder = function() {
 
 /**
  * Set the offset coordinates for the note.
- * @param {{top: number, left: number}} the coordinates to use.
+ * @param {{top: number, left: number}} coordinates the coordinates to use.
  * @return {networkStickies.NoteView.Builder} the builder for chaining.
  * @const
  */
-networkStickies.NoteView.Builder.offsetBy = function(coordinates) {
+networkStickies.NoteView.Builder.prototype.offsetBy = function(coordinates) {
   this.noteElement.offset(coordinates);
   return this;
 };
@@ -77,7 +88,7 @@ networkStickies.NoteView.Builder.prototype.body = function(body) {
  * @return {networkStickies.NoteView.Builder} the builder for chaining.
  * @const
  */
-networkStickies.NoteView.Builder.prototype.editButton = function() {
+networkStickies.NoteView.Builder.prototype.withEditButton = function() {
   this.editButton = $('<input>', {type: 'button', value: 'Edit'});
   this.noteElement.append(this.editButton);
   return this;
@@ -89,7 +100,7 @@ networkStickies.NoteView.Builder.prototype.editButton = function() {
  * @return {networkStickies.NoteView.Builder} the builder for chaining.
  * @const
  */
-networkStickies.NoteView.Builder.prototype.deleteButton = function() {
+networkStickies.NoteView.Builder.prototype.withDeleteButton = function() {
   this.deleteButton = $('<input>', {type: 'button', value: 'Delete'});
   this.noteElement.append(this.deleteButton);
   return this;
@@ -106,10 +117,10 @@ networkStickies.NoteView.Builder.prototype.deleteButton = function() {
 networkStickies.NoteView.Builder.prototype.clicksHandledBy =
     function(controller) {
   this.editButton.bind('click', function(event) {
-    controller.onEditButtonClicked(); 
+    controller.onEditButtonClicked();
   });
   this.deleteButton.bind('click', function(event) {
-    controller.onDeleteButtonClicked(); 
+    controller.onDeleteButtonClicked();
   });
   return this;
 };
