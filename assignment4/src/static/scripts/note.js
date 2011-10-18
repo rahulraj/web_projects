@@ -1,3 +1,6 @@
+
+
+
 /**
  * Class to represent one sticky note.
  * Representation Invariant - Immutable
@@ -10,20 +13,20 @@
 networkStickies.Note = function(identifier, body) {
   /**
    * Getter for the identifier
-   * @return {number} identifier
+   * @return {number} identifier.
    * @const
    */
   this.identifier = function() {
-    return identifier; 
+    return identifier;
   };
 
   /**
    * Getter for the body of the note
-   * @return {string} body
+   * @return {string} body.
    * @const
    */
   this.body = function() {
-    return body; 
+    return body;
   };
 };
 
@@ -31,6 +34,7 @@ networkStickies.Note = function(identifier, body) {
 /**
  * Return a new Note with the body updated, under the same ID.
  * @param {string} newBody the updated body.
+ * @return {networkStickies.Note} the updated Note, leaving this unchanged.
  * @const
  */
 networkStickies.Note.prototype.updateBody = function(newBody) {
