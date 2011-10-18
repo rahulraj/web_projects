@@ -3,7 +3,7 @@
 
 /**
  * Class to represent one sticky note.
- * Representation Invariant - Immutable
+ * Representation Invariant - Immutable.
  * @param {number} identifier a numerical identifier for the note.
  *     User-identifier combinations should be unique.
  * @param {string} body the body of the note.
