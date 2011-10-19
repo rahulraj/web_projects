@@ -23,8 +23,19 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
 
 
 /**
+ * Get the text contained within this.noteElement representing the
+ * note that the user made.
+ * @return {string} the text in the note.
+ * @const
+ */
+networkStickies.NoteView.prototype.body = function() {
+  return this.noteElement.children('p').html();
+};
+
+
+/**
  * Factory function to create a view given a note.
- * @param {string} noteBody the body of the note being viewed.
+ * @param {networkStickies.Note} note the note being viewed.
  * @param {{top: number, left: number}} coordinates an object containing
  *     coordinates for the Note. This format is the same one jQuery's
  *     offset function uses.
@@ -33,10 +44,10 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
  * @return {networkStickies.NoteView} the newly created view.
  * @const
  */
-networkStickies.NoteView.of = function(noteBody, coordinates, controller) {
+networkStickies.NoteView.of = function(note, coordinates, controller) {
   return new networkStickies.NoteView.Builder().
+      viewing(note).
       offsetBy(coordinates).
-      body(noteBody).
       withEditButton().
       withDeleteButton().
       clicksHandledBy(controller).
@@ -60,6 +71,7 @@ networkStickies.NoteView.Builder = function() {
   this.noteElement = $('<div>', {'class': 'note'});
   this.editButton = null;
   this.deleteButton = null;
+  this.identifier = null;
 };
 
 
@@ -76,15 +88,17 @@ networkStickies.NoteView.Builder.prototype.offsetBy = function(coordinates) {
 
 
 /**
- * Set the contents of the NoteView's body.
- * @param {string} body the body of the note.
+ * Set the Note that this View is displaying. Creates the body element
+ * and keeps track of the ID for configuration with the controller.
+ * @param {networkStickies.Note} note the note.
  * @return {networkStickies.NoteView.Builder} the builder for chaining.
  * @const
  */
-networkStickies.NoteView.Builder.prototype.body = function(body) {
+networkStickies.NoteView.Builder.prototype.viewing = function(note) {
   /** @const */ var bodyElement = $('<p>');
-  bodyElement.html(body);
+  bodyElement.html(note.body());
   this.noteElement.append(bodyElement);
+  this.identifier = note.identifier();
   return this;
 };
 
@@ -116,17 +130,18 @@ networkStickies.NoteView.Builder.prototype.withDeleteButton = function() {
 /**
  * Specify the controller object to handle click events.
  * @param {networkStickies.NoteController} controller the object with methods to
- *     handle click events.
+ *     handle click events. It needs to be passed the ID of the note.
  * @return {networkStickies.NoteView.Builder} the builder for chaining.
  * @const
  */
 networkStickies.NoteView.Builder.prototype.clicksHandledBy =
     function(controller) {
+  /** @const */ var identifier = this.identifier;
   this.editButton.bind('click', function(event) {
-    controller.onEditButtonClicked();
+    controller.onEditButtonClicked(identifier);
   });
   this.deleteButton.bind('click', function(event) {
-    controller.onDeleteButtonClicked();
+    controller.onDeleteButtonClicked(identifier);
   });
   return this;
 };
