@@ -7,10 +7,10 @@ $(function() {
   /** @const */ var secondCoordinates = {top: 170, left: 270};
 
   /** @const */ var firstView = networkStickies.NoteView.of(
-        first.body(), firstCoordinates, controller);
+        first, firstCoordinates, controller);
 
   /** @const */ var secondView = networkStickies.NoteView.of(
-        second.body(), secondCoordinates, controller);
+        second, secondCoordinates, controller);
 
   /** @const */ var parent = $('section');
   firstView.attachTo(parent);
