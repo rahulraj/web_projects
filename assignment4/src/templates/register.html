@@ -1,14 +1,16 @@
-{% extends layout.html %}
+{% extends "layout.html" %}
 {% block title_content %}Register{% endblock %}
 {% block body_content %}
-  <form action="{{ url_for('register') }}" method="post">
+  <form action="" method="post">
     <label for="username">Username</label>
-    <input type="text" name="username" value="username">
+    <input type="text" name="username" value="">
 
     <label for="password">Password</label>
-    <input type="password" name="password" value="password">
+    <input type="password" name="password" value="">
 
     <label for="confirmPassword">Confirm Password</label>
-    <input type="password" name="confirmPassword" value="confirmPassword">
+    <input type="password" name="confirmPassword" value="">
+
+    <input type="submit" name="submit" value="Log In">
   </form>
 {% endblock %}
