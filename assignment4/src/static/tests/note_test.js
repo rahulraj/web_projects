@@ -15,3 +15,9 @@ NoteTest.prototype.testUpdate = function() {
   assertEquals("And this.note should be unchanged",
              oldBody, this.note.body());
 };
+
+NoteTest.prototype.testUniqueIds = function() {
+  /** @const */ var first = networkStickies.Note.createNote('first');
+  /** @const */ var second = networkStickies.Note.createNote('second');
+  assertFalse(first.identifier() === second.identifier());
+};

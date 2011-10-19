@@ -46,14 +46,15 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
  * @const
  */
 networkStickies.NoteView.prototype.clicksHandledBy = function(controller) {
+  /** @const */ var identifier = this.identifier;
   this.editButton.bind('click', function(event) {
-    controller.onEditButtonClicked(this.identifier);
+    controller.onEditButtonClicked(identifier);
   });
   this.enterButton.bind('click', function(event) {
-    controller.onEnterButtonClicked(this.identifier);
+    controller.onEnterButtonClicked(identifier);
   });
   this.deleteButton.bind('click', function(event) {
-    controller.onDeleteButtonClicked(this.identifier);
+    controller.onDeleteButtonClicked(identifier);
   });
 };
 
@@ -79,7 +80,7 @@ networkStickies.NoteView.prototype.displayMode = function(bodyText) {
 
 
 networkStickies.NoteView.prototype.editTextAreaText = function() {
-  return this.editTextArea.html();
+  return this.editTextArea.val();
 };
 
 networkStickies.NoteView.prototype.updateBody = function(newBody) {
