@@ -24,7 +24,7 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
 
 /**
  * Factory function to create a view given a note.
- * @param {networkStickies.Note} note the note being viewed.
+ * @param {string} noteBody the body of the note being viewed.
  * @param {{top: number, left: number}} coordinates an object containing
  *     coordinates for the Note. This format is the same one jQuery's
  *     offset function uses.
@@ -33,10 +33,10 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
  * @return {networkStickies.NoteView} the newly created view.
  * @const
  */
-networkStickies.NoteView.of = function(note, coordinates, controller) {
+networkStickies.NoteView.of = function(noteBody, coordinates, controller) {
   return new networkStickies.NoteView.Builder().
       offsetBy(coordinates).
-      body(note.body()).
+      body(noteBody).
       withEditButton().
       withDeleteButton().
       clicksHandledBy(controller).
