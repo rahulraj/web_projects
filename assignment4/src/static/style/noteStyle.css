@@ -1,0 +1,19 @@
+body {
+  margin: 0 auto;
+  background-color: #99FFFF;
+}
+header, nav, article, footer, address {
+  display:block;
+}
+.note {
+  background-color: #FFFF33;
+  width: 150px;
+  height: 100px;
+
+  border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-border-radius: 8px;
+
+  padding-top: 5px;
+  padding-left: 5px;
+}

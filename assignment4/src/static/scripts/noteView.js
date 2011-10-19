@@ -41,6 +41,7 @@ networkStickies.NoteView.of = function(note, coordinates, controller) {
       withDeleteButton().
       clicksHandledBy(controller).
       draggable().
+      resizable().
       build();
 };
 
@@ -136,6 +137,10 @@ networkStickies.NoteView.Builder.prototype.draggable = function() {
   return this;
 };
 
+networkStickies.NoteView.Builder.prototype.resizable = function() {
+  this.noteElement.resizable();
+  return this;
+};
 
 /**
  * Build the NoteView.
