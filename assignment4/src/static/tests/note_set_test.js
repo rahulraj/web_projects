@@ -26,3 +26,26 @@ NoteSetTest.prototype.testFindNoteById = function() {
   /** @const */ var notReal = this.noteSet.findNoteById(324).getOrElse(null);
   assertNull(notReal);
 };
+
+NoteSetTest.prototype.testEditNote = function() {
+  /** @const */ var nextSet = this.noteSet.editNoteWithId(
+      1, 'Edited first note');
+
+  nextSetFirst = nextSet.findNoteById(1).getOrElse(null);
+  assertEquals(nextSetFirst.body(), 'Edited first note');
+
+  oldFirst = this.noteSet.findNoteById(1).getOrElse(null);
+  assertEquals('The old note set should be unchanged',
+               oldFirst.body(), 'First note');
+};
+
+NoteSetTest.prototype.testDeleteNote = function() {
+  /** @const */ var nextSet = this.noteSet.deleteNoteWithId(1);
+
+  nextSetFirst = nextSet.findNoteById(1).getOrElse(null);
+  assertNull(nextSetFirst);
+
+  oldFirst = this.noteSet.findNoteById(1).getOrElse(null);
+  assertEquals('The old note set should be unchanged',
+               oldFirst.body(), 'First note');
+};
