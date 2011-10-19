@@ -1,16 +1,46 @@
 NoteViewTest = TestCase('NoteViewTest');
 
+NoteViewTest.MockController = function(correctId) {
+  /** @const */ this.correctId = correctId;
+  this.editClicked = false;
+  this.deleteClicked = false;
+};
+
+NoteViewTest.MockController.prototype.onEditButtonClicked = function(id) {
+  assertEquals(this.correctId, id);
+  this.editClicked = true;
+};
+
+NoteViewTest.MockController.prototype.onDeleteButtonClicked = function(id) {
+  assertEquals(this.correctId, id);
+  this.deleteClicked = true;
+};
+
 NoteViewTest.prototype.setUp = function() {
-  /** @const */ this.note = new networkStickies.Note(1, 'First note');
-  /** @const */ this.noteView = new networkStickies.NoteView.Builder().
+  /** @const */ this.noteId = 1;
+  /** @const */ this.noteBody = 'First note';
+  /** @const */ this.note = new networkStickies.Note(this.noteId,this.noteBody);
+  /** @const */ this.controller = new NoteViewTest.MockController(this.noteId);
+
+  /** @const */ this.noteViewBuilder = new networkStickies.NoteView.Builder().
     viewing(this.note).
     withEditButton().
     withDeleteButton().
+    clicksHandledBy(this.controller).
     draggable().
-    resizable().build();
+    resizable();
+  /** @const */ this.noteView = this.noteViewBuilder.build();
 };
 
 NoteViewTest.prototype.testBodyContainsNotesBody = function() {
   /** @const */ var body = this.noteView.body();
-  assertEquals(body, 'First note');
+  assertEquals(this.noteBody, body);
+};
+
+NoteViewTest.prototype.testClicksNotifyController = function() {
+  this.noteViewBuilder.editButton.click();
+  assertTrue(this.controller.editClicked);
+
+  this.noteViewBuilder.deleteButton.click();
+  assertTrue(this.controller.deleteClicked);
 };
