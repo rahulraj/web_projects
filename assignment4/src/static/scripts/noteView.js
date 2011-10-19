@@ -39,6 +39,25 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
 };
 
 
+/**
+ * Specify the controller object to handle click events.
+ * @param {networkStickies.NoteController} controller the object with methods to
+ *     handle click events. It needs to be passed the ID of the note.
+ * @const
+ */
+networkStickies.NoteView.prototype.clicksHandledBy = function(controller) {
+  this.editButton.bind('click', function(event) {
+    controller.onEditButtonClicked(this.identifier);
+  });
+  this.enterButton.bind('click', function(event) {
+    controller.onEnterButtonClicked(this.identifier);
+  });
+  this.deleteButton.bind('click', function(event) {
+    controller.onDeleteButtonClicked(this.identifier);
+  });
+};
+
+
 networkStickies.NoteView.prototype.editMode = function() {
   this.bodyElement.hide();
   this.editButton.hide();
@@ -107,12 +126,10 @@ networkStickies.NoteView.prototype.coordinates = function() {
  * @param {{top: number, left: number}} coordinates an object containing
  *     coordinates for the Note. This format is the same one jQuery's
  *     offset function uses.
- * @param {networkStickies.NoteController} controller the controller handling
- *     on click events.
  * @return {networkStickies.NoteView} the newly created view.
  * @const
  */
-networkStickies.NoteView.of = function(note, coordinates, controller) {
+networkStickies.NoteView.of = function(note, coordinates) {
   return new networkStickies.NoteView.Builder().
       viewing(note).
       offsetBy(coordinates).
@@ -120,7 +137,6 @@ networkStickies.NoteView.of = function(note, coordinates, controller) {
       withDeleteButton().
       withEnterButton().
       withTextArea().
-      clicksHandledBy(controller).
       draggable().
       resizable().
       build();
@@ -216,28 +232,6 @@ networkStickies.NoteView.Builder.prototype.withTextArea = function() {
   this.editTextArea = $('<textarea>');
   this.editTextArea.hide();
   this.noteElement.append(this.editTextArea);
-  return this;
-};
-
-/**
- * Specify the controller object to handle click events.
- * @param {networkStickies.NoteController} controller the object with methods to
- *     handle click events. It needs to be passed the ID of the note.
- * @return {networkStickies.NoteView.Builder} the builder for chaining.
- * @const
- */
-networkStickies.NoteView.Builder.prototype.clicksHandledBy =
-    function(controller) {
-  if (!this.identifier) {
-    throw new Error('Tried to handle clicks without an identifier'); 
-  }
-  var identifier = this.identifier;
-  this.editButton.bind('click', function(event) {
-    controller.onEditButtonClicked(identifier);
-  });
-  this.deleteButton.bind('click', function(event) {
-    controller.onDeleteButtonClicked(identifier);
-  });
   return this;
 };
 

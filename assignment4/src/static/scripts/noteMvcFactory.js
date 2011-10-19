@@ -1,20 +1,37 @@
+networkStickies.NoteMvcFactory = {};
+
+
 /**
  * Given a NoteSet, wire up the application to display them.
- * @param {Object.<Note, {top: number, left: number}} jsonNoteSet a JSON object
- *     from the server mapping Notes to their coordinates.
+ * @param {Object.<networkStickies.Note, {top: number, left: number}>} 
+ *     jsonNoteSet a JSON object from the server mapping Notes to their 
+ *     coordinates.
  * @param {jQueryObject} parentElement the element to attach views to.
+ * @const
  */
 networkStickies.NoteMvcFactory.createMvc =
     function(jsonNoteSet, parentElement) {
-  /** @const */ var notes = _.keys(jsonNoteSet);
-  /** @const */ var views = _(notes).map(function(note) {
-    return networkStickies.NoteView.of(note, noteSet[note]);
+  // TEst data, TODO hook up w/ python
+  /** @const */ var first = networkStickies.Note.createNote('This is a first note');
+  /** @const */ var second = networkStickies.Note.createNote('This is another note');
+
+  /** @const */ var firstCoordinates = {top: 50, left: 50};
+  /** @const */ var secondCoordinates = {top: 170, left: 270};
+
+  ///** @const */ var notes = _.keys(jsonNoteSet);
+  /** @const */ var notes = [first, second]
+  /** @const */ var coordinates = [firstCoordinates, secondCoordinates];
+  /** @const */ var notesAndCoords = _.zip(notes, coordinates);
+  /** @const */ var views = _(notesAndCoords).map(function(pair) {
+    /** @const */ var note = pair[0];
+    /** @const */ var coord = pair[1];
+    return networkStickies.NoteView.of(note, coord);
   });
   /** @const */ var noteSet = new networkStickies.NoteSet(notes);
-  /** @const */ var model = new networkStickies.NoteModel(NoteSet, views);
+  /** @const */ var model = new networkStickies.NoteModel(noteSet, views);
   /** @const */ var controllers = _(views).map(function(view) {
-    /** @const */ var controller = new networkStickies.Controller(
-        noteModel, view);
+    /** @const */ var controller = new networkStickies.NoteController(
+        model, view);
     view.clicksHandledBy(controller);
     return controller;
   });

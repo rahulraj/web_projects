@@ -12,6 +12,7 @@ java -jar /home/rahulraj/dls/closure-compiler/compiler.jar \
   --js=observable.js --js=observer.js \
   --js=noteSet.js --js=noteModel.js \
   --js=noteController.js --js=noteView.js \
+  --js=noteMvcFactory.js \
   --js=main.js \
   --externs=externs.js --warning_level=VERBOSE \
   --compilation_level=SIMPLE_OPTIMIZATIONS \

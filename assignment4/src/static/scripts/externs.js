@@ -71,3 +71,4 @@ _.each = function(arg1, arg2) {};
 _.map = function(arg1, arg2) {};
 _.range = function(arg1, arg2) {};
 _.zip = function(arg1, arg2) {};
+_.keys = function(arg) {};
