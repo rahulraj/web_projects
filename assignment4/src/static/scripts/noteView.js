@@ -40,6 +40,7 @@ networkStickies.NoteView.of = function(note, coordinates, controller) {
       withEditButton().
       withDeleteButton().
       clicksHandledBy(controller).
+      draggable().
       build();
 };
 
@@ -122,6 +123,12 @@ networkStickies.NoteView.Builder.prototype.clicksHandledBy =
   this.deleteButton.bind('click', function(event) {
     controller.onDeleteButtonClicked();
   });
+  return this;
+};
+
+
+networkStickies.NoteView.Builder.prototype.draggable = function() {
+  this.noteElement.draggable();
   return this;
 };
 
