@@ -43,6 +43,7 @@ networkStickies.Note.prototype.updateBody = function(newBody) {
 
 
 networkStickies.Note.createNoteGenerator = function() {
+  // TODO Improve this method. Dates don't work.
   var id = 0;
   return function(body) {
     id++;

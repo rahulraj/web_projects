@@ -42,4 +42,20 @@ networkStickies.NoteMvcFactory.createMvc =
   });
 
   // make an add notes button and its click event
+  /** @const */ var addNoteButton = $('<input>',
+      {type: 'button', value: 'Add a New Note'});
+  addNoteButton.bind('click', function(event) {
+    /** @const */ var newNote = networkStickies.Note.createNote('New Note');
+    /** @const */ var coordinates = {top: 50, left: 50};
+    /** @const */ var newView = networkStickies.NoteView.of(
+        newNote, coordinates);
+    /** @const */ var controller = new networkStickies.NoteController(
+        model, newView);
+    newView.clicksHandledBy(controller);
+    newView.attachTo(parentElement);
+    model.addObserver(newView);
+    // By updating, the model will notify newView to populate itself.
+    model.addNote(newNote);
+  });
+  parentElement.after(addNoteButton);
 };

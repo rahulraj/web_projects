@@ -36,4 +36,11 @@ networkStickies.NoteModel.prototype.deleteNoteWithId = function(identifier) {
   this.notifyObservers();
 };
 
+networkStickies.NoteModel.prototype.addObserver = function(observer) {
+  this.observers.push(observer);
+};
 
+networkStickies.NoteModel.prototype.addNote = function(note) {
+  this.noteSet = this.noteSet.addNote(note);
+  this.notifyObservers();
+};

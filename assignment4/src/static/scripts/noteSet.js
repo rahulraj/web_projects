@@ -66,6 +66,10 @@ networkStickies.NoteSet = function(notes) {
   };
 
   this.addNote = function(note) {
-  
+    /** @const */ var newNotes = _(notesCopy).map(function(note) {
+      return note; 
+    });
+    newNotes.push(note);
+    return new networkStickies.NoteSet(newNotes);
   };
 };
