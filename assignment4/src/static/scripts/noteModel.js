@@ -20,6 +20,9 @@ networkStickies.NoteModel.prototype.notifyObservers = function() {
   });
 };
 
+networkStickies.NoteModel.prototype.findNoteById = function(identifier) {
+  return this.noteSet.findNoteById(identifier);
+};
 
 networkStickies.NoteModel.prototype.editNoteWithId =
     function(identifier, newBody) {
@@ -32,3 +35,5 @@ networkStickies.NoteModel.prototype.deleteNoteWithId = function(identifier) {
   this.noteSet = this.noteSet.deleteNoteWithId(identifier);
   this.notifyObservers();
 };
+
+

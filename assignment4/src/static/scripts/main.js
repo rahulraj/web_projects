@@ -1,6 +1,9 @@
 $(function() {
   /** @const */ var first = networkStickies.Note.createNote('This is a first note');
   /** @const */ var second = networkStickies.Note.createNote('This is another note');
+
+  /** @const */ var set = new networkStickies.NoteSet([first, second]);
+
   /** @const */ var controller = new networkStickies.NoteController();
 
   /** @const */ var firstCoordinates = {top: 50, left: 50};

@@ -8,21 +8,33 @@
 var jQueryObject = function() {};
 jQueryObject.prototype.append = function(arg) {};
 jQueryObject.prototype.bind = function(arg1, arg2) {};
-jQueryObject.prototype.offset = function(arg) {};
+/**
+ * @param {*=} opt_arg
+ */
+jQueryObject.prototype.offset = function(opt_arg) {};
 jQueryObject.prototype.live = function(arg1, arg2) {};
-jQueryObject.prototype.val = function() {};
 
+/**
+ * @param {*=} opt_arg
+ */
+jQueryObject.prototype.val = function(opt_arg) {};
 
 /**
  * @param {*} arg1
  * @param {*=} opt_arg2
  */
 jQueryObject.prototype.attr = function(arg1, opt_arg2) {};
-jQueryObject.prototype.html = function(arg1) {};
-jQueryObject.prototype.html = function(arg1, arg2) {};
+/**
+ * @param {*=} opt_arg
+ */
+jQueryObject.prototype.html = function(opt_arg) {};
 jQueryObject.prototype.filter = function(arg1) {};
 jQueryObject.prototype.click = function(arg1) {};
 jQueryObject.prototype.draggable = function() {};
+jQueryObject.prototype.resizable = function() {};
+jQueryObject.prototype.show = function() {};
+jQueryObject.prototype.hide = function() {};
+jQueryObject.prototype.remove = function() {};
 
 
 /**
@@ -46,6 +58,7 @@ Underscore.prototype.map = function(arg) {};
 Underscore.prototype.reduce = function(arg1, arg2) {};
 Underscore.prototype.filter = function(arg) {};
 Underscore.prototype.reject = function(arg) {};
+Underscore.prototype.detect = function(arg) {};
 
 
 /**
