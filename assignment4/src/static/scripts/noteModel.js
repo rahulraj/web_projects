@@ -2,7 +2,7 @@
  * Top-level model class for Network Stickies.
  * @param {networkStickies.NoteSet} noteSet the initial note set.
  *     This can change as the user sends input to the application.
- * @param {networkStickies.Observer} observers the observers watching 
+ * @param {networkStickies.Observer} observers the observers watching
  *     this model.
  * @constructor
  * @implements {networkStickies.Observable}

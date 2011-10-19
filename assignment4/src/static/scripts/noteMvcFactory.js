@@ -3,8 +3,8 @@ networkStickies.NoteMvcFactory = {};
 
 /**
  * Given a NoteSet, wire up the application to display them.
- * @param {Object.<networkStickies.Note, {top: number, left: number}>} 
- *     jsonNoteSet a JSON object from the server mapping Notes to their 
+ * @param {Object.<networkStickies.Note, {top: number, left: number}>}
+ *     jsonNoteSet a JSON object from the server mapping Notes to their
  *     coordinates.
  * @param {jQueryObject} parentElement the element to attach views to.
  * @const
@@ -19,7 +19,7 @@ networkStickies.NoteMvcFactory.createMvc =
   /** @const */ var secondCoordinates = {top: 170, left: 270};
 
   ///** @const */ var notes = _.keys(jsonNoteSet);
-  /** @const */ var notes = [first, second]
+  /** @const */ var notes = [first, second];
   /** @const */ var coordinates = [firstCoordinates, secondCoordinates];
   /** @const */ var notesAndCoords = _.zip(notes, coordinates);
   /** @const */ var views = _(notesAndCoords).map(function(pair) {

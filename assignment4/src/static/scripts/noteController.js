@@ -14,6 +14,7 @@ networkStickies.NoteController = function(noteModel, noteView) {
   /** @const */ this.noteView = noteView;
 };
 
+
 /**
  * Swap out the NoteView with a NoteEditor that allows users to edit
  * that note, then click Confirm to switch back to a NoteView.

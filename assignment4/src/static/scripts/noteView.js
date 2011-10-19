@@ -10,7 +10,7 @@
  * @param {jQueryObject} editButton the edit button.
  * @param {jQueryObject} deleteButton the delete button.
  * @param {jQueryObject} enterButton the enter button for editing
- *     (hidden when not in edit mode)
+ *     (hidden when not in edit mode).
  * @param {jQueryObject} editTextArea the area to edit the note.
  * @param {number} identifier the ID for the note this is viewing.
  * @constructor
@@ -87,6 +87,7 @@ networkStickies.NoteView.prototype.updateBody = function(newBody) {
   this.bodyElement.html(newBody);
 };
 
+
 /**
  * Get the text contained within this.noteElement representing the
  * note that the user made.
@@ -151,10 +152,10 @@ networkStickies.NoteView.of = function(note, coordinates) {
  * @const
  */
 networkStickies.NoteView.Builder = function() {
-  /** 
+  /**
    * @type {jQueryObject}
-   * @const 
-   */ 
+   * @const
+   */
   this.noteElement = $('<div>', {'class': 'note'});
   this.bodyElement = null;
   this.editButton = null;
@@ -247,6 +248,7 @@ networkStickies.NoteView.Builder.prototype.resizable = function() {
   return this;
 };
 
+
 /**
  * Build the NoteView.
  * @return {networkStickies.NoteView} the newly created view.
@@ -257,7 +259,7 @@ networkStickies.NoteView.Builder.prototype.build = function() {
       !this.enterButton || !this.editTextArea || !this.identifier) {
     throw new Error('Uninitialized parts of the view');
   }
-  return new networkStickies.NoteView(this.noteElement, this.bodyElement, 
+  return new networkStickies.NoteView(this.noteElement, this.bodyElement,
       this.editButton, this.deleteButton, this.enterButton, this.editTextArea,
       this.identifier);
 };

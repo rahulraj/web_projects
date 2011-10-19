@@ -47,7 +47,7 @@ networkStickies.Note.createNoteGenerator = function() {
   var id = 0;
   return function(body) {
     id++;
-    return new  networkStickies.Note(id, body);
+    return new networkStickies.Note(id, body);
   };
 };
 

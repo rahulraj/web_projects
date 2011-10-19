@@ -25,12 +25,12 @@ networkStickies.NoteSet = function(notes) {
    */
   this.findNoteById = function(identifier) {
     /** @const */ var result = _(notesCopy).detect(function(note) {
-      return note.identifier() === identifier; 
+      return note.identifier() === identifier;
     });
     if (result) {
       return new networkStickies.utils.Some(result);
     } else {
-      return networkStickies.utils.None.instance; 
+      return networkStickies.utils.None.instance;
     }
   };
 
@@ -67,7 +67,7 @@ networkStickies.NoteSet = function(notes) {
 
   this.addNote = function(note) {
     /** @const */ var newNotes = _(notesCopy).map(function(note) {
-      return note; 
+      return note;
     });
     newNotes.push(note);
     return new networkStickies.NoteSet(newNotes);

@@ -8,22 +8,28 @@
 var jQueryObject = function() {};
 jQueryObject.prototype.append = function(arg) {};
 jQueryObject.prototype.bind = function(arg1, arg2) {};
+
+
 /**
  * @param {*=} opt_arg
  */
 jQueryObject.prototype.offset = function(opt_arg) {};
 jQueryObject.prototype.live = function(arg1, arg2) {};
 
+
 /**
  * @param {*=} opt_arg
  */
 jQueryObject.prototype.val = function(opt_arg) {};
+
 
 /**
  * @param {*} arg1
  * @param {*=} opt_arg2
  */
 jQueryObject.prototype.attr = function(arg1, opt_arg2) {};
+
+
 /**
  * @param {*=} opt_arg
  */
