@@ -40,4 +40,6 @@ networkStickies.NoteMvcFactory.createMvc =
   _(views).each(function(view) {
     view.attachTo(parentElement);
   });
+
+  // make an add notes button and its click event
 };

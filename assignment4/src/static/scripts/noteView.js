@@ -102,7 +102,7 @@ networkStickies.NoteView.prototype.onModelChange = function(newNoteSet) {
   /** @const */ var note = newNoteSet.findNoteById(this.identifier);
   if (note === networkStickies.utils.None.instance) {
     // this note was removed, remove the view too.
-    this.bodyElement.remove();
+    this.noteElement.remove();
   } else {
     /** @const */ var noteElement = note.getOrElse(null);
     /** @const */ var body = noteElement.body();

@@ -64,4 +64,8 @@ networkStickies.NoteSet = function(notes) {
     });
     return new networkStickies.NoteSet(newNotes);
   };
+
+  this.addNote = function(note) {
+  
+  };
 };
