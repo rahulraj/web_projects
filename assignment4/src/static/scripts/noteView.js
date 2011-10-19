@@ -52,7 +52,11 @@ networkStickies.NoteView.of = function(note, coordinates, controller) {
  * @const
  */
 networkStickies.NoteView.Builder = function() {
-  /** @const */ this.noteElement = $('<div>', {'class': 'note'});
+  /** 
+   * @type {jQueryObject}
+   * @const 
+   */ 
+  this.noteElement = $('<div>', {'class': 'note'});
   this.editButton = null;
   this.deleteButton = null;
 };

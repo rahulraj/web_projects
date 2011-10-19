@@ -22,6 +22,7 @@ jQueryObject.prototype.html = function(arg1) {};
 jQueryObject.prototype.html = function(arg1, arg2) {};
 jQueryObject.prototype.filter = function(arg1) {};
 jQueryObject.prototype.click = function(arg1) {};
+jQueryObject.prototype.draggable = function() {};
 
 
 /**
