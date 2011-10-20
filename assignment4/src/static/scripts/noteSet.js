@@ -83,4 +83,30 @@ networkStickies.NoteSet = function(notes) {
     newNotes.push(note);
     return new networkStickies.NoteSet(newNotes);
   };
+
+  this.asJson = function() {
+    /** @const */ var noteArray = _(notesCopy).map(function(note) {
+      return {
+        identifier: note.identifier(),
+        body: note.body(),
+        coordinates: note.coordinates()
+      };
+    });
+    /** @const */ var jsonSet = {notes: noteArray};
+    return JSON.stringify(jsonSet);
+  };
+};
+
+/**
+ * Named constructor that reads in a note set from a JSON string.
+ * @param {string} jsonString a string representing notes.
+ */
+networkStickies.NoteSet.readJson = function(jsonString) {
+  /** @const */ var jsonObject = JSON.parse(jsonString);
+  /** @const */ var notesArray = jsonObject.notes;
+  /** @const */ var notes = _(notesArray).map(function(noteObjectLiteral) {
+    return new networkStickies.Note(noteObjectLiteral.identifier,
+        noteObjectLiteral.body, noteObjectLiteral.coordinates);
+  });
+  return new networkStickies.NoteSet(notes);
 };
