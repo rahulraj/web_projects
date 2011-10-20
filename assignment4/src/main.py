@@ -18,7 +18,16 @@ def login():
   if request.method == 'GET':
     return render_template('login.html')
   else:
-    return "You've posted, but this feature isn't implemented yet"
+    username = request.form['username']
+    password = request.form['password']
+    with shelve.open('users') as user_shelf:
+      with shelve.open('user_salts') as salt_shelf:
+        users = Users(user_shelf, salt_shelf)
+        if users.login_is_valid(username, password):
+          return redirect(url_for('notes'))
+    flash('Login failed. Maybe you made a typo?')
+    return render_template('login.html')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -32,11 +41,12 @@ def register():
       flash("Your password and confirmation didn't match up.")
       return render_template('register.html')
     with shelve.open('users') as user_shelf:
-      users = Users(user_shelf)
-      if users.has_user(username):
-        flash("Username %s has already been taken." % (username))
-        return render_template('register.html')
-      users.register_user(username, password)
+      with shelve.open('user_salts') as salt_shelf:
+        users = Users(user_shelf, salt_shelf)
+        if users.has_user(username):
+          flash("Username %s has already been taken." % (username))
+          return render_template('register.html')
+        users.register_user(username, password)
     return redirect(url_for('notes'))
 
 @app.route('/notes')
