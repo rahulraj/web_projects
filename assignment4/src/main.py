@@ -27,8 +27,7 @@ def register():
 
 @app.route('/notes')
 def notes():
-  
-  pass
+  return render_template('notes.html')
 
 if __name__ == '__main__':
   app.run(debug=True)

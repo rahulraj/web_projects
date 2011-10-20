@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% block title_content %}
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <link rel="stylesheet" 
+      href="{{ url_for('static', filename='style/noteStyle.css')}}"></link>
+  <link rel="stylesheet" href="{{ url_for('static',
+      filename='lib/jquery-ui/css/ui-lightness/jquery-ui-1.8.16.custom.css')}}">
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='lib/jquery-1.6.4.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='lib/underscore.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', 
+      filename='lib/jquery-ui/js/jquery-1.6.2.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='lib/jquery-ui/js/jquery-ui-1.8.16.custom.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/networkStickies.js') }}"></script>
+  <script type="text/javascript" src="{{url_for('static',
+      filename='scripts/utils/utils.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/utils/option.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/note.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/observable.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/observer.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/noteSet.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/noteModel.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/noteController.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/noteView.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/noteMvcFactory.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/main.js') }}"></script>
+  <title>Your Notes</title>
+{% endblock %}
+{% block body_content %}
+  <section>
+  <!-- Populated by JavaScript-->
+  </section>
+{% endblock %}
