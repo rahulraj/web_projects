@@ -9,5 +9,17 @@
     <input type="password" name="password" value="">
 
     <input type="submit" name="submit" value="Log In">
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashedMessages"> 
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
   </form>
+
+  <a href="{{ url_for('register') }}">Register</a>
 {% endblock %}

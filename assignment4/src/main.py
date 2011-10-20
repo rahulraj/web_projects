@@ -1,7 +1,8 @@
 import os
 import shelve
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, session
 from users import Users, confirmed_password_valid
+from closing import closing
 app = Flask(__name__)
 
 def zwrite(msg):
@@ -20,9 +21,10 @@ def login():
   else:
     username = request.form['username']
     password = request.form['password']
-    with shelve.open('users') as user_shelf:
+    with closing(shelve.open('users')) as user_shelf:
       users = Users(user_shelf)
       if users.login_is_valid(username, password):
+        session['username'] = username
         return redirect(url_for('notes'))
     flash('Login failed. Maybe you made a typo?')
     return render_template('login.html')
@@ -39,21 +41,24 @@ def register():
     if not confirmed_password_valid(password, confirmation):
       flash("Your password and confirmation didn't match up.")
       return render_template('register.html')
-    with shelve.open('users') as user_shelf:
-      with shelve.open('user_salts') as salt_shelf:
-        users = Users(user_shelf, salt_shelf)
-        if users.has_user(username):
-          flash("Username %s has already been taken." % (username))
-          return render_template('register.html')
-        users.register_user(username, password)
+    with closing(shelve.open('users')) as user_shelf:
+      users = Users(user_shelf)
+      if users.has_user(username):
+        flash("Username %s has already been taken." % (username))
+        return render_template('register.html')
+      users.register_user(username, password)
     return redirect(url_for('notes'))
 
 @app.route('/notes')
 def notes():
-  return render_template('notes.html')
+  if 'username' not in session:
+    return redirect(url_for('login'))
+  return render_template('notes.html', username=session['username'])
+
+
+app.secret_key = \
+    '\x1e\xa7\xfafD\xc4A\x15\xdf\xf4v\x17\x97\x19\xc2m\xfew\xfd\xbfip+\x9f'
 
 if __name__ == '__main__':
   app.run(debug=True)
 
-app.secret_key = \
-    '\x1e\xa7\xfafD\xc4A\x15\xdf\xf4v\x17\x97\x19\xc2m\xfew\xfd\xbfip+\x9f'

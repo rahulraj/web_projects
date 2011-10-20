@@ -18,14 +18,14 @@ class Users(object):
     assign_injectables(self, locals())
 
   def has_user(self, username):
-    return username in self.user_shelf
+    return str(username) in self.user_shelf
 
   def register_user(self, username, password):
     salt = generate_salt(salt_length)
     to_hash = combine_password_with_salt(password, salt)
     hashed = do_hash(to_hash)
     user_data = UserData(hashed, salt)
-    self.user_shelf[username] = user_data
+    self.user_shelf[str(username)] = user_data
 
   def login_is_valid(self, username, password):
     """
@@ -38,7 +38,7 @@ class Users(object):
     """
     if not self.has_user(username):
       return False
-    user_data = self.user_shelf[username]
+    user_data = self.user_shelf[str(username)]
     users_salt = user_data.get_salt()
     to_hash = combine_password_with_salt(password, users_salt)
     proposed_hash = do_hash(to_hash)
