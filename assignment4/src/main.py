@@ -55,6 +55,11 @@ def notes():
     return redirect(url_for('login'))
   return render_template('notes.html', username=session['username'])
 
+@app.route('/logout')
+def logout():
+  session.pop('username', None)
+  return redirect(url_for('login'))
+
 
 app.secret_key = \
     '\x1e\xa7\xfafD\xc4A\x15\xdf\xf4v\x17\x97\x19\xc2m\xfew\xfd\xbfip+\x9f'
