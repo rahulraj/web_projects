@@ -4,7 +4,7 @@ from users import Users, confirmed_password_valid
 class UsersTest(unittest.TestCase):
   def setUp(self):
     """ Using dicts instead of Shelve objects to speed up testing. """
-    self.users = Users({}, {})
+    self.users = Users({})
     self.username = 'test_user'
     self.password = 'test_password'
 

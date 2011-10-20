@@ -1,22 +1,21 @@
 import hashlib
 import string
 from random import randint
+from inject import assign_injectables
+from getters import with_getters_for
 
 salt_length = 10
 
 class Users(object):
-  def __init__(self, user_shelf, salt_shelf):
+  def __init__(self, user_shelf):
     """
     Create a Users object.
 
     Args:
       user_shelf a Shelve object obtained from opening the 'users' file.
           Maps usernames to their hashed passwords.
-      salt_shelf a Shelve object from the 'salts' file, maps usernames to
-          the salts used to hash their passwords.
     """
-    self.user_shelf = user_shelf
-    self.salt_shelf = salt_shelf
+    assign_injectables(self, locals())
 
   def has_user(self, username):
     return username in self.user_shelf
@@ -25,8 +24,8 @@ class Users(object):
     salt = generate_salt(salt_length)
     to_hash = combine_password_with_salt(password, salt)
     hashed = do_hash(to_hash)
-    self.user_shelf[username] = hashed
-    self.salt_shelf[username] = salt
+    user_data = UserData(hashed, salt)
+    self.user_shelf[username] = user_data
 
   def login_is_valid(self, username, password):
     """
@@ -39,11 +38,18 @@ class Users(object):
     """
     if not self.has_user(username):
       return False
-    users_salt = self.salt_shelf[username]
+    user_data = self.user_shelf[username]
+    users_salt = user_data.get_salt()
     to_hash = combine_password_with_salt(password, users_salt)
     proposed_hash = do_hash(to_hash)
-    real_hash = self.user_shelf[username]
+    real_hash = user_data.get_hashed_password()
     return proposed_hash == real_hash
+
+class UserData(object):
+  """ Class defining the values in the users shelf """
+  def __init__(self, hashed_password, salt):
+    assign_injectables(self, locals())
+with_getters_for(UserData, 'hashed_password', 'salt')
 
 def confirmed_password_valid(password, confirmation):
   return password == confirmation
@@ -52,7 +58,7 @@ def generate_salt(length):
   possible_characters = string.ascii_letters + string.digits
   salt = ""
   for _ in range(0, length):
-    salt += possible_characters[randint(0, len(possible_characters))]
+    salt += possible_characters[randint(0, len(possible_characters) - 1)]
   return salt
 
 def combine_password_with_salt(password, salt):

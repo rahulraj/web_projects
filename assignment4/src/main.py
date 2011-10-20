@@ -21,10 +21,9 @@ def login():
     username = request.form['username']
     password = request.form['password']
     with shelve.open('users') as user_shelf:
-      with shelve.open('user_salts') as salt_shelf:
-        users = Users(user_shelf, salt_shelf)
-        if users.login_is_valid(username, password):
-          return redirect(url_for('notes'))
+      users = Users(user_shelf)
+      if users.login_is_valid(username, password):
+        return redirect(url_for('notes'))
     flash('Login failed. Maybe you made a typo?')
     return render_template('login.html')
 
