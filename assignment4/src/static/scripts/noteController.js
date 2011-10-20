@@ -37,3 +37,8 @@ networkStickies.NoteController.prototype.onDeleteButtonClicked =
     function(identifier) {
   this.noteModel.deleteNoteWithId(identifier);
 };
+
+networkStickies.NoteController.prototype.onNoteMoved =
+    function(identifier, coordinates) {
+  this.noteModel.moveNoteWithId(identifier, coordinates);
+};

@@ -41,6 +41,8 @@ jQueryObject.prototype.resizable = function() {};
 jQueryObject.prototype.show = function() {};
 jQueryObject.prototype.hide = function() {};
 jQueryObject.prototype.remove = function() {};
+jQueryObject.prototype.after = function(arg) {};
+jQueryObject.prototype.before = function(arg) {};
 
 
 /**

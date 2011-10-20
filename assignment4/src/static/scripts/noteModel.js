@@ -1,8 +1,9 @@
 /**
- * Top-level model class for Network Stickies.
+ * Top-level model class for Network Stickies. Provides the mutability
+ * point for the data, and implements an Observable interface.
  * @param {networkStickies.NoteSet} noteSet the initial note set.
  *     This can change as the user sends input to the application.
- * @param {networkStickies.Observer} observers the observers watching
+ * @param {Array.<networkStickies.Observer>} observers the observers watching
  *     this model.
  * @constructor
  * @implements {networkStickies.Observable}
@@ -10,7 +11,7 @@
  */
 networkStickies.NoteModel = function(noteSet, observers) {
   this.noteSet = noteSet;
-  /** @const */ this.observers = observers;
+  this.observers = observers;
 };
 
 networkStickies.NoteModel.prototype.notifyObservers = function() {
@@ -33,6 +34,12 @@ networkStickies.NoteModel.prototype.editNoteWithId =
 
 networkStickies.NoteModel.prototype.deleteNoteWithId = function(identifier) {
   this.noteSet = this.noteSet.deleteNoteWithId(identifier);
+  this.notifyObservers();
+};
+
+networkStickies.NoteModel.prototype.moveNoteWithId =
+    function(identifier, newCoordinates) {
+  this.noteSet = this.noteSet.moveNoteWithId(identifier, newCoordinates);
   this.notifyObservers();
 };
 

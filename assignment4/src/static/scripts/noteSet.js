@@ -52,6 +52,17 @@ networkStickies.NoteSet = function(notes) {
     return new networkStickies.NoteSet(newNotes);
   };
 
+  this.moveNoteWithId = function(identifier, newCoordinates) {
+    /** @const */ var newNotes = _(notesCopy).map(function(note) {
+      if (note.identifier() !== identifier) {
+        return note; 
+      } else {
+        return note.updateCoordinates(newCoordinates);
+      }
+    });
+    return new networkStickies.NoteSet(newNotes);
+  };
+
   /**
    * Delete a note.
    * @param {number} identifier the ID of the note.

@@ -41,11 +41,12 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
 
 /**
  * Specify the controller object to handle click events.
+ * TODO rename
  * @param {networkStickies.NoteController} controller the object with methods to
  *     handle click events. It needs to be passed the ID of the note.
  * @const
  */
-networkStickies.NoteView.prototype.clicksHandledBy = function(controller) {
+networkStickies.NoteView.prototype.changesHandledBy = function(controller) {
   /** @const */ var identifier = this.identifier;
   this.editButton.bind('click', function(event) {
     controller.onEditButtonClicked(identifier);
@@ -55,6 +56,10 @@ networkStickies.NoteView.prototype.clicksHandledBy = function(controller) {
   });
   this.deleteButton.bind('click', function(event) {
     controller.onDeleteButtonClicked(identifier);
+  });
+  /** @const */ var self = this;
+  this.noteElement.bind('dragstop', function(event, ui) {
+    controller.onNoteMoved(identifier, self.coordinates());
   });
 };
 
