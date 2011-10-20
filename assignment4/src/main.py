@@ -1,5 +1,7 @@
 import os
-from flask import Flask, render_template, request
+import shelve
+from flask import Flask, render_template, request, flash, redirect, url_for
+from users import Users, confirmed_password_valid
 app = Flask(__name__)
 
 def zwrite(msg):
@@ -23,7 +25,19 @@ def register():
   if request.method == 'GET':
     return render_template('register.html')
   else:
-    return "You've posted, but not implemented yet"
+    username = request.form['username']
+    password = request.form['password']
+    confirmation = request.form['confirmPassword']
+    if not confirmed_password_valid(password, confirmation):
+      flash("Your password and confirmation didn't match up.")
+      return render_template('register.html')
+    with shelve.open('users') as user_shelf:
+      users = Users(user_shelf)
+      if users.has_user(username):
+        flash("Username %s has already been taken." % (username))
+        return render_template('register.html')
+      users.register_user(username, password)
+    return redirect(url_for('notes'))
 
 @app.route('/notes')
 def notes():
