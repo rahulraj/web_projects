@@ -52,5 +52,5 @@ networkStickies.NoteMvcFactory.createMvc =
     // By updating, the model will notify newView to populate itself.
     model.addNote(newNote);
   });
-  parentElement.before(addNoteButton);
+  $('header').append(addNoteButton);
 };

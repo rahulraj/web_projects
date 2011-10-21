@@ -6,9 +6,6 @@
 
 {% extends 'layout.html' %}
 {% block title_content %}
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-  <link rel="stylesheet" 
-      href="{{ url_for('static', filename='style/noteStyle.css')}}"></link>
   <link rel="stylesheet" href="{{ url_for('static',
       filename='lib/jquery-ui/css/ui-lightness/jquery-ui-1.8.16.custom.css')}}">
   <script type="text/javascript" src="{{ url_for('static',
@@ -52,7 +49,10 @@
   <title>{{ username }}'s Notes</title>
 {% endblock %}
 {% block body_content %}
-  <a href={{ url_for('logout') }}>Log Out</a>
+  <header>
+    <h1>{{ username }}'s Notes</h1>
+    <a href={{ url_for('logout') }}>Log Out</a>
+  </header>
   <section>
     <!-- Populated by JavaScript-->
   </section>

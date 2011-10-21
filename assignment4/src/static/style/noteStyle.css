@@ -5,10 +5,23 @@ body {
 header, nav, article, footer, address {
   display:block;
 }
+header {
+  margin: auto auto;
+  width: 950px;
+  text-align: center;
+}
+h1 {
+  font-family: Arial,Verdana,sans-serif;
+}
+section {
+  position: relative;
+  margin: auto auto;
+  width: 950px;
+}
 .note {
   background-color: #FFFF33;
-  width: 150px;
-  height: 100px;
+  width: 140px;
+  height: 130px;
 
   border-radius: 8px;
   -moz-border-radius: 8px;
@@ -20,4 +33,9 @@ header, nav, article, footer, address {
 
   padding-top: 5px;
   padding-left: 5px;
+}
+.note > p {
+  /* What I really want is to stick the buttons to the bottom of the note */
+  /* This doesn't quite get there. */
+  margin-bottom: 35px;
 }
