@@ -58,7 +58,7 @@ class Users(object):
     if not self.has_user(username):
       raise NoSuchUser
     user_data = self.user_shelf[str(username)]
-    self.user_shelf[username] = user_data.update_stickies(new_stickies_json)
+    self.user_shelf[str(username)] = user_data.update_stickies(new_stickies_json)
 
 class UserData(object):
   """ Class defining the values in the users shelf """

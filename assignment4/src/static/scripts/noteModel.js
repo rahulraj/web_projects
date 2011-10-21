@@ -14,7 +14,10 @@
  */
 networkStickies.NoteModel = function(noteSet, observers) {
   this.noteSet = noteSet;
-  this.observers = observers;
+  // defensive copy
+  this.observers = _(observers).map(function(observer) {
+    return observer; 
+  });
 };
 
 

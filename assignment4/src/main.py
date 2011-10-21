@@ -75,8 +75,9 @@ def notes_storage():
   else:
     with closing(shelve.open('users')) as user_shelf:
       users = Users(user_shelf)
-      raise NotImplementedError
-
+      data = request.form['noteSet']
+      users.save_stickies_for_user(session['username'], data)
+      return 'Post successful'
 
 @app.route('/logout')
 def logout():

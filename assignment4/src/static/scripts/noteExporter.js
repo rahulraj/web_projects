@@ -19,7 +19,8 @@ networkStickies.NoteExporter = function(postUrl) {
  */
 networkStickies.NoteExporter.prototype.onModelChange = function(noteSet) {
   /** @const */ var setAsJson = noteSet.asJson();
-  $.post(this.postUrl, setAsJson, function(data) {
+  /** @const */ var postData = {noteSet: setAsJson};
+  $.post(this.postUrl, postData, function(data) {
     // currently, this is just the equivalent of a "Save" button,
     // so the callback function is a no-op.
   });
