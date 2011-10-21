@@ -49,6 +49,7 @@ def register():
         flash("Username %s has already been taken." % (username))
         return render_template('register.html')
       users.register_user(username, password)
+      session['username'] = username
     return redirect(url_for('notes'))
 
 @app.route('/notes')
