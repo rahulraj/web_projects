@@ -43,6 +43,19 @@ NoteSetTest.prototype.testEditNote = function() {
                oldFirst.body(), 'First note');
 };
 
+NoteSetTest.prototype.testMoveNote = function() {
+  /** @const */ var newCoordinates = {top: 100, left: 150};
+  /** @const */ var nextSet = this.noteSet.moveNoteWithId(1, newCoordinates);
+
+  assertEquals(50,
+      this.noteSet.findNoteById(1).getOrElse(null).coordinates().top);
+  assertEquals(50,
+      this.noteSet.findNoteById(1).getOrElse(null).coordinates().left);
+
+  assertEquals(100, nextSet.findNoteById(1).getOrElse(null).coordinates().top);
+  assertEquals(150, nextSet.findNoteById(1).getOrElse(null).coordinates().left);
+};
+
 NoteSetTest.prototype.testAddNote = function() {
   /** @const */ var note = new networkStickies.Note(
       4, 'Fourth note', this.coordinates);
