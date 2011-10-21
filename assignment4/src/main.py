@@ -1,4 +1,3 @@
-import os
 import shelve
 from flask import Flask, render_template, request, flash, redirect, url_for, session, abort
 from users import Users, confirmed_password_valid
@@ -6,15 +5,6 @@ from closing import closing
 
 app = Flask(__name__)
 users_file = 'users'
-
-def zwrite(msg):
-    """use this for printline debugging"""
-    try:
-        os.system("zwrite -d -c afarrell-dbg -i flask -m '%s'" % msg)
-    except Exception:
-        os.system("zwrite -d -c afarrell-dbg -i flask -m 'ZWRITE ERROR'")
-        os.system("zwrite -d -c afarrell-dbg -i flask -m '%s'" % msg)
-
 
 @app.route('/')
 def index():
