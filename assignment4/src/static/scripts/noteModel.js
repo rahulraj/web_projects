@@ -34,18 +34,6 @@ networkStickies.NoteModel.prototype.notifyObservers = function() {
 
 
 /**
- * Finds a note.
- * @param {number} identifier the ID of the note.
- * @return {networkStickies.utils.Option} an option containing Some(note) if
- *     the note was found, None otherwise.
- * @const
- */
-networkStickies.NoteModel.prototype.findNoteById = function(identifier) {
-  return this.noteSet.findNoteById(identifier);
-};
-
-
-/**
  * Edits a note.
  * @param {number} identifier the ID of the note.
  * @param {string} newBody the new body for the note.

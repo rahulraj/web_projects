@@ -17,22 +17,6 @@ networkStickies.NoteSet = function(notes) {
     return note;
   });
 
-  /**
-   * Retrieve a note.
-   * @param {number} identifier the ID of the note.
-   * @return {networkStickies.utils.Option} a Some containing the Note,
-   *     or None if no note exists.
-   */
-  this.findNoteById = function(identifier) {
-    /** @const */ var result = _(notesCopy).detect(function(note) {
-      return note.identifier() === identifier;
-    });
-    if (result) {
-      return new networkStickies.utils.Some(result);
-    } else {
-      return networkStickies.utils.None.instance;
-    }
-  };
 
   /**
    * Edit a note.
