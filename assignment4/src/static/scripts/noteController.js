@@ -35,7 +35,7 @@ networkStickies.NoteController.prototype.onEditButtonClicked =
  */
 networkStickies.NoteController.prototype.onEnterButtonClicked =
     function(identifier) {
-  /** @const */ var text = escape(this.noteView.editTextAreaText());
+  /** @const */ var text = this.noteView.editTextAreaText();
   this.noteView.displayMode(text);
   this.noteModel.editNoteWithId(identifier, text);
 };
