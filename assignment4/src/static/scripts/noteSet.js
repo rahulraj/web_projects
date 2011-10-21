@@ -53,11 +53,11 @@ networkStickies.NoteSet = function(notes) {
     return new networkStickies.NoteSet(newNotes);
   };
 
-  
+
   /**
    * Update the coordinates of a note.
    * @param {string} identifier the ID of the note.
-   * @param {{left: number, top: number}} newCoordinates the new 
+   * @param {{left: number, top: number}} newCoordinates the new
    *     coordinates of the note.
    * @return {networkStickies.NoteSet} the updated model.
    * @const
