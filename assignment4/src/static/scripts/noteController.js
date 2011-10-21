@@ -18,11 +18,9 @@ networkStickies.NoteController = function(noteModel, noteView) {
 /**
  * Swap out the NoteView with a NoteEditor that allows users to edit
  * that note, then click Confirm to switch back to a NoteView.
- * @param {number} identifier the ID for the note being edited.
  * @const
  */
-networkStickies.NoteController.prototype.onEditButtonClicked =
-    function(identifier) {
+networkStickies.NoteController.prototype.onEditButtonClicked = function() {
   this.noteView.editMode();
 };
 
@@ -30,35 +28,35 @@ networkStickies.NoteController.prototype.onEditButtonClicked =
 /**
  * Action when the Enter button is clicked, signifying that a note
  * body update is complete.
- * @param {number} identifier the ID for the note to update.
+ * @param {networkStickies.Note} noteToEdit the note to edit.
  * @const
  */
 networkStickies.NoteController.prototype.onEnterButtonClicked =
-    function(identifier) {
+    function(noteToEdit) {
   /** @const */ var text = this.noteView.editTextAreaText();
   this.noteView.displayMode(text);
-  this.noteModel.editNoteWithId(identifier, text);
+  this.noteModel.editNoteWithId(noteToEdit, text);
 };
 
 
 /**
  * Action when a note is deleted.
- * @param {number} identifier the ID for the note to delete.
+ * @param {networkStickies.Note} noteToDelete the note to delete.
  * @const
  */
 networkStickies.NoteController.prototype.onDeleteButtonClicked =
-    function(identifier) {
-  this.noteModel.deleteNoteWithId(identifier);
+    function(noteToDelete) {
+  this.noteModel.deleteNoteWithId(noteToDelete);
 };
 
 
 /**
  * Action when a note is moved.
- * @param {number} identifier the ID for the note to move.
+ * @param {networkStickies.Note} noteToMove the note to move.
  * @param {{top: number, left: number}} coordinates the new coordinates.
  * @const
  */
 networkStickies.NoteController.prototype.onNoteMoved =
-    function(identifier, coordinates) {
-  this.noteModel.moveNoteWithId(identifier, coordinates);
+    function(noteToMove, coordinates) {
+  this.noteModel.moveNoteWithId(noteToMove, coordinates);
 };
