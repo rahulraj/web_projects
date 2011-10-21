@@ -15,7 +15,11 @@ def zwrite(msg):
         os.system("zwrite -d -c afarrell-dbg -i flask -m 'ZWRITE ERROR'")
         os.system("zwrite -d -c afarrell-dbg -i flask -m '%s'" % msg)
 
+
 @app.route('/')
+def index():
+  return render_template('index.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   if request.method == 'GET':

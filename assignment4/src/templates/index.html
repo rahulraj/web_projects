@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title_content %}<title>Network Stickies</title>{% endblock %}
+{% block body_content %}
+  <header><h1>Network Stickies</h1></header>
+  <section>
+  <p>
+    Network Stickies (Assignment 4 of 6.170) is a simple web application that
+    can be used to keep track of sticky notes. Users can:
+
+    <ul>
+      <li>Add, edit, and delete notes.</li>
+      <li>Organize notes by moving them with the mouse.</li>
+      <li>Access their own notes from any machine, as
+          they are saved on the server</li>
+    </ul>
+
+    If this sounds interesting, feel free to register or log in!
+  </p>
+
+  <nav>
+    <ul>
+      <li><a href={{ url_for('register') }}>Register</a></li>
+      <li><a href={{ url_for('login') }}>Log In</a></li>
+    </ul>
+  </nav>
+  </section>
+
+{% endblock %}
