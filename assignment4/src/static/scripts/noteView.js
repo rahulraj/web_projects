@@ -64,6 +64,10 @@ networkStickies.NoteView.prototype.changesHandledBy = function(controller) {
 };
 
 
+/**
+ * Switch to edit mode.
+ * @const
+ */
 networkStickies.NoteView.prototype.editMode = function() {
   this.bodyElement.hide();
   this.editButton.hide();
@@ -74,6 +78,11 @@ networkStickies.NoteView.prototype.editMode = function() {
 };
 
 
+/**
+ * Switch to display mode.
+ * @param {string} bodyText the text to display in the body.
+ * @const
+ */
 networkStickies.NoteView.prototype.displayMode = function(bodyText) {
   this.bodyElement.show();
   this.editButton.show();
@@ -84,10 +93,21 @@ networkStickies.NoteView.prototype.displayMode = function(bodyText) {
 };
 
 
+/**
+ * Get the text in the edit textarea.
+ * @return {string} the text.
+ * @const
+ */
 networkStickies.NoteView.prototype.editTextAreaText = function() {
   return this.editTextArea.val();
 };
 
+
+/**
+ * Update the text in the body.
+ * @param {string} newBody the new text.
+ * @const
+ */
 networkStickies.NoteView.prototype.updateBody = function(newBody) {
   this.bodyElement.html(newBody);
 };
@@ -104,6 +124,11 @@ networkStickies.NoteView.prototype.body = function() {
 };
 
 
+/**
+ * Update the view when the model changes.
+ * @param {networkStickies.NoteSet} newNoteSet the updated notes.
+ * @const
+ */
 networkStickies.NoteView.prototype.onModelChange = function(newNoteSet) {
   /** @const */ var note = newNoteSet.findNoteById(this.identifier);
   if (note === networkStickies.utils.None.instance) {
@@ -232,6 +257,12 @@ networkStickies.NoteView.Builder.prototype.withEnterButton = function() {
   return this;
 };
 
+
+/**
+ * Add a textarea
+ * @return {networkStickies.NoteView.Builder} the builder for chaining.
+ * @const
+ */
 networkStickies.NoteView.Builder.prototype.withTextArea = function() {
   this.editTextArea = $('<textarea>');
   this.editTextArea.hide();
@@ -240,11 +271,22 @@ networkStickies.NoteView.Builder.prototype.withTextArea = function() {
 };
 
 
+/**
+ * Make the sticky draggable
+ * @return {networkStickies.NoteView.Builder} the builder for chaining.
+ * @const
+ */
 networkStickies.NoteView.Builder.prototype.draggable = function() {
   this.noteElement.draggable();
   return this;
 };
 
+
+/**
+ * Make the sticky resizable
+ * @return {networkStickies.NoteView.Builder} the builder for chaining.
+ * @const
+ */
 networkStickies.NoteView.Builder.prototype.resizable = function() {
   this.noteElement.resizable();
   return this;

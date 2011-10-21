@@ -76,6 +76,13 @@ networkStickies.NoteSet = function(notes) {
     return new networkStickies.NoteSet(newNotes);
   };
 
+
+  /**
+   * Add a note to the set
+   * @param {networkStickies.Note} note the note to add.
+   * @return {networkStickies.NoteSet} the updated set.
+   * @const
+   */
   this.addNote = function(note) {
     /** @const */ var newNotes = _(notesCopy).map(function(note) {
       return note;
@@ -84,6 +91,12 @@ networkStickies.NoteSet = function(notes) {
     return new networkStickies.NoteSet(newNotes);
   };
 
+
+  /**
+   * Represent this set as a JSON string.
+   * @return {string} a JSON string containing the data in this set.
+   * @const
+   */
   this.asJson = function() {
     /** @const */ var noteArray = _(notesCopy).map(function(note) {
       return {
@@ -99,6 +112,10 @@ networkStickies.NoteSet = function(notes) {
   /**
    * Iterate through all the Notes, applying g
    * to each one, and returning an array of the results.
+   * @param {function(networkStickies.Note): *} g a function to apply to the
+   *     Notes.
+   * @return {Array.<*>}  the output of applying that function.
+   * @const
    */
   this.mapNotes = function(g) {
     return _(notesCopy).map(g);
@@ -109,6 +126,8 @@ networkStickies.NoteSet = function(notes) {
 /**
  * Named constructor that reads in a note set from a JSON string.
  * @param {string} jsonString a string representing notes.
+ * @return {networkStickies.NoteSet} the read NoteSet.
+ * @const
  */
 networkStickies.NoteSet.readJson = function(jsonString) {
   /** @const */ var jsonObject = JSON.parse(jsonString);

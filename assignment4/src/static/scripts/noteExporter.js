@@ -1,3 +1,6 @@
+
+
+
 /**
  * Class to export a note to the server, so that it can be saved.
  * @param {string} postUrl the URL to send POSTs to.
@@ -9,6 +12,11 @@ networkStickies.NoteExporter = function(postUrl) {
 };
 
 
+/**
+ * When the NoteSet changes, save it.
+ * @param {networkStickies.NoteSet} noteSet the notes to save.
+ * @const
+ */
 networkStickies.NoteExporter.prototype.onModelChange = function(noteSet) {
   /** @const */ var setAsJson = noteSet.asJson();
   $.post(this.postUrl, setAsJson, function(data) {

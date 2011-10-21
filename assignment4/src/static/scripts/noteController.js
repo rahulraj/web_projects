@@ -26,6 +26,13 @@ networkStickies.NoteController.prototype.onEditButtonClicked =
   this.noteView.editMode();
 };
 
+
+/**
+ * Action when the Enter button is clicked, signifying that a note
+ * body update is complete.
+ * @param {number} identifier the ID for the note to update.
+ * @const
+ */
 networkStickies.NoteController.prototype.onEnterButtonClicked =
     function(identifier) {
   /** @const */ var text = this.noteView.editTextAreaText();
@@ -33,11 +40,24 @@ networkStickies.NoteController.prototype.onEnterButtonClicked =
   this.noteModel.editNoteWithId(identifier, text);
 };
 
+
+/**
+ * Action when a note is deleted.
+ * @param {number} identifier the ID for the note to delete.
+ * @const
+ */
 networkStickies.NoteController.prototype.onDeleteButtonClicked =
     function(identifier) {
   this.noteModel.deleteNoteWithId(identifier);
 };
 
+
+/**
+ * Action when a note is moved.
+ * @param {number} identifier the ID for the note to move.
+ * @param {{top: number, left: number}} coordinates the new coordinates.
+ * @const
+ */
 networkStickies.NoteController.prototype.onNoteMoved =
     function(identifier, coordinates) {
   this.noteModel.moveNoteWithId(identifier, coordinates);

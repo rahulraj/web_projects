@@ -1,3 +1,9 @@
+
+
+/**
+ * A namespace for the MVC factory.
+ * @const
+ */
 networkStickies.NoteMvcFactory = {};
 
 
@@ -10,24 +16,6 @@ networkStickies.NoteMvcFactory = {};
  */
 networkStickies.NoteMvcFactory.createMvc =
     function(jsonNoteSet, parentElement) {
-  // Test data, TODO hook up w/ python
-  ///** @const */ var first = networkStickies.Note.createNote('This is a first note');
-  ///** @const */ var second = networkStickies.Note.createNote('This is another note');
-
-  ///** @const */ var firstCoordinates = {top: 50, left: 50};
-  ///** @const */ var secondCoordinates = {top: 170, left: 270};
-
-  ///** @const */ var notes = _.keys(jsonNoteSet);
-  ///** @const */ var notes = [first, second];
-  ///** @const */ var coordinates = [firstCoordinates, secondCoordinates];
-  ///** @const */ var notesAndCoords = _.zip(notes, coordinates);
-  ///** @const */ var views = _(notesAndCoords).map(function(pair) {
-  ///** @const */ var note = pair[0];
-  ///** @const */ var coord = pair[1];
-  //return networkStickies.NoteView.of(note, coord);
-  //});
-  ///** @const */ var noteSet = new networkStickies.NoteSet(notes);
-
   /** @const */ var noteSet = networkStickies.NoteSet.readJson(jsonNoteSet);
   /** @const */ var views = noteSet.mapNotes(function(note) {
     return networkStickies.NoteView.of(note);

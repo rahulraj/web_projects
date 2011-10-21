@@ -77,6 +77,11 @@ networkStickies.Note.prototype.updateCoordinates = function(newCoordinates) {
 };
 
 
+/**
+ * Create a note generating function.
+ * @return {function(string): networkStickies.Note} a note factory.
+ * @const
+ */
 networkStickies.Note.createNoteGenerator = function() {
   // TODO Improve this method. Dates don't work.
   var id = 0;

@@ -1,3 +1,6 @@
+
+
+
 /**
  * Top-level model class for Network Stickies. Provides the mutability
  * point for the data, and implements an Observable interface.
@@ -30,7 +33,7 @@ networkStickies.NoteModel.prototype.notifyObservers = function() {
 /**
  * Finds a note.
  * @param {number} identifier the ID of the note.
- * @return {networkStickies.Option} an option containing Some(note) if
+ * @return {networkStickies.utils.Option} an option containing Some(note) if
  *     the note was found, None otherwise.
  * @const
  */
