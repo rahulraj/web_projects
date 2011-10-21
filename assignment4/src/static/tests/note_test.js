@@ -1,8 +1,9 @@
 NoteTest = TestCase('NoteTest');
 
 NoteTest.prototype.setUp = function() {
+  /** @const */ this.coordinates = {left: 50, top: 50}
   /** @const */ this.note = new networkStickies.Note(
-      1, 'This is an example note body.');
+      1, 'This is an example note body.', this.coordinates);
 };
 
 NoteTest.prototype.testUpdate = function() {

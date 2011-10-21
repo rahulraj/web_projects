@@ -1,9 +1,13 @@
 NoteSetTest = TestCase('NoteSetTest');
 
 NoteSetTest.prototype.setUp = function() {
-  /** @const */ this.firstNote = new networkStickies.Note(1, 'First note');
-  /** @const */ this.secondNote = new networkStickies.Note(2, 'Second note');
-  /** @const */ this.thirdNote = new networkStickies.Note(3, 'Third note');
+  /** @const */ this.coordinates = {left: 50, top: 50};
+  /** @const */ this.firstNote = new networkStickies.Note(
+      1, 'First note', this.coordinates);
+  /** @const */ this.secondNote = new networkStickies.Note(
+      2, 'Second note', this.coordinates);
+  /** @const */ this.thirdNote = new networkStickies.Note(
+      3, 'Third note', this.coordinates);
   /** @const */ this.notes = [this.firstNote, this.secondNote, this.thirdNote];
   /** @const */ this.noteSet = new networkStickies.NoteSet(this.notes);
 };

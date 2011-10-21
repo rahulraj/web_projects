@@ -25,7 +25,9 @@ NoteViewTest.MockController.prototype.onDeleteButtonClicked = function(id) {
 NoteViewTest.prototype.setUp = function() {
   /** @const */ this.noteId = 1;
   /** @const */ this.noteBody = 'First note';
-  /** @const */ this.note = new networkStickies.Note(this.noteId,this.noteBody);
+  /** @const */ this.coordinates = {left: 50, top: 50};
+  /** @const */ this.note = new networkStickies.Note(
+      this.noteId, this.noteBody, this.coordinates);
   /** @const */ this.controller = new NoteViewTest.MockController(this.noteId);
 
   /** @const */ this.noteViewBuilder = new networkStickies.NoteView.Builder().
