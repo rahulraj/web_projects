@@ -3,7 +3,9 @@ import shelve
 from flask import Flask, render_template, request, flash, redirect, url_for, session, abort
 from users import Users, confirmed_password_valid
 from closing import closing
+
 app = Flask(__name__)
+users_file = 'users'
 
 def zwrite(msg):
     """use this for printline debugging"""
@@ -21,7 +23,7 @@ def login():
   else:
     username = request.form['username']
     password = request.form['password']
-    with closing(shelve.open('users')) as user_shelf:
+    with closing(shelve.open(users_file)) as user_shelf:
       users = Users(user_shelf)
       if users.login_is_valid(username, password):
         session['username'] = username
@@ -41,7 +43,7 @@ def register():
     if not confirmed_password_valid(password, confirmation):
       flash("Your password and confirmation didn't match up.")
       return render_template('register.html')
-    with closing(shelve.open('users')) as user_shelf:
+    with closing(shelve.open(users_file)) as user_shelf:
       users = Users(user_shelf)
       if users.has_user(username):
         flash("Username %s has already been taken." % (username))
@@ -68,13 +70,11 @@ def notes_storage():
   if 'username' not in session:
     abort(401)
 
-  if request.method == 'GET':
-    with closing(shelve.open('users')) as user_shelf:
-      users = Users(user_shelf)
+  with closing(shelve.open(users_file)) as user_shelf:
+    users = Users(user_shelf)
+    if request.method == 'GET':
       return users.stickies_for_user(session['username'])
-  else:
-    with closing(shelve.open('users')) as user_shelf:
-      users = Users(user_shelf)
+    else:
       data = request.form['noteSet']
       users.save_stickies_for_user(session['username'], data)
       return 'Post successful'
