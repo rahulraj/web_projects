@@ -8,6 +8,35 @@ networkStickies.NoteMvcFactory = {};
 
 
 /**
+ * Create an Add Note button and return it.
+ * @param {jQueryObject} parentElement the parent for notes.
+ * @param {networkStickies.NoteModel} model the model to update.
+ * @return {jQueryObject} the add button.
+ * @const
+ */
+networkStickies.NoteMvcFactory.createAddButton =
+    function(parentElement, model) {
+  // make an add notes button and its click event
+  /** @const */ var addNoteButton = $('<input>',
+      {type: 'button', value: 'Add a New Note'});
+  addNoteButton.bind('click', function(event) {
+    /** @const */ var newNote = networkStickies.Note.createNote('New Note');
+    // TODO See why the new notes keep moving down
+    /** @const */ var coordinates = {top: 50, left: 50};
+    /** @const */ var newView = networkStickies.NoteView.of(newNote);
+    /** @const */ var controller = new networkStickies.NoteController(
+        model, newView);
+    newView.changesHandledBy(controller);
+    newView.attachTo(parentElement);
+    model.addObserver(newView);
+    // By updating, the model will notify newView to populate itself.
+    model.addNote(newNote);
+  });
+  return addNoteButton
+};
+
+
+/**
  * Given a NoteSet, wire up the application to display them.
  * @param {string} jsonNoteSet a JSON string from the server
  *     containing Note data for the current user.
@@ -36,21 +65,7 @@ networkStickies.NoteMvcFactory.createMvc =
     view.attachTo(parentElement);
   });
 
-  // make an add notes button and its click event
-  /** @const */ var addNoteButton = $('<input>',
-      {type: 'button', value: 'Add a New Note'});
-  addNoteButton.bind('click', function(event) {
-    /** @const */ var newNote = networkStickies.Note.createNote('New Note');
-    // TODO See why the new notes keep moving down
-    /** @const */ var coordinates = {top: 50, left: 50};
-    /** @const */ var newView = networkStickies.NoteView.of(newNote);
-    /** @const */ var controller = new networkStickies.NoteController(
-        model, newView);
-    newView.changesHandledBy(controller);
-    newView.attachTo(parentElement);
-    model.addObserver(newView);
-    // By updating, the model will notify newView to populate itself.
-    model.addNote(newNote);
-  });
+  /** @const */ var addNoteButton =
+      networkStickies.NoteMvcFactory.createAddButton(parentElement, model);
   $('header').append(addNoteButton);
 };
