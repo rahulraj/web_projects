@@ -130,16 +130,13 @@ networkStickies.NoteView.prototype.coordinates = function() {
 /**
  * Factory function to create a view given a note.
  * @param {networkStickies.Note} note the note being viewed.
- * @param {{top: number, left: number}} coordinates an object containing
- *     coordinates for the Note. This format is the same one jQuery's
- *     offset function uses.
  * @return {networkStickies.NoteView} the newly created view.
  * @const
  */
-networkStickies.NoteView.of = function(note, coordinates) {
+networkStickies.NoteView.of = function(note) {
   return new networkStickies.NoteView.Builder().
       viewing(note).
-      offsetBy(coordinates).
+      offsetBy(note.coordinates()).
       withEditButton().
       withDeleteButton().
       withEnterButton().

@@ -95,6 +95,14 @@ networkStickies.NoteSet = function(notes) {
     /** @const */ var jsonSet = {notes: noteArray};
     return JSON.stringify(jsonSet);
   };
+
+  /**
+   * Iterate through all the Notes, applying g
+   * to each one, and returning an array of the results.
+   */
+  this.mapNotes = function(g) {
+    return _(notesCopy).map(g);
+  };
 };
 
 /**

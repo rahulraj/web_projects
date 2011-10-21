@@ -14,6 +14,11 @@ networkStickies.NoteModel = function(noteSet, observers) {
   this.observers = observers;
 };
 
+
+/**
+ * Notify the observers that this model has changed.
+ * @const
+ */
 networkStickies.NoteModel.prototype.notifyObservers = function() {
   /** @const */ var newNoteSet = this.noteSet;
   _(this.observers).each(function(observer) {
@@ -21,6 +26,10 @@ networkStickies.NoteModel.prototype.notifyObservers = function() {
   });
 };
 
+
+/**
+ *
+ */
 networkStickies.NoteModel.prototype.findNoteById = function(identifier) {
   return this.noteSet.findNoteById(identifier);
 };

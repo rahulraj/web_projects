@@ -52,7 +52,9 @@ jQueryObject.prototype.before = function(arg) {};
  * @return {jQueryObject} a jQuery object
  * @const
  */
-function $(element, opt_attributes) {}
+function $(element, opt_attributes) {};
+$.get = function(arg1, arg2) {};
+$.post = function(arg1, arg2, arg3) {};
 
 
 
@@ -80,3 +82,7 @@ _.map = function(arg1, arg2) {};
 _.range = function(arg1, arg2) {};
 _.zip = function(arg1, arg2) {};
 _.keys = function(arg) {};
+
+var JSON = function() {};
+JSON.stringify = function(arg) {};
+JSON.parse = function(arg) {};

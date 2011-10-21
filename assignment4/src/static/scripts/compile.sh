@@ -7,11 +7,13 @@
 
 java -jar /home/rahulraj/dls/closure-compiler/compiler.jar \
   --js=networkStickies.js \
+  --js=storageUrl.js \
   --js=utils/utils.js --js=utils/option.js \
   --js=note.js \
   --js=observable.js --js=observer.js \
   --js=noteSet.js --js=noteModel.js \
   --js=noteController.js --js=noteView.js \
+  --js=noteExporter.js \
   --js=noteMvcFactory.js \
   --js=main.js \
   --externs=externs.js --warning_level=VERBOSE \
