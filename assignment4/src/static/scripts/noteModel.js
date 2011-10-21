@@ -35,7 +35,7 @@ networkStickies.NoteModel.prototype.notifyObservers = function() {
 
 /**
  * Finds a note.
- * @param {number} identifier the ID of the note.
+ * @param {string} identifier the ID of the note.
  * @return {networkStickies.utils.Option} an option containing Some(note) if
  *     the note was found, None otherwise.
  * @const
@@ -47,7 +47,7 @@ networkStickies.NoteModel.prototype.findNoteById = function(identifier) {
 
 /**
  * Edits a note.
- * @param {number} identifier the ID of the note.
+ * @param {string} identifier the ID of the note.
  * @param {string} newBody the new body for the note.
  * @const
  */
@@ -60,7 +60,7 @@ networkStickies.NoteModel.prototype.editNoteWithId =
 
 /**
  * Deletes a note.
- * @param {number} identifier the ID of the note.
+ * @param {string} identifier the ID of the note.
  * @const
  */
 networkStickies.NoteModel.prototype.deleteNoteWithId = function(identifier) {
@@ -71,7 +71,7 @@ networkStickies.NoteModel.prototype.deleteNoteWithId = function(identifier) {
 
 /**
  * Moves a note's position.
- * @param {number} identifier the ID of the note.
+ * @param {string} identifier the ID of the note.
  * @param {{top: number, left: number}} newCoordinates the updated coordinates.
  * @const
  */

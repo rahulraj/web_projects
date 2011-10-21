@@ -4,7 +4,7 @@
 /**
  * Class to represent one sticky note.
  * Representation Invariant - Immutable.
- * @param {number} identifier a numerical identifier for the note.
+ * @param {string} identifier a numerical identifier for the note.
  *     User-identifier combinations should be unique.
  * @param {string} body the body of the note.
  * @param {{left: number, top: number}} coordinates the coordinates that this
@@ -16,7 +16,7 @@
 networkStickies.Note = function(identifier, body, coordinates) {
   /**
    * Getter for the identifier
-   * @return {number} identifier.
+   * @return {string} identifier.
    * @const
    */
   this.identifier = function() {
@@ -78,19 +78,20 @@ networkStickies.Note.prototype.updateCoordinates = function(newCoordinates) {
 
 
 /**
- * Create a note generating function.
- * @return {function(string): networkStickies.Note} a note factory.
- * @const
+ * Generate an ID for the note, so the view can keep track of it.
+ * If the backend used a relational database, IDs would also be useful.
+ * Note that the body of a note is not guaranteed to be unique.
+ *
+ * Credit for the implementation should go to John Millikin, who posted it at
+ * http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+ * @return {string} a generated unique ID for notes.
  */
-networkStickies.Note.createNoteGenerator = function() {
-  // TODO Improve this method. Dates don't work.
-  var id = 0;
-  return function(body) {
-    id++;
-    /** @const */ var coordinates = {top: 50, left: 50};
-    return new networkStickies.Note(id, body, coordinates);
-  };
-};
+networkStickies.Note.generateNoteId = function() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
 
 
 /**
@@ -99,4 +100,8 @@ networkStickies.Note.createNoteGenerator = function() {
  * @return {networkStickies.Note} the newly created Note.
  * @const
  */
-networkStickies.Note.createNote = networkStickies.Note.createNoteGenerator();
+networkStickies.Note.createNote = function(body) {
+  /** @const */ var id = networkStickies.Note.generateNoteId();
+  /** @const */ var coordinates = {top: 50, left: 50};
+  return new networkStickies.Note(id, body, coordinates);
+};

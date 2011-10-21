@@ -18,7 +18,7 @@ networkStickies.NoteController = function(noteModel, noteView) {
 /**
  * Swap out the NoteView with a NoteEditor that allows users to edit
  * that note, then click Confirm to switch back to a NoteView.
- * @param {number} identifier the ID for the note being edited.
+ * @param {string} identifier the ID for the note being edited.
  * @const
  */
 networkStickies.NoteController.prototype.onEditButtonClicked =
@@ -30,7 +30,7 @@ networkStickies.NoteController.prototype.onEditButtonClicked =
 /**
  * Action when the Enter button is clicked, signifying that a note
  * body update is complete.
- * @param {number} identifier the ID for the note to update.
+ * @param {string} identifier the ID for the note to update.
  * @const
  */
 networkStickies.NoteController.prototype.onEnterButtonClicked =
@@ -43,7 +43,7 @@ networkStickies.NoteController.prototype.onEnterButtonClicked =
 
 /**
  * Action when a note is deleted.
- * @param {number} identifier the ID for the note to delete.
+ * @param {string} identifier the ID for the note to delete.
  * @const
  */
 networkStickies.NoteController.prototype.onDeleteButtonClicked =
@@ -54,7 +54,7 @@ networkStickies.NoteController.prototype.onDeleteButtonClicked =
 
 /**
  * Action when a note is moved.
- * @param {number} identifier the ID for the note to move.
+ * @param {string} identifier the ID for the note to move.
  * @param {{top: number, left: number}} coordinates the new coordinates.
  * @const
  */

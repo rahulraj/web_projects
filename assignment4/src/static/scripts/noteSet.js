@@ -19,7 +19,7 @@ networkStickies.NoteSet = function(notes) {
 
   /**
    * Retrieve a note.
-   * @param {number} identifier the ID of the note.
+   * @param {string} identifier the ID of the note.
    * @return {networkStickies.utils.Option} a Some containing the Note,
    *     or None if no note exists.
    */
@@ -34,9 +34,10 @@ networkStickies.NoteSet = function(notes) {
     }
   };
 
+
   /**
    * Edit a note.
-   * @param {number} identifier the ID of the note.
+   * @param {string} identifier the ID of the note.
    * @param {string} newBody the new body of the note.
    * @return {networkStickies.NoteSet} the updated model.
    * @const
@@ -52,6 +53,15 @@ networkStickies.NoteSet = function(notes) {
     return new networkStickies.NoteSet(newNotes);
   };
 
+  
+  /**
+   * Update the coordinates of a note.
+   * @param {string} identifier the ID of the note.
+   * @param {{left: number, top: number}} newCoordinates the new 
+   *     coordinates of the note.
+   * @return {networkStickies.NoteSet} the updated model.
+   * @const
+   */
   this.moveNoteWithId = function(identifier, newCoordinates) {
     /** @const */ var newNotes = _(notesCopy).map(function(note) {
       if (note.identifier() !== identifier) {
@@ -63,9 +73,10 @@ networkStickies.NoteSet = function(notes) {
     return new networkStickies.NoteSet(newNotes);
   };
 
+
   /**
    * Delete a note.
-   * @param {number} identifier the ID of the note.
+   * @param {string} identifier the ID of the note.
    * @return {networkStickies.NoteSet} the updated model.
    * @const
    */

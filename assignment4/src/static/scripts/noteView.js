@@ -12,7 +12,7 @@
  * @param {jQueryObject} enterButton the enter button for editing
  *     (hidden when not in edit mode).
  * @param {jQueryObject} editTextArea the area to edit the note.
- * @param {number} identifier the ID for the note this is viewing.
+ * @param {string} identifier the ID for the note this is viewing.
  * @constructor
  * @implements {networkStickies.Observer}
  * @const
@@ -41,7 +41,6 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
 
 /**
  * Specify the controller object to handle click events.
- * TODO rename
  * @param {networkStickies.NoteController} controller the object with methods to
  *     handle click events. It needs to be passed the ID of the note.
  * @const
