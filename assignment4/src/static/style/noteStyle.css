@@ -7,7 +7,7 @@ header, nav, article, footer, address {
 }
 header {
   margin: auto auto;
-  width: 950px;
+  width: 550px;
   text-align: center;
 }
 h1 {
@@ -24,6 +24,7 @@ ul {
 }
 li {
   margin-bottom: 10px;
+  padding-left: 130px;
 }
 .note {
   background-color: #FFFF33;
