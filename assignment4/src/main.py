@@ -45,8 +45,9 @@ def register():
       return render_template('register.html')
     with closing(shelve.open(users_file)) as user_shelf:
       users = Users(user_shelf)
-      if users.has_user(username):
-        flash("Username %s has already been taken." % (username))
+      if not users.is_valid_user(username):
+        flash("Username %s is not valid." % (username))
+        flash("Either it's taken, or it's blank (blank names are not allowed)")
         return render_template('register.html')
       users.register_user(username, password)
       session['username'] = username

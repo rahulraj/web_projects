@@ -2,25 +2,41 @@
 {% block title_content %}<title>Register</title>{% endblock %}
 {% block body_content %}
   <header><h1> Register </h1></header>
-  <form action="" method="post">
-    <label for="username">Username</label>
-    <input type="text" name="username" value="">
+  <section>
+    <form action="" method="post">
+      <ul>
+        <li>
+          <label for="username">Username</label>
+        </li>
+        <li>
+          <input type="text" name="username" value="">
+        </li>
+        <li>
+          <label for="password">Password</label>
+        </li>
+        <li>
+          <input type="password" name="password" value="">
+        </li>
+        <li>
+          <label for="confirmPassword">Confirm Password</label>
+        </li>
+        <li>
+          <input type="password" name="confirmPassword" value="">
+        </li>
 
-    <label for="password">Password</label>
-    <input type="password" name="password" value="">
-
-    <label for="confirmPassword">Confirm Password</label>
-    <input type="password" name="confirmPassword" value="">
-
-    <input type="submit" name="submit" value="Register and log in">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class="flashedMessages"> 
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-  </form>
+        <li>
+          <input type="submit" name="submit" value="Register and log in">
+        </li>
+      </ul>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul class="flashedMessages"> 
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    </form>
+  </section>
 {% endblock %}

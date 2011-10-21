@@ -14,9 +14,16 @@ h1 {
   font-family: Arial,Verdana,sans-serif;
 }
 section {
+  font-family: "Times New Roman",Georgia,serif;
   position: relative;
   margin: auto auto;
-  width: 950px;
+  width: 550px;
+}
+ul {
+  list-style-type: none;
+}
+li {
+  margin-bottom: 10px;
 }
 .note {
   background-color: #FFFF33;

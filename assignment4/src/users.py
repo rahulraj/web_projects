@@ -22,6 +22,13 @@ class Users(object):
 
   def has_user(self, username):
     return str(username) in self.user_shelf
+  
+  def is_valid_user(self, username):
+    if self.has_user(username):
+      return False
+    if len(username) == 0:
+      return False
+    return True
 
   def register_user(self, username, password):
     salt = generate_salt(salt_length)
