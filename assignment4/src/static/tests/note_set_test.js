@@ -43,6 +43,15 @@ NoteSetTest.prototype.testEditNote = function() {
                oldFirst.body(), 'First note');
 };
 
+NoteSetTest.prototype.testAddNote = function() {
+  /** @const */ var note = new networkStickies.Note(
+      4, 'Fourth note', this.coordinates);
+  /** @const */ var nextSet = this.noteSet.addNote(note);
+
+  assertNull(this.noteSet.findNoteById(4).getOrElse(null));
+  assertEquals('Fourth note', nextSet.findNoteById(4).getOrElse(null).body());
+};
+
 NoteSetTest.prototype.testDeleteNote = function() {
   /** @const */ var nextSet = this.noteSet.deleteNoteWithId(1);
 
