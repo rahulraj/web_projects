@@ -35,14 +35,14 @@ networkStickies.Note = function(identifier, body, coordinates) {
   // Defensive copy, or this Note could be mutated by changing
   // coordinates after passing them into this constructor!
   /** @const */ var coordinatesCopy = {left: coordinates.left,
-      top: coordinates.top};
+    top: coordinates.top};
   /**
    * Getter for the coordinates of this note. We mus
    * @return {{left: number, top: number}} the coordinates.
    * @const
    */
   this.coordinates = function() {
-    // Another copy is needed, otherwise this Note is mutated when 
+    // Another copy is needed, otherwise this Note is mutated when
     // the caller changes the output value of this function.
     /** @const */ var coordinatesCopyCopy = {
       left: coordinatesCopy.left,
@@ -63,6 +63,7 @@ networkStickies.Note.prototype.updateBody = function(newBody) {
   return new networkStickies.Note(
       this.identifier(), newBody, this.coordinates());
 };
+
 
 /**
  * Return a new Note with the coordinates updated.

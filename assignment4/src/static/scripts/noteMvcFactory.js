@@ -3,7 +3,7 @@ networkStickies.NoteMvcFactory = {};
 
 /**
  * Given a NoteSet, wire up the application to display them.
- * @param {string} jsonNoteSet a JSON string from the server 
+ * @param {string} jsonNoteSet a JSON string from the server
  *     containing Note data for the current user.
  * @param {jQueryObject} parentElement the element to attach views to.
  * @const
@@ -22,12 +22,12 @@ networkStickies.NoteMvcFactory.createMvc =
   ///** @const */ var coordinates = [firstCoordinates, secondCoordinates];
   ///** @const */ var notesAndCoords = _.zip(notes, coordinates);
   ///** @const */ var views = _(notesAndCoords).map(function(pair) {
-    ///** @const */ var note = pair[0];
-    ///** @const */ var coord = pair[1];
-    //return networkStickies.NoteView.of(note, coord);
+  ///** @const */ var note = pair[0];
+  ///** @const */ var coord = pair[1];
+  //return networkStickies.NoteView.of(note, coord);
   //});
   ///** @const */ var noteSet = new networkStickies.NoteSet(notes);
-  
+
   /** @const */ var noteSet = networkStickies.NoteSet.readJson(jsonNoteSet);
   /** @const */ var views = noteSet.mapNotes(function(note) {
     return networkStickies.NoteView.of(note);

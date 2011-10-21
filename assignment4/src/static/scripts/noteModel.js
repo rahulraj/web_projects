@@ -28,12 +28,23 @@ networkStickies.NoteModel.prototype.notifyObservers = function() {
 
 
 /**
- *
+ * Finds a note.
+ * @param {number} identifier the ID of the note.
+ * @return {networkStickies.Option} an option containing Some(note) if
+ *     the note was found, None otherwise.
+ * @const
  */
 networkStickies.NoteModel.prototype.findNoteById = function(identifier) {
   return this.noteSet.findNoteById(identifier);
 };
 
+
+/**
+ * Edits a note.
+ * @param {number} identifier the ID of the note.
+ * @param {string} newBody the new body for the note.
+ * @const
+ */
 networkStickies.NoteModel.prototype.editNoteWithId =
     function(identifier, newBody) {
   this.noteSet = this.noteSet.editNoteWithId(identifier, newBody);
@@ -41,21 +52,45 @@ networkStickies.NoteModel.prototype.editNoteWithId =
 };
 
 
+/**
+ * Deletes a note.
+ * @param {number} identifier the ID of the note.
+ * @const
+ */
 networkStickies.NoteModel.prototype.deleteNoteWithId = function(identifier) {
   this.noteSet = this.noteSet.deleteNoteWithId(identifier);
   this.notifyObservers();
 };
 
+
+/**
+ * Moves a note's position.
+ * @param {number} identifier the ID of the note.
+ * @param {{top: number, left: number}} newCoordinates the updated coordinates.
+ * @const
+ */
 networkStickies.NoteModel.prototype.moveNoteWithId =
     function(identifier, newCoordinates) {
   this.noteSet = this.noteSet.moveNoteWithId(identifier, newCoordinates);
   this.notifyObservers();
 };
 
+
+/**
+ * Add an observer.
+ * @param {networkStickies.Observer} observer the observer to add.
+ * @const
+ */
 networkStickies.NoteModel.prototype.addObserver = function(observer) {
   this.observers.push(observer);
 };
 
+
+/**
+ * Add a note.
+ * @param {networkStickies.Note} note the note to add.
+ * @const
+ */
 networkStickies.NoteModel.prototype.addNote = function(note) {
   this.noteSet = this.noteSet.addNote(note);
   this.notifyObservers();

@@ -52,7 +52,7 @@ jQueryObject.prototype.before = function(arg) {};
  * @return {jQueryObject} a jQuery object
  * @const
  */
-function $(element, opt_attributes) {};
+function $(element, opt_attributes) {}
 $.get = function(arg1, arg2) {};
 $.post = function(arg1, arg2, arg3) {};
 

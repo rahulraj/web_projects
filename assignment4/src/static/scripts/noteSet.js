@@ -55,7 +55,7 @@ networkStickies.NoteSet = function(notes) {
   this.moveNoteWithId = function(identifier, newCoordinates) {
     /** @const */ var newNotes = _(notesCopy).map(function(note) {
       if (note.identifier() !== identifier) {
-        return note; 
+        return note;
       } else {
         return note.updateCoordinates(newCoordinates);
       }
@@ -104,6 +104,7 @@ networkStickies.NoteSet = function(notes) {
     return _(notesCopy).map(g);
   };
 };
+
 
 /**
  * Named constructor that reads in a note set from a JSON string.
