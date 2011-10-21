@@ -31,6 +31,7 @@
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           <ul class="flashedMessages"> 
+            <li> Registration failed for the following reason(s): </li>
           {% for message in messages %}
             <li>{{ message }}</li>
           {% endfor %}

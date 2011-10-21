@@ -43,6 +43,9 @@ def register():
     if not confirmed_password_valid(password, confirmation):
       flash("Your password and confirmation didn't match up.")
       return render_template('register.html')
+    if len(password) == 0:
+      flash("Passwords can not be blank.")
+      return render_template('register.html')
     with closing(shelve.open(users_file)) as user_shelf:
       users = Users(user_shelf)
       if not users.is_valid_user(username):
