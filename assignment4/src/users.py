@@ -28,6 +28,8 @@ class Users(object):
       return False
     if len(username) == 0:
       return False
+    if ' ' in username:
+      return False
     return True
 
   def register_user(self, username, password):

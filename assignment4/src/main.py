@@ -31,6 +31,9 @@ def login():
     flash('Login failed. Maybe you made a typo?')
     return render_template('login.html')
 
+def fail_registration(message):
+  flash(message)
+  return render_template('register.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -41,16 +44,17 @@ def register():
     password = request.form['password']
     confirmation = request.form['confirmPassword']
     if not confirmed_password_valid(password, confirmation):
-      flash("Your password and confirmation didn't match up.")
-      return render_template('register.html')
+      return fail_registration(
+          "Your password and confirmation didn't match up.")
     if len(password) == 0:
-      flash("Passwords can not be blank.")
-      return render_template('register.html')
+      return fail_registration("Passwords can not be blank.")
+    if ' ' in password:
+      return fail_registration("Passwords can not have spaces")
     with closing(shelve.open(users_file)) as user_shelf:
       users = Users(user_shelf)
       if not users.is_valid_user(username):
         flash("Username %s is not valid." % (username))
-        flash("Either it's taken, or it's blank (blank names are not allowed)")
+        flash("Either it's taken, it has a space, or it's blank")
         return render_template('register.html')
       users.register_user(username, password)
       session['username'] = username
