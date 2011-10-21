@@ -1,6 +1,6 @@
 import os
 import shelve
-from flask import Flask, render_template, request, flash, redirect, url_for, session
+from flask import Flask, render_template, request, flash, redirect, url_for, session, abort
 from users import Users, confirmed_password_valid
 from closing import closing
 app = Flask(__name__)
@@ -53,7 +53,30 @@ def register():
 def notes():
   if 'username' not in session:
     return redirect(url_for('login'))
-  return render_template('notes.html', username=session['username'])
+  storage_url = url_for('notes_storage')
+  return render_template('notes.html', 
+      username=session['username'], storage_url=storage_url)
+
+@app.route('/notes-storage', methods=['GET', 'POST'])
+def notes_storage():
+  """
+  Sending a GET request to this URL retrieves the notes associated with
+  the user logged in (checked via the session).
+  
+  Sending a POST request updates the shelf with the provided new values.
+  """
+  if 'username' not in session:
+    abort(401)
+
+  if request.method == 'GET':
+    with closing(shelve.open('users')) as user_shelf:
+      users = Users(user_shelf)
+      return users.stickies_for_user(session['username'])
+  else:
+    with closing(shelve.open('users')) as user_shelf:
+      users = Users(user_shelf)
+      raise NotImplementedError
+
 
 @app.route('/logout')
 def logout():

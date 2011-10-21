@@ -1,6 +1,7 @@
 {#
   Args:
     username the name of the current user.
+    storage_url the url to send requests to when persisting the data.
 #}
 
 {% extends 'layout.html' %}
@@ -39,7 +40,13 @@
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/noteView.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/noteExporter.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/noteMvcFactory.js') }}"></script>
+  <script type="text/javascript">
+    /** @const */ networkStickies.storageUrl =
+        '{{ storage_url }}'
+  </script>
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/main.js') }}"></script>
   <title>{{ username }}'s Notes</title>

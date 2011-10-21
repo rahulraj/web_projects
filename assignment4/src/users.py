@@ -6,6 +6,9 @@ from getters import with_getters_for
 
 salt_length = 10
 
+class NoSuchUser(Exception):
+  pass
+
 class Users(object):
   def __init__(self, user_shelf):
     """
@@ -24,7 +27,7 @@ class Users(object):
     salt = generate_salt(salt_length)
     to_hash = combine_password_with_salt(password, salt)
     hashed = do_hash(to_hash)
-    user_data = UserData(hashed, salt)
+    user_data = UserData(hashed, salt, '{"notes": []}')
     self.user_shelf[str(username)] = user_data
 
   def login_is_valid(self, username, password):
@@ -45,10 +48,31 @@ class Users(object):
     real_hash = user_data.get_hashed_password()
     return proposed_hash == real_hash
 
+  def stickies_for_user(self, username):
+    if not self.has_user(username):
+      raise NoSuchUser
+    user_data = self.user_shelf[str(username)]
+    return user_data.get_stickies_json()
+
+  def save_stickies_for_user(self, username, new_stickies_json):
+    if not self.has_user(username):
+      raise NoSuchUser
+    user_data = self.user_shelf[str(username)]
+    self.user_shelf[username] = user_data.update_stickies(new_stickies_json)
+
 class UserData(object):
   """ Class defining the values in the users shelf """
-  def __init__(self, hashed_password, salt):
-    assign_injectables(self, locals())
+  def __init__(self, hashed_password, salt, stickies_json):
+    self.hashed_password = hashed_password
+    self.salt = salt
+    self.stickies_json = stickies_json
+
+  def get_stickies_json(self):
+    return self.stickies_json
+
+  def update_stickies(self, new_stickies_json):
+    """ Returns a new UserData with the updated stickies """
+    return UserData(self.hashed_password, self.salt, new_stickies_json)
 with_getters_for(UserData, 'hashed_password', 'salt')
 
 def confirmed_password_valid(password, confirmation):
