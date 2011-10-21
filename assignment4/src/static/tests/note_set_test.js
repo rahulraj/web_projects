@@ -53,3 +53,12 @@ NoteSetTest.prototype.testDeleteNote = function() {
   assertEquals('The old note set should be unchanged',
                oldFirst.body(), 'First note');
 };
+
+NoteSetTest.prototype.testJsonWriteAndRead = function() {
+  /** @const */ var jsonSet = this.noteSet.asJson();
+
+  /** @const */ var readSet = networkStickies.NoteSet.readJson(jsonSet);
+  assertEquals('First note', readSet.findNoteById(1).getOrElse(null).body());
+  assertEquals('Second note', readSet.findNoteById(2).getOrElse(null).body());
+  assertEquals('Third note', readSet.findNoteById(3).getOrElse(null).body());
+};
