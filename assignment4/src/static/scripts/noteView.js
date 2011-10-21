@@ -12,20 +12,21 @@
  * @param {jQueryObject} enterButton the enter button for editing
  *     (hidden when not in edit mode).
  * @param {jQueryObject} editTextArea the area to edit the note.
- * @param {number} identifier the ID for the note this is viewing.
+ * @param {networkStickies.Note} note an immutable representation of the
+ *     note being viewed (though the reference may change to newer versions)
  * @constructor
  * @implements {networkStickies.Observer}
  * @const
  */
 networkStickies.NoteView = function(noteElement, bodyElement,
-    editButton, deleteButton, enterButton, editTextArea, identifier) {
+    editButton, deleteButton, enterButton, editTextArea, note) {
   /** @const */ this.noteElement = noteElement;
   /** @const */ this.bodyElement = bodyElement;
   /** @const */ this.editButton = editButton;
   /** @const */ this.deleteButton = deleteButton;
   /** @const */ this.enterButton = enterButton;
   /** @const */ this.editTextArea = editTextArea;
-  /** @const */ this.identifier = identifier;
+  this.note = note;
 };
 
 
@@ -41,25 +42,24 @@ networkStickies.NoteView.prototype.attachTo = function(parentElement) {
 
 /**
  * Specify the controller object to handle click events.
- * TODO rename
  * @param {networkStickies.NoteController} controller the object with methods to
  *     handle click events. It needs to be passed the ID of the note.
  * @const
  */
 networkStickies.NoteView.prototype.changesHandledBy = function(controller) {
-  /** @const */ var identifier = this.identifier;
+  /** @const */ var note = this.note;
   this.editButton.bind('click', function(event) {
-    controller.onEditButtonClicked(identifier);
+    controller.onEditButtonClicked();
   });
   this.enterButton.bind('click', function(event) {
-    controller.onEnterButtonClicked(identifier);
+    controller.onEnterButtonClicked(note);
   });
   this.deleteButton.bind('click', function(event) {
-    controller.onDeleteButtonClicked(identifier);
+    controller.onDeleteButtonClicked(note);
   });
-  /** @const */ var self = this;
+  /** @const */ var coordinates = this.coordinates;
   this.noteElement.bind('dragstop', function(event, ui) {
-    controller.onNoteMoved(identifier, self.coordinates());
+    controller.onNoteMoved(note, coordinates);
   });
 };
 
@@ -189,7 +189,7 @@ networkStickies.NoteView.Builder = function() {
   this.deleteButton = null;
   this.enterButton = null;
   this.editTextArea = null;
-  this.identifier = null;
+  this.note = null;
 };
 
 
@@ -216,7 +216,7 @@ networkStickies.NoteView.Builder.prototype.viewing = function(note) {
   this.bodyElement = $('<p>');
   this.bodyElement.html(note.body());
   this.noteElement.append(this.bodyElement);
-  this.identifier = note.identifier();
+  this.note = note;
   return this;
 };
 
@@ -305,5 +305,5 @@ networkStickies.NoteView.Builder.prototype.build = function() {
   }
   return new networkStickies.NoteView(this.noteElement, this.bodyElement,
       this.editButton, this.deleteButton, this.enterButton, this.editTextArea,
-      this.identifier);
+      this.note);
 };

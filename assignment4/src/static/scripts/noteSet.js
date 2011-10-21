@@ -47,6 +47,7 @@ networkStickies.NoteSet = function(notes) {
     return new networkStickies.NoteSet(newNotes);
   };
 
+
   /**
    * Delete a note.
    * @param {networkStickies.Note} noteToDelete the note to delete.
