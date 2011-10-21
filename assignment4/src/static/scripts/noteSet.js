@@ -20,14 +20,14 @@ networkStickies.NoteSet = function(notes) {
 
   /**
    * Edit a note.
-   * @param {number} identifier the ID of the note.
+   * @param {networkStickies.Note} noteToEdit a reference to the note to edit.
    * @param {string} newBody the new body of the note.
    * @return {networkStickies.NoteSet} the updated model.
    * @const
    */
-  this.editNoteWithId = function(identifier, newBody) {
+  this.editNoteWithId = function(noteToEdit, newBody) {
     /** @const */ var newNotes = _(notesCopy).map(function(note) {
-      if (note.identifier() !== identifier) {
+      if (note === noteToEdit) {
         return note;
       } else {
         return note.updateBody(newBody);
@@ -36,9 +36,9 @@ networkStickies.NoteSet = function(notes) {
     return new networkStickies.NoteSet(newNotes);
   };
 
-  this.moveNoteWithId = function(identifier, newCoordinates) {
+  this.moveNoteWithId = function(noteToMove, newCoordinates) {
     /** @const */ var newNotes = _(notesCopy).map(function(note) {
-      if (note.identifier() !== identifier) {
+      if (note === noteToMove) {
         return note;
       } else {
         return note.updateCoordinates(newCoordinates);
@@ -49,13 +49,13 @@ networkStickies.NoteSet = function(notes) {
 
   /**
    * Delete a note.
-   * @param {number} identifier the ID of the note.
+   * @param {networkStickies.Note} noteToDelete the note to delete.
    * @return {networkStickies.NoteSet} the updated model.
    * @const
    */
-  this.deleteNoteWithId = function(identifier) {
+  this.deleteNoteWithId = function(noteToDelete) {
     /** @const */ var newNotes = _(notesCopy).reject(function(note) {
-      return note.identifier() === identifier;
+      return note === noteToDelete;
     });
     return new networkStickies.NoteSet(newNotes);
   };

@@ -35,48 +35,38 @@ networkStickies.NoteModel.prototype.notifyObservers = function() {
 
 /**
  * Edits a note.
- * @param {number} identifier the ID of the note.
+ * @param {networkStickies.Note} noteToEdit the note to edit.
  * @param {string} newBody the new body for the note.
  * @const
  */
 networkStickies.NoteModel.prototype.editNoteWithId =
-    function(identifier, newBody) {
-  this.noteSet = this.noteSet.editNoteWithId(identifier, newBody);
+    function(noteToEdit, newBody) {
+  this.noteSet = this.noteSet.editNoteWithId(noteToEdit, newBody);
   this.notifyObservers();
 };
 
 
 /**
  * Deletes a note.
- * @param {number} identifier the ID of the note.
+ * @param {networkStickies.Note} noteToDelete the note to delete.
  * @const
  */
-networkStickies.NoteModel.prototype.deleteNoteWithId = function(identifier) {
-  this.noteSet = this.noteSet.deleteNoteWithId(identifier);
+networkStickies.NoteModel.prototype.deleteNoteWithId = function(noteToDelete) {
+  this.noteSet = this.noteSet.deleteNoteWithId(noteToDelete);
   this.notifyObservers();
 };
 
 
 /**
  * Moves a note's position.
- * @param {number} identifier the ID of the note.
+ * @param {networkStickies.Note} noteToMove the note to move.
  * @param {{top: number, left: number}} newCoordinates the updated coordinates.
  * @const
  */
 networkStickies.NoteModel.prototype.moveNoteWithId =
-    function(identifier, newCoordinates) {
-  this.noteSet = this.noteSet.moveNoteWithId(identifier, newCoordinates);
+    function(noteToMove, newCoordinates) {
+  this.noteSet = this.noteSet.moveNoteWithId(noteToMove, newCoordinates);
   this.notifyObservers();
-};
-
-
-/**
- * Add an observer.
- * @param {networkStickies.Observer} observer the observer to add.
- * @const
- */
-networkStickies.NoteModel.prototype.addObserver = function(observer) {
-  this.observers.push(observer);
 };
 
 
@@ -88,4 +78,14 @@ networkStickies.NoteModel.prototype.addObserver = function(observer) {
 networkStickies.NoteModel.prototype.addNote = function(note) {
   this.noteSet = this.noteSet.addNote(note);
   this.notifyObservers();
+};
+
+
+/**
+ * Add an observer.
+ * @param {networkStickies.Observer} observer the observer to add.
+ * @const
+ */
+networkStickies.NoteModel.prototype.addObserver = function(observer) {
+  this.observers.push(observer);
 };
