@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'NotethisRegular';
+    src: url('fonts/Note_this-webfont.eot');
+    src: url('fonts/Note_this-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/Note_this-webfont.woff') format('woff'),
+         url('fonts/Note_this-webfont.ttf') format('truetype'),
+         url('fonts/Note_this-webfont.svg#NotethisRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 body {
   margin: 0 auto;
   background-color: #99FFFF;
@@ -25,12 +35,23 @@ li {
   margin-bottom: 10px;
   padding-left: 130px;
 }
+input {
+  font-family: Arial,Verdana,sans-serif;
+  background: transparent url(forms/subfield.jpg)
+}
 textarea {
+  font-family: NotethisRegular;
+  background: transparent url(forms/msgfield.jpg);
   width: 120px;
   height: 80px;
   border: 3px solid #CCCCCC;
 }
+.button {
+  /*background: #ACB4CB;*/
+  background: #FAFAD2;
+}
 .note {
+  font-family: NotethisRegular;
   background-color: #FFFF33;
   width: 140px;
   height: 130px;
