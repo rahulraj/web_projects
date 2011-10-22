@@ -221,6 +221,10 @@ networkStickies.NoteView.Builder.prototype.viewing = function(note) {
   return this;
 };
 
+networkStickies.NoteView.Builder.createButton = function(value) {
+  return $('<input>', {type: 'button', 'class': 'button', value: value});
+};
+
 
 /**
  * Add an Edit button.
@@ -228,7 +232,7 @@ networkStickies.NoteView.Builder.prototype.viewing = function(note) {
  * @const
  */
 networkStickies.NoteView.Builder.prototype.withEditButton = function() {
-  this.editButton = $('<input>', {type: 'button', value: 'Edit'});
+  this.editButton = networkStickies.NoteView.Builder.createButton('Edit');
   this.noteElement.append(this.editButton);
   return this;
 };
@@ -240,7 +244,7 @@ networkStickies.NoteView.Builder.prototype.withEditButton = function() {
  * @const
  */
 networkStickies.NoteView.Builder.prototype.withDeleteButton = function() {
-  this.deleteButton = $('<input>', {type: 'button', value: 'Delete'});
+  this.deleteButton = networkStickies.NoteView.Builder.createButton('Delete');
   this.noteElement.append(this.deleteButton);
   return this;
 };
@@ -252,7 +256,7 @@ networkStickies.NoteView.Builder.prototype.withDeleteButton = function() {
  * @const
  */
 networkStickies.NoteView.Builder.prototype.withEnterButton = function() {
-  this.enterButton = $('<input>', {type: 'button', value: 'Enter'});
+  this.enterButton = networkStickies.NoteView.Builder.createButton('Enter');
   this.enterButton.hide();
   this.noteElement.append(this.enterButton);
   return this;

@@ -17,11 +17,10 @@ networkStickies.NoteMvcFactory = {};
 networkStickies.NoteMvcFactory.createAddButton =
     function(parentElement, model) {
   // make an add notes button and its click event
-  /** @const */ var addNoteButton = $('<input>',
-      {type: 'button', value: 'Add a New Note'});
+  /** @const */ var addNoteButton =
+      networkStickies.NoteView.Builder.createButton('Add a New Note');
   addNoteButton.bind('click', function(event) {
     /** @const */ var newNote = networkStickies.Note.createNote('New Note');
-    // TODO See why the new notes keep moving down
     /** @const */ var coordinates = {top: 50, left: 50};
     /** @const */ var newView = networkStickies.NoteView.of(newNote);
     /** @const */ var controller = new networkStickies.NoteController(
@@ -29,7 +28,7 @@ networkStickies.NoteMvcFactory.createAddButton =
     newView.changesHandledBy(controller);
     newView.attachTo(parentElement);
     model.addObserver(newView);
-    // By updating, the model will notify newView to populate itself.
+    // By updating, the model will tell newView to populate itself.
     model.addNote(newNote);
   });
   return addNoteButton
