@@ -199,7 +199,9 @@ networkStickies.NoteView.Builder = function() {
  * @const
  */
 networkStickies.NoteView.Builder.prototype.offsetBy = function(coordinates) {
-  this.noteElement.offset(coordinates);
+  this.noteElement.css('position', 'absolute');
+  this.noteElement.css('top', coordinates.top + 'px');
+  this.noteElement.css('left', coordinates.left + 'px');
   return this;
 };
 
