@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Demonstration of Dangers of Obtrusive Javascript</title>
+	<script>
+	function click () {alert("clicked!");}
+	</script>
+	
+</head>
+
+<body>
+
+<!-- this works
+<span onclick="click()">click here</span>
+-->
+
+<!-- what follows in non-commented code fails, but renaming to click_dnj works
+
+To see what's going on, replace by the following and see that click is bound to native code:
+<input onclick="console.log(click)"></input>
+
+Or try this, to display attribute and see that listener string is executed in context of this element:
+<input id="x" onclick="console.log(getAttribute('id'))"></input>
+
+See https://developer.mozilla.org/en/DOM/element#Methods
+click is bound in this context! simulates click on element
+
+-->
+<input id="x" onclick="click()"></input>
+
+
+</body>
+
+</html>

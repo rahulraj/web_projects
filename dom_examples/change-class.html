@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<head>
+	<title>changing class in DOM example</title>
+    
+    <style>
+    .plain {color: black}
+    .highlight {color: red}
+    </style>
+
+	<script>
+		// modify the CSS class associated with the 
+		// element with id 'content' to be 'highlight'
+        function highlight_content() {
+        	var e = document.getElementById('content');
+        	e.className = 'highlight';
+        }
+
+		// enter this in the browser console:
+        // highlight_content();
+
+	</script>
+	
+	
+</head>
+
+<body>
+	<h1 id="header">
+	    My new webpage
+	</h1>
+	<div id="content" class="plain">Welcome!
+	</div>
+</body>
+</html>

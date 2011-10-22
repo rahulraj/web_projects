@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'NotethisRegular';
+    src: url('fonts/Note_this-webfont.eot');
+    src: url('fonts/Note_this-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/Note_this-webfont.woff') format('woff'),
+         url('fonts/Note_this-webfont.ttf') format('truetype'),
+         url('fonts/Note_this-webfont.svg#NotethisRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 body {
   margin: 0 auto;
   background-color: #99FFFF;
@@ -14,8 +24,7 @@ h1 {
   font-family: Arial,Verdana,sans-serif;
 }
 section {
-  font-family: "Times New Roman",Georgia,serif;
-  position: relative;
+  font-family: Georgia,"Times New Roman",serif;
   margin: auto auto;
   width: 550px;
 }
@@ -26,12 +35,25 @@ li {
   margin-bottom: 10px;
   padding-left: 130px;
 }
+input {
+  font-family: Arial,Verdana,sans-serif;
+  background: transparent url(forms/subfield.jpg)
+}
 textarea {
+  font-family: NotethisRegular;
+  background: transparent url(forms/msgfield.jpg);
   width: 120px;
   height: 80px;
   border: 3px solid #CCCCCC;
 }
+.button {
+  background: #FAFAD2;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
 .note {
+  font-family: NotethisRegular;
   background-color: #FFFF33;
   width: 140px;
   height: 130px;

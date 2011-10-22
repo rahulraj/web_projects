@@ -1,0 +1,15 @@
+How to run network clock locally
+-- cd to this directory
+-- execute the command
+	python runserver.py
+-- you should now have a server running at http://127.0.0.1:5000
+-- open a browser and load the page at this url
+
+Now
+-- the page should display the time in GMT, and should refresh it continually
+-- you can click on the time element to stop and start the refreshing
+
+How to run on scripts.mit.edu
+
+-- point the code to http://[USERNAME].scripts.mit.edu/workrepo_6170/network_clock_example/
+where [USERNAME] is your athena name. This will load the file index.fcgi which starts the server and loads the clock app
