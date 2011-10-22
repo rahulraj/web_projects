@@ -128,17 +128,12 @@ class UserData(object):
       salt the salt used to hash the password.
       stickies_json the JSON string  for their stickies.
     """
-    self.hashed_password = hashed_password
-    self.salt = salt
-    self.stickies_json = stickies_json
-
-  def get_stickies_json(self):
-    return self.stickies_json
+    assign_injectables(self, locals())
 
   def update_stickies(self, new_stickies_json):
     """ Returns a new UserData with the updated stickies """
     return UserData(self.hashed_password, self.salt, new_stickies_json)
-with_getters_for(UserData, 'hashed_password', 'salt')
+with_getters_for(UserData, 'hashed_password', 'salt', 'stickies_json')
 
 def confirmed_password_valid(password, confirmation):
   """
