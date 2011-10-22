@@ -18,10 +18,15 @@ def zwrite(msg):
 
 @app.route('/')
 def index():
+  """ Simply displays the landing page. """
   return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+  """
+  Sending a GET request gets the login form page.
+  Sending a POST request tries to logs in the user.
+  """
   if request.method == 'GET':
     return render_template('login.html')
   else:
@@ -36,11 +41,21 @@ def login():
     return render_template('login.html')
 
 def fail_registration(message):
+  """ 
+  Helper function to handle a request that failed for some reason.
+  Args:
+   message the error message to flash
+  """
   flash(message)
   return render_template('register.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+  """
+  Sending a GET request returns the register.html page.
+  Sending a POST request validates, then registers the user.
+  If successful, the user is immediately brought to the sticky note page.
+  """
   if request.method == 'GET':
     return render_template('register.html')
   else:
@@ -66,6 +81,10 @@ def register():
 
 @app.route('/notes')
 def notes():
+  """
+  Notes page, users can organize notes here.
+  JavaScript does most of the processing.
+  """
   if 'username' not in session:
     return redirect(url_for('login'))
   storage_url = url_for('notes_storage')
@@ -79,6 +98,8 @@ def notes_storage():
   the user logged in (checked via the session).
   
   Sending a POST request updates the shelf with the provided new values.
+
+  JavaScript calls this function to save/load notes.
   """
   if 'username' not in session:
     abort(401)
@@ -94,6 +115,9 @@ def notes_storage():
 
 @app.route('/logout')
 def logout():
+  """
+  Log the user out.
+  """
   session.pop('username', None)
   return redirect(url_for('login'))
 
