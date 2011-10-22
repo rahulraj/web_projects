@@ -47,8 +47,10 @@ textarea {
   border: 3px solid #CCCCCC;
 }
 .button {
-  /*background: #ACB4CB;*/
   background: #FAFAD2;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 .note {
   font-family: NotethisRegular;
