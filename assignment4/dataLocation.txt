@@ -1,0 +1,4 @@
+The data from a run of the application can be found in src/users
+
+This file was created by the shelve module, and maps usernames 
+to UserData objects.
