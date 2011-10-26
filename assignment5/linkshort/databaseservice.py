@@ -33,7 +33,13 @@ class DatabaseService(object):
   def add_user(self, user):
     """
     Ignores the ID attribute of user, allowing the database to create
-    a new autoincrement ID.
+    a new autoincrement ID. Use the returned User to make calls to find_*
+
+    Args:
+      user a User object containing the row data (except for the ID)
+
+    Returns:
+      A new User object with the ID field filled in.
     """
     self.database.execute( \
         'insert into users values (NULL, :username, :hashed_password, :salt)',
@@ -59,7 +65,7 @@ class DatabaseService(object):
 
   def add_page_visit(self, visit):
     self.database.execute( \
-        'insert into page_visits (NULL, :for_page, :time_visited)',
+        'insert into page_visits values (NULL, :for_page, :time_visited)',
         {'for_page': visit.get_for_page(),
          'time_visited': visit.get_time_visited()})
     return PageVisit(visit.get_for_page(), visit.get_time_visited(),
@@ -67,7 +73,7 @@ class DatabaseService(object):
 
   def add_visit_for_page(self, page, time_visited):
     for_page = page.get_id()
-    visit = PageVisit(for_page, time_visited)
+    visit = PageVisit(for_page=for_page, time_visited=time_visited)
     return self.add_page_visit(visit)
 
   def user_query(self, username):
@@ -103,10 +109,9 @@ class DatabaseService(object):
         """
         select id, created_by_user, original_url, shortened_url
             from pages
-            where pages.created_by_user = :user_id
-            order by pages.id
-        """, {'user_id': user.get_id()}
-        )
+            where created_by_user = :user_id
+            order by id
+        """, {'user_id': user.get_id()})
     return (Page(page_row[1], page_row[2], page_row[3], id=page_row[0]) for \
         page_row in self.database)
 
@@ -115,9 +120,11 @@ class DatabaseService(object):
         """ 
         select id, for_page, time_visited
         from page_visits
-        """
-        
-        )
+        where for_page = :page_id
+        order by id
+        """, {'page_id': page.get_id()})
+    return (PageVisit(visit_row[1], visit_row[2], id=visit_row[0]) for \
+        visit_row in self.database)
 
 """ 
 Immutable data objects representing rows in the databases.
@@ -138,4 +145,4 @@ with_getters_for(Page, 'id', 'created_by_user', 'original_url', 'shortened_url')
 class PageVisit(object):
   def __init__(self, for_page, time_visited, id=None):
     assign_injectables(self, locals())
-with_getters_for(PageVisit, 'id' 'for_page', 'time_visited')
+with_getters_for(PageVisit, 'id', 'for_page', 'time_visited')
