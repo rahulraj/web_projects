@@ -1,6 +1,6 @@
 from contextlib import closing
 import sqlite3
-from flask import Flask
+from flask import Flask, g
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -22,11 +22,13 @@ def initialize_database():
 @app.before_request
 def before_request():
     """ open dictionary/db connection"""
+    g.database = connect_database()
 
 
 @app.after_request
 def shutdown_session(response):
     """ Closes the dictionary/db connection after each request """
+    g.database.close()
     return response
 
 @app.route('/')
