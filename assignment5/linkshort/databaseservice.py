@@ -199,6 +199,27 @@ class DatabaseService(object):
     return (Page(page_row[1], page_row[2], page_row[3], id=page_row[0]) for \
         page_row in self.database)
 
+  def find_page_by_shortened_url(self, shortened_url):
+    """
+    Finds the page whose shortened_url is the one given
+
+    Args:
+      shortened_url the URL to look up
+
+    Returns:
+      The Page with that URL, or None if it doesn't exist.
+    """
+    self.database.execute( \
+        """ 
+        select id, created_by_user, original_url, shortened_url
+        from pages
+        where shortened_url = :shortened_url
+        """, {'shortened_url': shortened_url})
+    row = self.database.fetchone()
+    if row is None:
+      return None
+    return Page(row[1], row[2], row[3], id=row[0])
+
   def find_visits_of_page(self, page):
     """
     Finds the visit data for a page

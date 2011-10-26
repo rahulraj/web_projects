@@ -93,6 +93,22 @@ class DatabaseServiceTest(unittest.TestCase):
     self.assertEquals(self.second_shortened,
         second_pages[0].get_shortened_url())
 
+  def test_find_page_by_shortened_url(self):
+    first_user = self.database.add_user(self.test_user)
+    self.database.add_page_for_user(first_user,
+        self.first_url, self.first_shortened)
+    self.database.add_page_for_user(first_user,
+        self.second_url, self.second_shortened)
+
+    first_page = \
+        self.database.find_page_by_shortened_url(self.first_shortened)
+    self.assertEquals(self.first_shortened, first_page.get_shortened_url())
+
+    second_page = \
+        self.database.find_page_by_shortened_url(self.second_shortened)
+    self.assertEquals(self.second_shortened, second_page.get_shortened_url())
+
+
   def test_visits_of_pages(self):
     user = self.database.add_user(self.test_user)
 
