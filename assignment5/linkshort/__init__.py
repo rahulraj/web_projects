@@ -1,6 +1,5 @@
-from contextlib import closing
-import sqlite3
 from flask import Flask, g
+import databaseservice
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -10,14 +9,11 @@ app.secret_key = \
 app.database = 'link_shortener.db'
 
 def connect_database():
-  return sqlite3.connect(app.database)
+  return databaseservice.connect_database(app.database)
 
 def initialize_database():
-  with closing(connect_database()) as database:
-    with app.open_resource('schema.sql') as schema:
-      database.cursor().executescript(schema.read())
-    database.commit()
-
+  with app.open_resource('schema.sql') as schema:
+    databaseservice.initialize_database(app.database, schema)
 
 @app.before_request
 def before_request():
