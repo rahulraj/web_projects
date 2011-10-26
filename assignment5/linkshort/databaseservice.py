@@ -65,6 +65,11 @@ class DatabaseService(object):
     return PageView(view.get_for_page(), view.get_time_visited(),
         self.database.lastrowid)
 
+  def add_view_for_page(self, page, time_visited):
+    for_page = page.get_id()
+    view = PageView(for_page, time_visited)
+    return self.add_page_view(view)
+
   def user_query(self, username):
     self.database.execute( \
         'select * from users where username=:username',
@@ -96,14 +101,16 @@ class DatabaseService(object):
   def find_pages_by_user(self, user):
     self.database.execute( \
         """
-        select pages.id, pages.created_by_user, pages.original_url, 
-            pages.shortened_url from pages, users
-            where pages.created_by_user = users.id
+        select id, created_by_user, original_url, shortened_url
+            from pages
+            where pages.created_by_user = :user_id
             order by pages.id
-        """
+        """, {'user_id': user.get_id()}
         )
     return (Page(page_row[1], page_row[2], page_row[3], id=page_row[0]) for \
         page_row in self.database)
+
+  #def find_views_of_page(self, page):
 
 """ 
 Immutable data objects representing rows in the databases.
