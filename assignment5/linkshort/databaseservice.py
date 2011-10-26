@@ -57,18 +57,18 @@ class DatabaseService(object):
     page = Page(created_by, original_url, shortened_url)
     return self.add_page(page)
 
-  def add_page_view(self, view):
+  def add_page_visit(self, visit):
     self.database.execute( \
         'insert into page_visits (NULL, :for_page, :time_visited)',
-        {'for_page': view.get_for_page(),
-         'time_visited': view.get_time_visited()})
-    return PageView(view.get_for_page(), view.get_time_visited(),
+        {'for_page': visit.get_for_page(),
+         'time_visited': visit.get_time_visited()})
+    return PageVisit(visit.get_for_page(), visit.get_time_visited(),
         self.database.lastrowid)
 
-  def add_view_for_page(self, page, time_visited):
+  def add_visit_for_page(self, page, time_visited):
     for_page = page.get_id()
-    view = PageView(for_page, time_visited)
-    return self.add_page_view(view)
+    visit = PageVisit(for_page, time_visited)
+    return self.add_page_visit(visit)
 
   def user_query(self, username):
     self.database.execute( \
@@ -110,7 +110,14 @@ class DatabaseService(object):
     return (Page(page_row[1], page_row[2], page_row[3], id=page_row[0]) for \
         page_row in self.database)
 
-  #def find_views_of_page(self, page):
+  def find_visits_of_page(self, page):
+    self.database.execute( \
+        """ 
+        select id, for_page, time_visited
+        from page_visits
+        """
+        
+        )
 
 """ 
 Immutable data objects representing rows in the databases.
@@ -128,7 +135,7 @@ class Page(object):
     assign_injectables(self, locals())
 with_getters_for(Page, 'id', 'created_by_user', 'original_url', 'shortened_url')
 
-class PageView(object):
+class PageVisit(object):
   def __init__(self, for_page, time_visited, id=None):
     assign_injectables(self, locals())
-with_getters_for(PageView, 'id' 'for_page', 'time_visited')
+with_getters_for(PageVisit, 'id' 'for_page', 'time_visited')
