@@ -4,14 +4,28 @@ from inject import assign_injectables
 from getters import with_getters_for
 
 def connect_database(database_file):
+  """
+  Connect to a database
+
+  Args:
+    database_file the file containing the sqlite3 data.
+  """
   return sqlite3.connect(database_file)
 
 def initialize_database(database_file, schema):
+  """
+  Initialize a database
+
+  Args:
+    database_file the file to put the database
+    schema the file containing the database schema
+  """
   with closing(connect_database(database_file)) as database:
     database.cursor().executescript(schema.read())
     database.commit()
 
 class NoSuchUser(Exception):
+  """ The user requested does not exist. """
   pass
 
 class DatabaseService(object):
@@ -51,6 +65,15 @@ class DatabaseService(object):
         user.get_salt(), id=self.database.lastrowid)
 
   def add_page(self, page):
+    """
+    Adds a page, creating an autoincrement ID
+
+    Args:
+      page a Page object with the row data (except the ID)
+
+    Returns:
+      A new Page object with ID populated.
+    """
     self.database.execute( \
         """
         insert into pages 
@@ -63,11 +86,31 @@ class DatabaseService(object):
         page.get_shortened_url(), id=self.database.lastrowid)
 
   def add_page_for_user(self, user, original_url, shortened_url):
+    """
+    Add a page that a user entered and shortened.
+
+    Args:
+      user the user who created the page.
+      original_url the original URL.
+      shortened_url the shortened URL.
+
+    Returns:
+      The Page object created.
+    """
     created_by = user.get_id()
     page = Page(created_by, original_url, shortened_url)
     return self.add_page(page)
 
   def add_page_visit(self, visit):
+    """
+    Adds a PageVisit, with an autoincrement ID
+    
+    Args:
+      visit a PageVisit object with the row data
+
+    Returns:
+      A new PageVisit with ID populated.
+    """
     self.database.execute( \
         'insert into page_visits values (null, :for_page, :time_visited)',
         {'for_page': visit.get_for_page(),
@@ -76,17 +119,45 @@ class DatabaseService(object):
         self.database.lastrowid)
 
   def add_visit_for_page(self, page, time_visited):
+    """
+    Note a visit for a shortened page
+
+    Args:
+      page the page that was visited.
+      time_visited the time when it was visited
+
+    Returns:
+      The created PageVisit.
+    """
     for_page = page.get_id()
     visit = PageVisit(for_page=for_page, time_visited=time_visited)
     return self.add_page_visit(visit)
 
   def user_query(self, username):
+    """
+    Helper method to query for a user
+
+    Args:
+      username the name of the user
+
+    Returns:
+      The row with that username.
+    """
     self.database.execute( \
         'select * from users where username=:username',
         {'username': username})
     return self.database.fetchone()
 
   def has_user_with_name(self, username):
+    """
+    Tell if a user exists
+
+    Args:
+     username the user name to check.
+
+    Returns:
+      True if that username is in the database.
+    """
     row = self.user_query(username) 
     return row is not None
 
@@ -109,6 +180,15 @@ class DatabaseService(object):
     return User(row[1], row[2], row[3], id=row[0])
 
   def find_pages_by_user(self, user):
+    """
+    Finds the pages submitted by user
+
+    Args:
+      user the user by which to make lookups.
+
+    Returns:
+      A generator, containing the Pages that user shortened.
+    """
     self.database.execute( \
         """
         select id, created_by_user, original_url, shortened_url
@@ -120,6 +200,15 @@ class DatabaseService(object):
         page_row in self.database)
 
   def find_visits_of_page(self, page):
+    """
+    Finds the visit data for a page
+
+    Args:
+      page the page to lookup
+
+    Returns:
+      A generator containing the PageVisits logged for page.
+    """
     self.database.execute( \
         """ 
         select id, for_page, time_visited
