@@ -10,7 +10,15 @@ class DatabaseServiceTest(unittest.TestCase):
     self.database_cursor = \
         databaseservice.connect_database(self.database_file).cursor()
     self.database = databaseservice.DatabaseService(self.database_cursor)
+
+    # Test data
+    self.first_url = 'first_url'
+    self.first_shortened = 'first_shortened'
+
+    self.second_url = 'second_url'
+    self.second_shortened = 'second_shortened'
     self.test_user = databaseservice.User('rahulraj', 'fake_hash', 'fake_salt')
+    self.second_user = databaseservice.User('second', 'fake_hash2', 'fake_salt2')
 
   def test_user_not_initially_in_database(self):
     self.assertFalse( \
@@ -34,21 +42,38 @@ class DatabaseServiceTest(unittest.TestCase):
     self.assertEquals(row_id, result_row[0])
 
   def test_create_pages_for_user(self):
-    first_url = 'first_url'
-    first_shortened = 'first_shortened'
-
-    second_url = 'second_url'
-    second_shortened = 'second_shortened'
-
     user = self.database.add_user(self.test_user)
-    self.database.add_page_for_user(user, first_url, first_shortened)
-    self.database.add_page_for_user(user, second_url, second_shortened)
+    self.database.add_page_for_user(user, self.first_url, self.first_shortened)
+    self.database.add_page_for_user(user, self.second_url, 
+        self.second_shortened)
 
     pages = list(self.database.find_pages_by_user(user))
-    self.assertEquals(first_url, pages[0].get_original_url())
-    self.assertEquals(first_shortened, pages[0].get_shortened_url())
-    self.assertEquals(second_url, pages[1].get_original_url())
-    self.assertEquals(second_shortened, pages[1].get_shortened_url())
+    self.assertEquals(2, len(pages))
+    self.assertEquals(self.first_url, pages[0].get_original_url())
+    self.assertEquals(self.first_shortened, pages[0].get_shortened_url())
+    self.assertEquals(self.second_url, pages[1].get_original_url())
+    self.assertEquals(self.second_shortened, pages[1].get_shortened_url())
+
+  def test_create_pages_multiple_users(self):
+    first_user = self.database.add_user(self.test_user)
+    second_user = self.database.add_user(self.second_user)
+
+    self.database.add_page_for_user(first_user,
+        self.first_url, self.first_shortened)
+    self.database.add_page_for_user(second_user,
+        self.second_url, self.second_shortened)
+
+    first_pages = list(self.database.find_pages_by_user(first_user))
+    self.assertEquals(1, len(first_pages))
+    self.assertEquals(self.first_url, first_pages[0].get_original_url())
+    self.assertEquals(self.first_shortened, first_pages[0].get_shortened_url())
+
+    second_pages = list(self.database.find_pages_by_user(second_user))
+    self.assertEquals(1, len(second_pages))
+    self.assertEquals(self.second_url, second_pages[0].get_original_url())
+    self.assertEquals(self.second_shortened,
+        second_pages[0].get_shortened_url())
+
 
 
   def tearDown(self):
