@@ -41,8 +41,9 @@ class DatabaseService(object):
     Returns:
       A new User object with the ID field filled in.
     """
+    # Pass in null for the ID; sqlite will automatically generate an ID.
     self.database.execute( \
-        'insert into users values (NULL, :username, :hashed_password, :salt)',
+        'insert into users values (null, :username, :hashed_password, :salt)',
         {'username': user.get_username(), 
          'hashed_password': user.get_hashed_password(),
          'salt': user.get_salt()})
@@ -51,7 +52,10 @@ class DatabaseService(object):
 
   def add_page(self, page):
     self.database.execute( \
-        'insert into pages values (NULL, :created_by_user, :original_url, :shortened_url)',
+        """
+        insert into pages 
+        values (null, :created_by_user, :original_url, :shortened_url)
+        """,
         {'created_by_user': page.get_created_by_user(),
          'original_url': page.get_original_url(),
          'shortened_url': page.get_shortened_url()})
@@ -65,7 +69,7 @@ class DatabaseService(object):
 
   def add_page_visit(self, visit):
     self.database.execute( \
-        'insert into page_visits values (NULL, :for_page, :time_visited)',
+        'insert into page_visits values (null, :for_page, :time_visited)',
         {'for_page': visit.get_for_page(),
          'time_visited': visit.get_time_visited()})
     return PageVisit(visit.get_for_page(), visit.get_time_visited(),

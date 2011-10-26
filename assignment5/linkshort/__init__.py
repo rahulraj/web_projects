@@ -30,4 +30,3 @@ def shutdown_session(response):
 @app.route('/')
 def index():
     return "Hello World! I'm a flask example."
-

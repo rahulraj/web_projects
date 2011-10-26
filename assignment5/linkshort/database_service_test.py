@@ -11,6 +11,9 @@ class PageVisitTest(unittest.TestCase):
     self.assertEquals(12345, self.visit.get_time_visited())
 
 class DatabaseServiceTest(unittest.TestCase):
+  """
+  These tests talk to an actual database, so they might run a bit slower.
+  """
   def setUp(self):
     self.database_file = 'test.db'
     with open('schema.sql') as schema:
