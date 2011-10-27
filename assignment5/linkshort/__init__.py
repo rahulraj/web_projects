@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, g, render_template
 import databaseservice
 
 app = Flask(__name__)
@@ -29,4 +29,7 @@ def shutdown_session(response):
 
 @app.route('/')
 def index():
-    return "Hello World! I'm a flask example."
+    return render_template('index.html')
+
+if __name__ == '__main__':
+  app.run(debug=True)
