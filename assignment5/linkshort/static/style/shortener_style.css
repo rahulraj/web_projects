@@ -8,6 +8,10 @@ body {
   /*background-color: #439300;*/
   background-color: #64AA2B;
 }
+header {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
 .container_12 {
   margin-top: 15px;
   background-color: #A9F16C;
@@ -16,11 +20,6 @@ body {
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
 
-  /*
-  box-shadow: 5px 5px 5px #888;
-  -moz-box-shadow: 5px 5px 5px #888;
-  -webkit-box-shadow: 5px 5px 5px #888;
-  */
   box-shadow: 5px 5px 5px #292929;
   -moz-box-shadow: 5px 5px 5px #292929;
   -webkit-box-shadow: 5px 5px 5px #292929;
