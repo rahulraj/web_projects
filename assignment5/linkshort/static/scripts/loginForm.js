@@ -4,6 +4,7 @@
  * @param {jQueryObject} passwordField the password field.
  * @param {jQueryObject} submitButton the submit button.
  * @constructor
+ * @const
  */
 shortener.LoginForm =
     function(formElement, usernameField, passwordField, submitButton) {
@@ -13,10 +14,22 @@ shortener.LoginForm =
   /** @const */ this.submitButton = submitButton;
 };
 
+
+/**
+ * Attach this to a parent.
+ * @param {jQueryObject} parentElement the parent.
+ * @const
+ */
 shortener.LoginForm.prototype.attachTo = function(parentElement) {
   parentElement.append(this.formElement);
 };
 
+
+/**
+ * Factory function for a LoginForm
+ * @return {shortener.LoginForm} the form.
+ * @const
+ */
 shortener.LoginForm.newForm = function() {
   return new shortener.LoginForm.Builder().
       usernameField().
@@ -26,7 +39,9 @@ shortener.LoginForm.newForm = function() {
 };
 
 /**
+ * Builder for LoginForms
  * @constructor
+ * @const
  */
 shortener.LoginForm.Builder = function() {
   /** 
@@ -40,12 +55,24 @@ shortener.LoginForm.Builder = function() {
   this.submitButtonElement = null;
 };
 
+
+/**
+ * Add a username field.
+ * @return {shortener.LoginForm.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.LoginForm.Builder.prototype.usernameField = function() {
   this.usernameFieldElement =
       shortener.FormFields.usernameField(this.fieldList);
   return this;
 };
 
+
+/**
+ * Add a password field.
+ * @return {shortener.LoginForm.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.LoginForm.Builder.prototype.passwordField = function() {
   this.passwordFieldElement =
       shortener.FormFields.passwordField(
@@ -53,12 +80,25 @@ shortener.LoginForm.Builder.prototype.passwordField = function() {
   return this;
 };
 
+
+/**
+ * Add a submit button.
+ * @return {shortener.LoginForm.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.LoginForm.Builder.prototype.submitButton = function() {
   this.submitButtonElement =
       shortener.FormFields.submitButton(this.fieldList, 'Log In');
   return this;
 };
 
+
+/**
+ * Build a LoginForm
+ * @return {shortener.LoginForm} the new form.
+ * @throws {Error} if not fully initialized.
+ * @const
+ */
 shortener.LoginForm.Builder.prototype.build = function() {
   if (!this.usernameField || !this.passwordField || !this.submitButton) {
     throw new Error('Not fully initialized') 

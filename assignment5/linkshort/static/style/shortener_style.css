@@ -14,6 +14,11 @@ header {
 ul {
   list-style-type: none;
 }
+li {
+  /* remove the indentation */
+  position: relative;
+  right: 30px;
+}
 .container_12 {
   margin-top: 15px;
   background-color: #A9F16C;
