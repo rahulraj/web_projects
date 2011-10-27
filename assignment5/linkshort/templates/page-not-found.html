@@ -1,0 +1,31 @@
+{#
+  Template to display when the user tries to navigate to a shortened
+  URL but it doesn't exist.
+
+  Args:
+    tried_url the URL that the user tried.
+#}
+
+{% extends "layout.html" %}
+{% block title_content %}
+  <title>Page Not Found</title>
+{% endblock %}
+{% block header_content %}
+  <header class="grid_12">
+    <h1>Page Not Found</h1>
+  </header>
+{% endblock %}
+{% block main_content %}
+  <div class="grid_12">
+    <p>
+      You've tried to access {{ tried_url }} but it doesn't correspond
+      to a page. This could be a typo, or the page could have been removed.
+    </p>
+
+    <p>
+      In any case, while you're here, why don't you try shortening some
+      URLs yourself?
+    </p>
+  </div>
+  <div class="clear"></div>
+{% endblock %}

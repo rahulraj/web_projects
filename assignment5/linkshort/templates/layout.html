@@ -13,6 +13,10 @@
     {% block title_content %}{% endblock %}
   </head>
   <body>
-    {% block body_content %}{% endblock %}
+    <div class="container container_12">
+      {% block header_content %}{% endblock %}
+      <div class="clear"></div>
+      {% block main_content %}{% endblock %}
+    </div>
   </body>
 </html>
