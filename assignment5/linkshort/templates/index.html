@@ -1,5 +1,15 @@
 {% extends "layout.html" %}
 {% block title_content %}
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='lib/underscore.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='lib/jquery-1.6.4.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/shortener.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/loginForm.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/main.js') }}"></script>
   <title>Link Shortener</title>
 {% endblock %}
 {% block header_content %}
@@ -8,8 +18,9 @@
   </header>
 {% endblock %}
 {% block main_content %}
-  <div class="grid_12">
+  <div class="grid_12" id="main">
     <p>Hello there</p>
+    <!-- JavaScript populates this at runtime -->
   </div>
   <div class="clear"></div>
 {% endblock %}
