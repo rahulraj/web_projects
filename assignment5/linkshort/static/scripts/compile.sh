@@ -7,7 +7,9 @@
 
 java -jar /home/rahulraj/dls/closure-compiler/compiler.jar \
   --js=shortener.js \
+  --js=formFields.js \
   --js=loginForm.js \
+  --js=registerForm.js \
   --js=main.js \
   --externs=externs.js --warning_level=VERBOSE \
   --compilation_level=SIMPLE_OPTIMIZATIONS \

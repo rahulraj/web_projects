@@ -17,7 +17,7 @@ shortener.LoginForm.prototype.attachTo = function(parentElement) {
   parentElement.append(this.formElement);
 };
 
-shortener.LoginForm.standardForm = function() {
+shortener.LoginForm.newForm = function() {
   return new shortener.LoginForm.Builder().
       usernameField().
       passwordField().
@@ -41,52 +41,21 @@ shortener.LoginForm.Builder = function() {
 };
 
 shortener.LoginForm.Builder.prototype.usernameField = function() {
-  /** @const */ var usernameLabel = $('<label>', {
-    'for': 'username',
-    'html': 'Username'
-  });
-  /** @const */ var labelListItem = $('<li>');
-  labelListItem.append(usernameLabel);
-  this.usernameFieldElement = $('<input>', {
-    type: 'text',
-    name: 'username',
-    value: ''
-  });
-  /** @const */ var fieldListItem = $('<li>');
-  fieldListItem.append(this.usernameFieldElement);
-  this.fieldList.append(labelListItem);
-  this.fieldList.append(fieldListItem);
+  this.usernameFieldElement =
+      shortener.FormFields.usernameField(this.fieldList);
   return this;
 };
 
 shortener.LoginForm.Builder.prototype.passwordField = function() {
-  /** @const */ var passwordLabel = $('<label>', {
-    'for': 'password',
-    'html': 'Password'
-  });
-  /** @const */ var labelListItem = $('<li>');
-  labelListItem.append(passwordLabel);
-  this.passwordFieldElement = $('<input>', {
-    type: 'password',
-    name: 'password',
-    value: ''
-  });
-  /** @const */ var fieldListItem = $('<li>');
-  fieldListItem.append(this.passwordFieldElement);
-  this.fieldList.append(labelListItem);
-  this.fieldList.append(fieldListItem);
+  this.passwordFieldElement =
+      shortener.FormFields.passwordField(
+        this.fieldList, 'password', 'Password');
   return this;
 };
 
 shortener.LoginForm.Builder.prototype.submitButton = function() {
-  this.submitButtonElement = $('<input>', {
-    type: 'button',
-    name: 'submit',
-    value: 'Log In'
-  });
-  /** @const */ var buttonListItem = $('<li>');
-  buttonListItem.append(this.submitButtonElement);
-  this.fieldList.append(buttonListItem);
+  this.submitButtonElement =
+      shortener.FormFields.submitButton(this.fieldList, 'Log In');
   return this;
 };
 
