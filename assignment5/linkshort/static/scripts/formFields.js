@@ -1,5 +1,18 @@
+
+
+/**
+ * Namespace for utility functions to create form fields.
+ * @const
+ */
 shortener.FormFields = {};
 
+
+/**
+ * Create a username field, and appends to the parent element.
+ * @param {jQueryObject} parentElement the parent element.
+ * @return {jQueryObject} the created username field.
+ * @const
+ */
 shortener.FormFields.usernameField = function(parentElement) {
   /** @const */ var usernameLabel = $('<label>', {
     'for': 'username',
@@ -16,9 +29,18 @@ shortener.FormFields.usernameField = function(parentElement) {
   fieldListItem.append(usernameFieldElement);
   parentElement.append(labelListItem);
   parentElement.append(fieldListItem);
-  return usernameFieldElement
+  return usernameFieldElement;
 };
 
+
+/**
+ * Create a passwordField and add it to the given parentElement.
+ * @param {jQueryObject} parentElement the parent for the field.
+ * @param {string} fieldName the name for the field.
+ * @param {string} label the label to display.
+ * @return {jQueryObject} the created field.
+ * @const
+ */
 shortener.FormFields.passwordField = function(parentElement, fieldName, label) {
   /** @const */ var passwordLabel = $('<label>', {
     'for': fieldName,
@@ -38,6 +60,14 @@ shortener.FormFields.passwordField = function(parentElement, fieldName, label) {
   return passwordFieldElement;
 };
 
+
+/**
+ * Create a submit button and add it to the given parent.
+ * @param {jQueryObject} parentElement the parent.
+ * @param {string} value the value to display in the button.
+ * @return {jQueryObject} the created button.
+ * @const
+ */
 shortener.FormFields.submitButton = function(parentElement, value) {
   /** @const */ var submitButtonElement = $('<input>', {
     type: 'button',

@@ -1,3 +1,6 @@
+
+
+
 /**
  * @param {jQueryObject} formElement the form element.
  * @param {jQueryObject} usernameField the username field.
@@ -38,16 +41,18 @@ shortener.LoginForm.newForm = function() {
       build();
 };
 
+
+
 /**
  * Builder for LoginForms
  * @constructor
  * @const
  */
 shortener.LoginForm.Builder = function() {
-  /** 
+  /**
    * @type {jQueryObject}
-   * @const 
-   */ 
+   * @const
+   */
   this.formElement = $('<form>');
   this.fieldList = $('<ul>');
   this.usernameFieldElement = null;
@@ -76,7 +81,7 @@ shortener.LoginForm.Builder.prototype.usernameField = function() {
 shortener.LoginForm.Builder.prototype.passwordField = function() {
   this.passwordFieldElement =
       shortener.FormFields.passwordField(
-        this.fieldList, 'password', 'Password');
+      this.fieldList, 'password', 'Password');
   return this;
 };
 
@@ -101,7 +106,7 @@ shortener.LoginForm.Builder.prototype.submitButton = function() {
  */
 shortener.LoginForm.Builder.prototype.build = function() {
   if (!this.usernameField || !this.passwordField || !this.submitButton) {
-    throw new Error('Not fully initialized') 
+    throw new Error('Not fully initialized');
   }
   this.formElement.append(this.fieldList);
   return new shortener.LoginForm(this.formElement, this.usernameFieldElement,

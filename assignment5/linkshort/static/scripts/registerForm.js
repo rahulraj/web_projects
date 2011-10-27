@@ -1,3 +1,6 @@
+
+
+
 /**
  * A register form.
  * @param {jQueryObject} formElement the form element.
@@ -42,6 +45,8 @@ shortener.RegisterForm.newForm = function() {
       build();
 };
 
+
+
 /**
  * Builder for RegisterForms
  * @constructor
@@ -49,7 +54,7 @@ shortener.RegisterForm.newForm = function() {
  */
 shortener.RegisterForm.Builder = function() {
   /** @const */ this.formElement = $('<form>');
-  /** @const */ this.fieldList = $('<ul>')
+  /** @const */ this.fieldList = $('<ul>');
   this.usernameFieldElement = null;
   this.passwordFieldElement = null;
   this.confirmationFieldElement = null;
@@ -77,7 +82,7 @@ shortener.RegisterForm.Builder.prototype.usernameField = function() {
 shortener.RegisterForm.Builder.prototype.passwordField = function() {
   this.passwordFieldElement =
       shortener.FormFields.passwordField(
-        this.fieldList, 'password', 'Password');
+      this.fieldList, 'password', 'Password');
   return this;
 };
 
@@ -90,7 +95,7 @@ shortener.RegisterForm.Builder.prototype.passwordField = function() {
 shortener.RegisterForm.Builder.prototype.confirmationField = function() {
   this.confirmationFieldElement =
       shortener.FormFields.passwordField(
-        this.fieldList, 'confirmPassword', 'Confirm Password');
+      this.fieldList, 'confirmPassword', 'Confirm Password');
   return this;
 };
 
@@ -102,7 +107,7 @@ shortener.RegisterForm.Builder.prototype.confirmationField = function() {
  */
 shortener.RegisterForm.Builder.prototype.submitButton = function() {
   this.submitButtonElement =
-    shortener.FormFields.submitButton(this.fieldList, 'Register');
+      shortener.FormFields.submitButton(this.fieldList, 'Register');
   return this;
 };
 
@@ -121,6 +126,6 @@ shortener.RegisterForm.Builder.prototype.build = function() {
   this.formElement.append(this.fieldList);
   return new shortener.RegisterForm(
       this.formElement, this.usernameFieldElement,
-      this.passwordFieldElement, this.confirmationFieldElement, 
+      this.passwordFieldElement, this.confirmationFieldElement,
       this.submitButtonElement);
 };
