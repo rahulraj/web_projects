@@ -34,6 +34,7 @@ shortener.LoginForm.Builder = function() {
    * @const 
    */ 
   this.formElement = $('<form>');
+  this.fieldList = $('<ul>');
   this.usernameFieldElement = null;
   this.passwordFieldElement = null;
   this.submitButtonElement = null;
@@ -44,13 +45,17 @@ shortener.LoginForm.Builder.prototype.usernameField = function() {
     'for': 'username',
     'html': 'Username'
   });
+  /** @const */ var labelListItem = $('<li>');
+  labelListItem.append(usernameLabel);
   this.usernameFieldElement = $('<input>', {
     type: 'text',
     name: 'username',
     value: ''
   });
-  this.formElement.append(usernameLabel);
-  this.formElement.append(this.usernameFieldElement);
+  /** @const */ var fieldListItem = $('<li>');
+  fieldListItem.append(this.usernameFieldElement);
+  this.fieldList.append(labelListItem);
+  this.fieldList.append(fieldListItem);
   return this;
 };
 
@@ -59,13 +64,17 @@ shortener.LoginForm.Builder.prototype.passwordField = function() {
     'for': 'password',
     'html': 'Password'
   });
+  /** @const */ var labelListItem = $('<li>');
+  labelListItem.append(passwordLabel);
   this.passwordFieldElement = $('<input>', {
     type: 'password',
     name: 'password',
     value: ''
   });
-  this.formElement.append(passwordLabel);
-  this.formElement.append(this.passwordFieldElement);
+  /** @const */ var fieldListItem = $('<li>');
+  fieldListItem.append(this.passwordFieldElement);
+  this.fieldList.append(labelListItem);
+  this.fieldList.append(fieldListItem);
   return this;
 };
 
@@ -75,7 +84,9 @@ shortener.LoginForm.Builder.prototype.submitButton = function() {
     name: 'submit',
     value: 'Log In'
   });
-  this.formElement.append(this.submitButtonElement);
+  /** @const */ var buttonListItem = $('<li>');
+  buttonListItem.append(this.submitButtonElement);
+  this.fieldList.append(buttonListItem);
   return this;
 };
 
@@ -83,6 +94,7 @@ shortener.LoginForm.Builder.prototype.build = function() {
   if (!this.usernameField || !this.passwordField || !this.submitButton) {
     throw new Error('Not fully initialized') 
   }
+  this.formElement.append(this.fieldList);
   return new shortener.LoginForm(this.formElement, this.usernameFieldElement,
       this.passwordFieldElement, this.submitButtonElement);
 };

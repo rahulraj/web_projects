@@ -11,6 +11,9 @@ header {
   padding-top: 15px;
   padding-bottom: 15px;
 }
+ul {
+  list-style-type: none;
+}
 .container_12 {
   margin-top: 15px;
   background-color: #A9F16C;
@@ -22,5 +25,7 @@ header {
   box-shadow: 5px 5px 5px #292929;
   -moz-box-shadow: 5px 5px 5px #292929;
   -webkit-box-shadow: 5px 5px 5px #292929;
+
+  padding-bottom: 15px;
 }
 /* TODO #439400 use for buttons */
