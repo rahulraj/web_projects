@@ -289,7 +289,7 @@ class Page(object):
     result['originalUrl'] = self.original_url
     result['shortenedUrl'] = self.shortened_url
     def visit_to_dict(visit):
-      local_time = time.localtime(visit._get_time_visited())
+      local_time = time.localtime(visit.get_time_visited())
       formatted_time = time.strftime('%a %d %b %Y %H:%M:%S', local_time)
       return {'time_visited': formatted_time}
     result['visits'] = map(visit_to_dict, visits)

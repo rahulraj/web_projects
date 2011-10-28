@@ -1,3 +1,4 @@
+import time
 from flask import Flask, request, g, render_template, session, jsonify, abort, redirect
 from users import confirmed_password_valid, Users
 from shortener import create_url_shortener
@@ -105,6 +106,10 @@ def pages_by_user():
     reserved_urls = ('login', 'register', 'pages')
     make_short_url = create_url_shortener(g.database_service)
     url_to_shorten = request.form['originalUrl']
+    if url_to_shorten.startswith('http://'):
+      # Don't store the protocol in the database, if it was specified.
+      # This avoids client-side postprocessing later.
+      url_to_shorten = url_to_shorten[len('http://'):]
     output_url = request.form['outputUrl']
     if output_url.strip() == '':
       shortened_url = make_short_url()
@@ -130,6 +135,8 @@ def access_short_url(shortened_url):
     destination = 'http://' + original_url 
   else:
     destination = original_url
+  visit_time = int(time.time())
+  g.database_service.add_visit_for_page(page, visit_time)
   return redirect(destination)
 
 if __name__ == '__main__':

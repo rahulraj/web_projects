@@ -33,4 +33,15 @@ li {
 
   padding-bottom: 15px;
 }
+label {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+h2 {
+  padding-top: 15px;
+  text-align: center;
+}
+#pageManager li {
+  padding-top: 15px;
+}
 /* TODO #439400 use for buttons */

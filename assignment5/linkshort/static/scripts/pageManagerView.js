@@ -36,7 +36,7 @@ shortener.PageManagerView.of = function(pagesAsJson) {
  */
 shortener.PageManagerView.Builder = function() {
   /** @const */ this.viewElement = $('<div>');
-  /** @const */ this.viewList = $('<ul>');
+  /** @const */ this.viewList = $('<ul>', {id: 'pageManager'});
   this.urlToShortenFieldElement = null;
   this.outputUrlFieldElement = null;
   this.shortenButtonElement = null;
@@ -102,7 +102,7 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
   _(pagesAsJson).each(function(pageAsJson) {
     /** @const */ var pageListItem = $('<li>');
     /** @const */ var originalUrlAnchor = $('<a>', {
-      href: pageAsJson.originalUrl, 
+      href: 'http://' + pageAsJson.originalUrl, 
       html: pageAsJson.originalUrl,
       'class': 'grid_4'
     });
@@ -125,6 +125,7 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
 };
 
 shortener.PageManagerView.Builder.prototype.build = function() {
+  this.viewElement.append($('<h2>', {html: 'Your Pages'}));
   this.viewElement.append(this.viewList);
   return new shortener.PageManagerView(this.viewElement,
       this.urlToShortenFieldElement, this.outputUrlFieldElement,
