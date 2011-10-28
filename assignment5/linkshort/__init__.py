@@ -1,4 +1,4 @@
-from flask import Flask, request, g, render_template, session, jsonify, abort
+from flask import Flask, request, g, render_template, session, jsonify, abort, redirect
 from users import confirmed_password_valid, Users
 from shortener import create_url_shortener
 import databaseservice
@@ -112,7 +112,7 @@ def pages_by_user():
         # Unlikely, but we should try to stay safe
         shortened_url = make_short_url()
     elif output_url in reserved_urls or \
-         g.database_service.has_shortened_url(output_url):
+         g.database_service.try_get_shortened_url(output_url) is not None:
       return jsonify(success=False, message='URL is taken')
     else:
       shortened_url = output_url
@@ -122,7 +122,15 @@ def pages_by_user():
 
 @app.route('/<shortened_url>')
 def access_short_url(shortened_url):
-  return render_template('page-not-found.html', tried_url=shortened_url)
+  page = g.database_service.try_get_shortened_url(shortened_url)
+  if page is None:  
+    return render_template('page-not-found.html', tried_url=shortened_url)
+  original_url = page.get_original_url()
+  if not original_url.startswith('http://'):
+    destination = 'http://' + original_url 
+  else:
+    destination = original_url
+  return redirect(destination)
 
 if __name__ == '__main__':
   app.run(debug=True)

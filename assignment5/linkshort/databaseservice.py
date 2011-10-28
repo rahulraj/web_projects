@@ -89,9 +89,9 @@ class DatabaseService(object):
     return Page(page.get_created_by_user(), page.get_original_url(),
         page.get_shortened_url(), id=self.database.lastrowid)
 
-  def has_shortened_url(self, shortened_url):
+  def try_get_shortened_url(self, shortened_url):
     """
-    Tell if shortened_url is in the database.
+    Returns the Page for a shortened_url, or None
     """
     self.database.execute( \
         """ 
@@ -99,7 +99,9 @@ class DatabaseService(object):
         where pages.shortened_url = :shortened_url
         """, {'shortened_url': shortened_url})
     row = self.database.fetchone()
-    return row is not None
+    if row is None:
+      return None
+    return Page(row[1], row[2], row[3], id=row[0])
 
   def add_page_for_user(self, user, original_url, shortened_url):
     """
