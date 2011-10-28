@@ -12,6 +12,10 @@
       filename='scripts/loginForm.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/registerForm.js') }}"></script>
+  <script>
+    /** @const */ shortener.loginUrl = "{{ url_for('login') }}";
+    /** @const */ shortener.addUserUrl = "{{ url_for('add_user') }}";
+  </script>
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/main.js') }}"></script>
   <title>Link Shortener</title>

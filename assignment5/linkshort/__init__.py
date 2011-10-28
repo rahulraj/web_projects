@@ -1,4 +1,4 @@
-from flask import Flask, request, g, render_template, session
+from flask import Flask, request, g, render_template, session, jsonify
 from users import confirmed_password_valid, Users
 import databaseservice
 
@@ -19,24 +19,44 @@ def initialize_database():
 @app.before_request
 def before_request():
   """ open dictionary/db connection"""
-  g.database = connect_database()
+  database_connection = connect_database()
+  database_cursor = database_connection.cursor()
+  g.database_service = databaseservice.DatabaseService( \
+      database_connection, database_cursor)
 
 @app.after_request
 def shutdown_session(response):
   """ Closes the dictionary/db connection after each request """
-  g.database.close()
+  g.database_service.close()
   return response
 
 @app.route('/')
 def index():
   return render_template('index.html')
 
-def fail_registration(message):
-  """ TODO Determine how to communicate failures to the client. """
-  pass
+def fail_login(message):
+  return jsonify(success=False, message=message)
 
-def success_registration():
-  pass
+def success_login():
+  # TODO Fetch the user's pages
+  return jsonify(success=True)
+
+@app.route('/login', methods=['POST'])
+def login():
+  username = request.form['username']
+  password = request.form['password']
+  users = Users(g.database_service)
+  if users.login_is_valid(username, password):
+    session['username'] = username
+    return success_login()
+  return fail_login('Login failed. Maybe you made a typo?')
+
+def fail_registration(message):
+  return jsonify(success=False, message=message)
+
+def success_registration(identifier):
+  # TODO Ditto here
+  return jsonify(success=True, identifier=identifier)
 
 @app.route('/register', methods=['POST'])
 def add_user():
@@ -50,17 +70,17 @@ def add_user():
     return fail_registration("Passwords can not be blank.")
   if ' ' in password:
     return fail_registration("Passwords can not have spaces")
-  database_service = databaseservice.DatabaseService(g.database)
-  users = Users(database_service)
-  if not users.is_valid_user(username):
+  users = Users(g.database_service)
+  if not users.is_valid_username(username):
     error = """
         Username %s is not valid.
         Either it's taken, it has a space, or it's blank.
         """ % (username)
     return fail_registration(error)
-  users.register_user(username, password)
+  new_user = users.register_user(username, password)
+  identifier = new_user.get_id()
   session['username'] = username
-  return success_registration()
+  return success_registration(identifier)
 
 @app.route('/<shortened_url>')
 def access_short_url(shortened_url):

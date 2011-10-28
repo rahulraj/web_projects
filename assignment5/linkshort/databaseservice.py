@@ -35,12 +35,13 @@ class DatabaseService(object):
   This class only contains the queries; client code is responsible
   for opening and closing the database connection.
   """
-  def __init__(self, database):
+  def __init__(self, connection, database):
     """
     Constructor for DatabaseService
 
     Args:
-      database the database connection to use.
+      connection the connection to use.
+      database the database cursor to use.
     """
     assign_injectables(self, locals())
 
@@ -61,6 +62,7 @@ class DatabaseService(object):
         {'username': user.get_username(), 
          'hashed_password': user.get_hashed_password(),
          'salt': user.get_salt()})
+    self.connection.commit()
     return User(user.get_username(), user.get_hashed_password(),
         user.get_salt(), id=self.database.lastrowid)
 
@@ -82,6 +84,7 @@ class DatabaseService(object):
         {'created_by_user': page.get_created_by_user(),
          'original_url': page.get_original_url(),
          'shortened_url': page.get_shortened_url()})
+    self.connection.commit()
     return Page(page.get_created_by_user(), page.get_original_url(),
         page.get_shortened_url(), id=self.database.lastrowid)
 
@@ -115,6 +118,7 @@ class DatabaseService(object):
         'insert into page_visits values (null, :for_page, :time_visited)',
         {'for_page': visit.get_for_page(),
          'time_visited': visit.get_time_visited()})
+    self.connection.commit()
     return PageVisit(visit.get_for_page(), visit.get_time_visited(),
         self.database.lastrowid)
 
@@ -239,6 +243,9 @@ class DatabaseService(object):
         """, {'page_id': page.get_id()})
     return (PageVisit(visit_row[1], visit_row[2], id=visit_row[0]) for \
         visit_row in self.database)
+
+  def close(self):
+    self.database.close()
 
 """ 
 Immutable data objects representing rows in the databases.

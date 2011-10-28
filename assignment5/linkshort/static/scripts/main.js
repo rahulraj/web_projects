@@ -1,7 +1,42 @@
 $(function() {
   /** @const */ var parentElement = $('#main');
   /** @const */ var loginForm = shortener.LoginForm.newForm();
-  /** @const */ var registerForm = shortener.RegisterForm.newForm();
+  /** @const */ var onLoginClick = function(username, password) {
+    /** @const */ var postData = {
+      username: username,
+      password: password
+    };
+    $.post(shortener.loginUrl, postData, function(data) {
+      if (data.success) {
+        loginForm.displayMessage(
+            'youre logged in, but this is not implemented yet');
+      } else {
+        loginForm.displayMessage(data.message);
+      }
+    });
+  };
+  loginForm.submitClickEvent(onLoginClick);
+
+  /** @const */ var registerForm =
+      shortener.RegisterForm.newForm();
+  /** @const */ var onRegisterClick =
+      function(username, password, confirmPassword) {
+    /** @const */ var postData = {
+      username: username,
+      password: password,
+      confirmPassword: confirmPassword
+    };
+    $.post(shortener.addUserUrl, postData, function(data) {
+      console.log(data);
+      if (data.success) {
+        registerForm.displayMessage(
+            'Youre registered, but not implemented yet');
+      } else {
+        registerForm.displayMessage(data.message);
+      }
+    });
+  };
+  registerForm.submitClickEvent(onRegisterClick);
   /** @const */ var loginDiv = $('<div>', {
     'class': 'grid_6'
   });

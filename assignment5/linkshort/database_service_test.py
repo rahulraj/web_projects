@@ -18,9 +18,11 @@ class DatabaseServiceTest(unittest.TestCase):
     self.database_file = 'test.db'
     with open('schema.sql') as schema:
       databaseservice.initialize_database(self.database_file, schema)
-    self.database_cursor = \
-        databaseservice.connect_database(self.database_file).cursor()
-    self.database = databaseservice.DatabaseService(self.database_cursor)
+    self.database_connection = \
+        databaseservice.connect_database(self.database_file)
+    self.database_cursor = self.database_connection.cursor()
+    self.database = databaseservice.DatabaseService( \
+        self.database_connection, self.database_cursor)
 
     # Test data
     self.first_url = 'first_url'

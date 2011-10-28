@@ -8,16 +8,19 @@
  * @param {jQueryObject} passwordField the field for the password.
  * @param {jQueryObject} confirmationField the confirmation of the password.
  * @param {jQueryObject} submitButton the button to submit the form.
+ * @param {jQueryObject} formFeedback a field in which to display feedback
+ *     messages to the user.
  * @constructor
  * @const
  */
 shortener.RegisterForm = function(formElement, usernameField,
-    passwordField, confirmationField, submitButton) {
+    passwordField, confirmationField, submitButton, formFeedback) {
   /** @const */ this.formElement = formElement;
   /** @const */ this.usernameField = usernameField;
   /** @const */ this.passwordField = passwordField;
   /** @const */ this.confirmationField = confirmationField;
   /** @const */ this.submitButton = submitButton;
+  /** @const */ this.formFeedback = formFeedback;
 };
 
 
@@ -28,6 +31,31 @@ shortener.RegisterForm = function(formElement, usernameField,
  */
 shortener.RegisterForm.prototype.attachTo = function(parentElement) {
   parentElement.append(this.formElement);
+};
+
+
+/**
+ * Add a click even to the submit button.
+ * @param {function(string, string, string)} handler a function that takes
+ *     the data inputted into the form, presumably to make an AJAX request.
+ * @const
+ */
+shortener.RegisterForm.prototype.submitClickEvent = function(handler) {
+  /** @const */ var self = this;
+  this.submitButton.bind('click', function(event) {
+    /** @const */ var inputtedUsername = self.usernameField.val(); 
+    /** @const */ var inputtedPassword = self.passwordField.val();
+    /** @const */ var confirmedPassword = self.confirmationField.val();
+    handler(inputtedUsername, inputtedPassword, confirmedPassword);
+  });
+};
+
+shortener.RegisterForm.prototype.displayMessage = function(message) {
+  this.formFeedback.html(message);
+};
+
+shortener.RegisterForm.prototype.fadeOut = function() {
+  this.formElement.fadeOut();
 };
 
 
@@ -59,6 +87,7 @@ shortener.RegisterForm.Builder = function() {
   this.passwordFieldElement = null;
   this.confirmationFieldElement = null;
   this.submitButtonElement = null;
+  this.formFeedback = $('<p>');
 };
 
 
@@ -123,9 +152,9 @@ shortener.RegisterForm.Builder.prototype.build = function() {
       !this.confirmationFieldElement || !this.submitButtonElement) {
     throw new Error('Not fully initialized');
   }
-  this.formElement.append(this.fieldList);
+  this.formElement.append(this.fieldList).append(this.formFeedback);
   return new shortener.RegisterForm(
       this.formElement, this.usernameFieldElement,
       this.passwordFieldElement, this.confirmationFieldElement,
-      this.submitButtonElement);
+      this.submitButtonElement, this.formFeedback);
 };
