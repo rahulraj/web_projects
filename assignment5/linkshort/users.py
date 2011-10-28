@@ -70,17 +70,17 @@ class Users(object):
     user = User(username, hashed, salt)
     return self.database_service.add_user(user)
 
-  def login_is_valid(self, username, password):
+  def try_login_user(self, username, password):
     """
-    Returns true if the user under username's password
-    matches the given pasword, false otherwise.
+    Returns the User if the user under username's password
+    matches the given pasword.
 
     Args:
       username the username
       password the submitted password
 
     Returns:
-      True if the user is authentical.
+      The logged in User, or None for a failure.
     """
     if not self.has_user(username):
       return False
@@ -89,7 +89,10 @@ class Users(object):
     to_hash = combine_password_with_salt(password, users_salt)
     proposed_hash = do_hash(to_hash)
     real_hash = user_data.get_hashed_password()
-    return proposed_hash == real_hash
+    if proposed_hash == real_hash:
+      return user_data
+    else:
+      return None
 
 def confirmed_password_valid(password, confirmation):
   """

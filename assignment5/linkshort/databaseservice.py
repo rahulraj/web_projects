@@ -1,4 +1,5 @@
 import sqlite3
+import time
 from contextlib import closing
 from inject import assign_injectables
 from getters import with_getters_for
@@ -261,6 +262,24 @@ with_getters_for(User, 'id', 'username', 'hashed_password', 'salt')
 class Page(object):
   def __init__(self, created_by_user, original_url, shortened_url, id=None):
     assign_injectables(self, locals())
+
+  def as_dict(self, visits):
+    """
+    Convert this Page and its associated PageVisits to a dict that
+    can be jsonified.
+
+    Args:
+      visits a list of PageVisits for this page.
+    """
+    result = {}
+    result['originalUrl'] = self.original_url
+    result['shortenedUrl'] = self.shortened_url
+    def visit_to_dict(visit):
+      local_time = time.localtime(visit._get_time_visited())
+      formatted_time = time.strftime('%a %d %b %Y %H:%M:%S', local_time)
+      return {'time_visited': formatted_time}
+    result['visits'] = map(visit_to_dict, visits)
+    return result
 with_getters_for(Page, 'id', 'created_by_user', 'original_url', 'shortened_url')
 
 class PageVisit(object):

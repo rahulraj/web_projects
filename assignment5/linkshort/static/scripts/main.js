@@ -1,6 +1,18 @@
+shortener.onUserValidated = function() {
+  $.getJSON(shortener.pagesUrl, function(data) {
+    console.log(data);
+    /** @const */ var pages = data.pages;
+    /** @const */ var view = shortener.PageManagerView.of(pages);
+    view.attachTo($('#main'));
+  });
+};
+
 $(function() {
   /** @const */ var parentElement = $('#main');
   /** @const */ var loginForm = shortener.LoginForm.newForm();
+  /** @const */ var registerForm =
+      shortener.RegisterForm.newForm();
+
   /** @const */ var onLoginClick = function(username, password) {
     /** @const */ var postData = {
       username: username,
@@ -8,17 +20,14 @@ $(function() {
     };
     $.post(shortener.loginUrl, postData, function(data) {
       if (data.success) {
-        loginForm.displayMessage(
-            'youre logged in, but this is not implemented yet');
+        loginForm.fadeOut();
+        registerForm.fadeOut();
+        shortener.onUserValidated();
       } else {
         loginForm.displayMessage(data.message);
       }
     });
   };
-  loginForm.submitClickEvent(onLoginClick);
-
-  /** @const */ var registerForm =
-      shortener.RegisterForm.newForm();
   /** @const */ var onRegisterClick =
       function(username, password, confirmPassword) {
     /** @const */ var postData = {
@@ -29,13 +38,16 @@ $(function() {
     $.post(shortener.addUserUrl, postData, function(data) {
       console.log(data);
       if (data.success) {
-        registerForm.displayMessage(
-            'Youre registered, but not implemented yet');
+        loginForm.fadeOut();
+        registerForm.fadeOut();
+        shortener.onUserValidated();
       } else {
         registerForm.displayMessage(data.message);
       }
     });
   };
+
+  loginForm.submitClickEvent(onLoginClick);
   registerForm.submitClickEvent(onRegisterClick);
   /** @const */ var loginDiv = $('<div>', {
     'class': 'grid_6'

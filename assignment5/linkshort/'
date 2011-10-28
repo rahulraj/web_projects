@@ -90,7 +90,7 @@ def pages_by_user():
   Sending a GET request to this URL retrieves the pages,
   and sending a POST request adds another page.
   """
-  if 'user' not in session:
+  if 'username' not in session or 'id' not in session:
     abort(401)
   if request.method == 'GET':
     user = session['user']
@@ -99,7 +99,6 @@ def pages_by_user():
       visits = g.database_service.find_visits_of_page(page)
       return page.as_dict(visits)
     page_dicts = map(page_to_dict, pages)
-    return jsonify(pages=page_dicts)
   else:
     pass
 
