@@ -1,5 +1,6 @@
 from flask import Flask, request, g, render_template, session, jsonify, abort
 from users import confirmed_password_valid, Users
+from shortener import create_url_shortener
 import databaseservice
 
 app = Flask(__name__)
@@ -83,7 +84,7 @@ def add_user():
   session['user'] = new_user
   return success_registration()
 
-@app.route('/pages')
+@app.route('/pages', methods=['GET', 'POST'])
 def pages_by_user():
   """
   The user whose pages to access should be in the session.
@@ -92,8 +93,8 @@ def pages_by_user():
   """
   if 'user' not in session:
     abort(401)
+  user = session['user']
   if request.method == 'GET':
-    user = session['user']
     pages = g.database_service.find_pages_by_user(user)
     def page_to_dict(page):
       visits = g.database_service.find_visits_of_page(page)
@@ -101,7 +102,23 @@ def pages_by_user():
     page_dicts = map(page_to_dict, pages)
     return jsonify(pages=page_dicts)
   else:
-    pass
+    reserved_urls = ('login', 'register', 'pages')
+    make_short_url = create_url_shortener(g.database_service)
+    url_to_shorten = request.form['originalUrl']
+    output_url = request.form['outputUrl']
+    if output_url.strip() == '':
+      shortened_url = make_short_url()
+      while shortened_url in reserved_urls:
+        # Unlikely, but we should try to stay safe
+        shortened_url = make_short_url()
+    elif output_url in reserved_urls or \
+         g.database_service.has_shortened_url(output_url):
+      return jsonify(success=False, message='URL is taken')
+    else:
+      shortened_url = output_url
+    # Now store the shortened URL
+    g.database_service.add_page_for_user(user, url_to_shorten, shortened_url)
+    return jsonify(success=True, shortenedUrl=shortened_url)
 
 @app.route('/<shortened_url>')
 def access_short_url(shortened_url):

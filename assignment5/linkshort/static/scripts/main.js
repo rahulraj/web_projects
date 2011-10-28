@@ -1,9 +1,31 @@
-shortener.onUserValidated = function() {
-  $.getJSON(shortener.pagesUrl, function(data) {
+shortener.onUserValidated = function(parentElement) {
+  /** @const */ var drawPage = function(data) {
+    parentElement.html('');
     console.log(data);
     /** @const */ var pages = data.pages;
     /** @const */ var view = shortener.PageManagerView.of(pages);
-    view.attachTo($('#main'));
+    /** @const */ var onShortenClick = function(originalUrl, outputUrl) {
+      /** @const */ var postData = {
+        originalUrl: originalUrl,
+        outputUrl: outputUrl
+      };
+      $.post(shortener.pagesUrl, postData, function(result) {
+        if (result.success) {
+          console.log('shortened URL to ' + result.shortenedUrl);
+          $.getJSON(shortener.pagesUrl, function(data) {
+            // Recur asynchronously to update the page.
+            drawPage(data); 
+          });
+        } else {
+          console.log('Failed: ' + result.message);
+        }
+      });
+    };
+    view.submitClickEvent(onShortenClick);
+    view.attachTo(parentElement);
+  };
+  $.getJSON(shortener.pagesUrl, function(data) {
+    drawPage(data);
   });
 };
 
@@ -22,7 +44,7 @@ $(function() {
       if (data.success) {
         loginForm.fadeOut();
         registerForm.fadeOut();
-        shortener.onUserValidated();
+        shortener.onUserValidated(parentElement);
       } else {
         loginForm.displayMessage(data.message);
       }
@@ -40,7 +62,7 @@ $(function() {
       if (data.success) {
         loginForm.fadeOut();
         registerForm.fadeOut();
-        shortener.onUserValidated();
+        shortener.onUserValidated(parentElement);
       } else {
         registerForm.displayMessage(data.message);
       }

@@ -89,6 +89,18 @@ class DatabaseService(object):
     return Page(page.get_created_by_user(), page.get_original_url(),
         page.get_shortened_url(), id=self.database.lastrowid)
 
+  def has_shortened_url(self, shortened_url):
+    """
+    Tell if shortened_url is in the database.
+    """
+    self.database.execute( \
+        """ 
+        select * from pages
+        where pages.shortened_url = :shortened_url
+        """, {'shortened_url': shortened_url})
+    row = self.database.fetchone()
+    return row is not None
+
   def add_page_for_user(self, user, original_url, shortened_url):
     """
     Add a page that a user entered and shortened.
@@ -201,8 +213,8 @@ class DatabaseService(object):
             where created_by_user = :user_id
             order by id
         """, {'user_id': user.get_id()})
-    return (Page(page_row[1], page_row[2], page_row[3], id=page_row[0]) for \
-        page_row in self.database)
+    return [Page(page_row[1], page_row[2], page_row[3], id=page_row[0]) for \
+        page_row in self.database]
 
   def find_page_by_shortened_url(self, shortened_url):
     """
@@ -242,8 +254,8 @@ class DatabaseService(object):
         where for_page = :page_id
         order by id
         """, {'page_id': page.get_id()})
-    return (PageVisit(visit_row[1], visit_row[2], id=visit_row[0]) for \
-        visit_row in self.database)
+    return [PageVisit(visit_row[1], visit_row[2], id=visit_row[0]) for \
+        visit_row in self.database]
 
   def close(self):
     self.database.close()

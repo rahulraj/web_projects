@@ -83,22 +83,42 @@ shortener.PageManagerView.Builder.prototype.shortenButton = function() {
 
 shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
   /** @const */ var viewList = this.viewList;
+  /** @const */ var headingListItem = $('<li>');
+  /** @const */ var originalUrlLabel = $('<span>', {
+    html: 'Original URL',
+    'class': 'grid_4'
+  });
+  /** @const */ var shortenedUrlLabel = $('<span>', {
+    html: 'Shortened URL',
+    'class': 'grid_4'
+  });
+  /** @const */ var analyticsLabel = $('<span>', {
+    html: 'Analytics',
+    'class': 'grid_4'
+  });
+  /** @const */ var clearDiv = $('<div>', {'class': 'clear'});
+  viewList.append(originalUrlLabel).append(shortenedUrlLabel).
+      append(analyticsLabel).append(clearDiv);
   _(pagesAsJson).each(function(pageAsJson) {
     /** @const */ var pageListItem = $('<li>');
     /** @const */ var originalUrlAnchor = $('<a>', {
       href: pageAsJson.originalUrl, 
-      html: pageAsJson.originalUrl
+      html: pageAsJson.originalUrl,
+      'class': 'grid_4'
     });
     /** @const */ var shortenedUrlAnchor = $('<a>', {
       href: pageAsJson.shortenedUrl,
-      html: pageAsJson.shortenedUrl
+      html: pageAsJson.shortenedUrl,
+      'class': 'grid_4'
     });
     /** @const */ var numberOfAnalytics = $('<span>', {
       // TODO Allow users to see details about analytics.
-      html: pageAsJson.visits.length
+      html: pageAsJson.visits.length,
+      'class': 'grid_4'
     });
+    /** @const */ var clearDiv = $('<div>', {'class': 'clear'});
     pageListItem.append(originalUrlAnchor).append(shortenedUrlAnchor).
-        append(numberOfAnalytics);
+        append(numberOfAnalytics).append(clearDiv);
     viewList.append(pageListItem);
   });
   return this;
