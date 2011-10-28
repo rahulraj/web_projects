@@ -66,6 +66,7 @@ shortener.RegisterForm.prototype.fadeOut = function() {
  */
 shortener.RegisterForm.newForm = function() {
   return new shortener.RegisterForm.Builder().
+      formHeading().
       usernameField().
       passwordField().
       confirmationField().
@@ -90,6 +91,12 @@ shortener.RegisterForm.Builder = function() {
   this.formFeedback = $('<p>');
 };
 
+
+shortener.RegisterForm.Builder.prototype.formHeading = function() {
+  /** @const */ var heading = $('<p>', {html: 'First time? Register here.'});
+  this.formElement.append(heading);
+  return this;
+}
 
 /**
  * Add a username field.

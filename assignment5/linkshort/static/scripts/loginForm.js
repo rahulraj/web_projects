@@ -62,6 +62,7 @@ shortener.LoginForm.prototype.fadeOut = function() {
  */
 shortener.LoginForm.newForm = function() {
   return new shortener.LoginForm.Builder().
+      formHeading().
       usernameField().
       passwordField().
       submitButton().
@@ -86,6 +87,12 @@ shortener.LoginForm.Builder = function() {
   this.passwordFieldElement = null;
   this.submitButtonElement = null;
   this.formFeedback = $('<p>');
+};
+
+shortener.LoginForm.Builder.prototype.formHeading = function() {
+  /** @const */ var heading = $('<p>', {html: 'Have an account? Log in here.'});
+  this.formElement.append(heading);
+  return this;
 };
 
 
