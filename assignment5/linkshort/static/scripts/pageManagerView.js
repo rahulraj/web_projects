@@ -107,8 +107,8 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
       'class': 'grid_4'
     });
     /** @const */ var shortenedUrlAnchor = $('<a>', {
-      href: pageAsJson.shortenedUrl,
-      html: pageAsJson.shortenedUrl,
+      href: shortener.rootUrl + pageAsJson.shortenedUrl,
+      html: shortener.rootUrl + pageAsJson.shortenedUrl,
       'class': 'grid_4'
     });
     /** @const */ var numberOfAnalytics = $('<span>', {

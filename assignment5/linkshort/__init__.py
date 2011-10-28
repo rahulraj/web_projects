@@ -34,7 +34,7 @@ def shutdown_session(response):
 
 @app.route('/')
 def index():
-  return render_template('index.html')
+  return render_template('index.html', root_url=request.url_root)
 
 def fail_login(message):
   return jsonify(success=False, message=message)

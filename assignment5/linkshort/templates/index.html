@@ -1,3 +1,9 @@
+{#
+  Main template for the application.
+
+  Args:
+    root_url the root URL.
+#}
 {% extends "layout.html" %}
 {% block title_content %}
   <script type="text/javascript" src="{{ url_for('static',
@@ -18,6 +24,7 @@
     /** @const */ shortener.loginUrl = "{{ url_for('login') }}";
     /** @const */ shortener.addUserUrl = "{{ url_for('add_user') }}";
     /** @const */ shortener.pagesUrl = "{{ url_for('pages_by_user') }}";
+    /** @const */ shortener.rootUrl = "{{ root_url }}";
   </script>
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/main.js') }}"></script>
