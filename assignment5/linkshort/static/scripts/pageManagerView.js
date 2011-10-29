@@ -150,14 +150,10 @@ shortener.PageManagerView.Builder.prototype.shortenButton = function() {
 
 
 /**
- * Add the page data.
- * @param {Array.<shortener.PageJson>} pagesAsJson a list of the
- *     the describing JSON objects.
- * @return {shortener.PageManagerView.Builder} the Builder for chaining.
+ * Helper function to add the heading for a PageManagerView
  * @const
  */
-shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
-  /** @const */ var viewList = this.viewList;
+shortener.PageManagerView.Builder.prototype.addHeading = function() {
   /** @const */ var headingListItem = $('<li>');
   /** @const */ var originalUrlLabel = $('<span>', {
     html: 'Original URL',
@@ -172,8 +168,21 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
     'class': 'grid_4'
   });
   /** @const */ var clearDiv = $('<div>', {'class': 'clear'});
-  viewList.append(originalUrlLabel).append(shortenedUrlLabel).
+  this.viewList.append(originalUrlLabel).append(shortenedUrlLabel).
       append(analyticsLabel).append(clearDiv);
+};
+
+
+/**
+ * Add the page data.
+ * @param {Array.<shortener.PageJson>} pagesAsJson a list of the
+ *     the describing JSON objects.
+ * @return {shortener.PageManagerView.Builder} the Builder for chaining.
+ * @const
+ */
+shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
+  this.addHeading();
+  /** @const */ var viewList = this.viewList;
   _(pagesAsJson).each(function(pageAsJson) {
     /** @const */ var pageListItem = $('<li>');
     /** @const */ var originalUrlAnchor = $('<a>', {
