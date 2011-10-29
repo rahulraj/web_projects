@@ -46,7 +46,13 @@ shortener.Factory.createInitialForms = function(parentElement) {
   /** @const */ var registerForm =
       shortener.RegisterForm.newForm();
 
-  /** @const */ var onLoginClick = function(username, password) {
+  /**
+   * Function to call when the login button is clicked
+   * @param {string} username the username.
+   * @param {string} password the password.
+   * @const
+   */
+  var onLoginClick = function(username, password) {
     /** @const */ var postData = {
       username: username,
       password: password
@@ -60,8 +66,14 @@ shortener.Factory.createInitialForms = function(parentElement) {
       }
     });
   };
-  /** @const */ var onRegisterClick =
-      function(username, password, confirmPassword) {
+  /**
+   * Function to call when the register button is clicked
+   * @param {string} username the username.
+   * @param {string} password the password.
+   * @param {string} confirmPassword the confirmation.
+   * @const
+   */
+  var onRegisterClick = function(username, password, confirmPassword) {
     /** @const */ var postData = {
       username: username,
       password: password,
@@ -122,7 +134,14 @@ shortener.Factory.createPageManager = function(parentElement) {
     parentElement.html('');
     /** @const */ var pages = data.pages;
     /** @const */ var view = shortener.PageManagerView.of(pages);
-    /** @const */ var onShortenClick = function(originalUrl, outputUrl) {
+    /**
+     * Function to call when the shorten button is clicked
+     * @param {string} originalUrl the original url.
+     * @param {string} outputUrl the desired shorter URL, or blank
+     *     to autogenerate one.
+     * @const
+     */
+    var onShortenClick = function(originalUrl, outputUrl) {
       /** @const */ var postData = {
         originalUrl: originalUrl,
         outputUrl: outputUrl

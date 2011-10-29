@@ -151,7 +151,7 @@ shortener.PageManagerView.Builder.prototype.shortenButton = function() {
 
 /**
  * Add the page data.
- * @param {Array.<shortener.PageJson>} pagesAsJson a list of the 
+ * @param {Array.<shortener.PageJson>} pagesAsJson a list of the
  *     the describing JSON objects.
  * @return {shortener.PageManagerView.Builder} the Builder for chaining.
  * @const
