@@ -39,14 +39,17 @@ class UsersTest(unittest.TestCase):
     self.assertFalse(self.users.has_user(self.username))
     self.users.register_user(self.username, self.password)
     self.assertTrue(self.users.has_user(self.username))
-    self.assertTrue(self.users.login_is_valid(self.username, self.password))
+    self.assertTrue( \
+        self.users.try_login_user(self.username, self.password) is not None)
 
   def test_login_before_register(self):
-    self.assertFalse(self.users.login_is_valid(self.username, self.password))
+    self.assertTrue( \
+        self.users.try_login_user(self.username, self.password) is None)
 
   def test_login_with_wrong_password(self):
     self.users.register_user(self.username, self.password)
-    self.assertFalse(self.users.login_is_valid(self.username, 'bad_password'))
+    self.assertTrue( \
+        self.users.try_login_user(self.username, 'bad_password') is None)
 
 if __name__ == '__main__':
   unittest.main()
