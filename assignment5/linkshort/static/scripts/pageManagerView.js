@@ -118,7 +118,6 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
       'class': 'grid_4'
     });
     /** @const */ var numberOfAnalytics = $('<span>', {
-      // TODO Allow users to see details about analytics.
       html: pageAsJson.visits.length,
       'class': 'grid_4'
     });
@@ -159,10 +158,15 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
   return this;
 };
 
+
 shortener.PageManagerView.Builder.prototype.build = function() {
   this.viewElement.append(this.messageElement);
   this.viewElement.append($('<h2>', {html: 'Your Pages'}));
   this.viewElement.append(this.viewList);
+  this.viewElement.append($('<a>', {
+    href: shortener.logoutUrl,
+    html: "Log out"
+  }));
   return new shortener.PageManagerView(this.viewElement,
       this.urlToShortenFieldElement, this.outputUrlFieldElement,
       this.shortenButtonElement, this.messageElement);

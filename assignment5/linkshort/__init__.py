@@ -1,5 +1,5 @@
 import time
-from flask import Flask, request, g, render_template, session, jsonify, abort, redirect
+from flask import Flask, request, g, render_template, session, jsonify, abort, redirect, url_for
 from users import confirmed_password_valid, Users
 from shortener import create_url_shortener
 import databaseservice
@@ -40,7 +40,6 @@ def fail_login(message):
   return jsonify(success=False, message=message)
 
 def success_login():
-  # TODO Fetch the user's pages
   return jsonify(success=True)
 
 @app.route('/login', methods=['POST'])
@@ -59,7 +58,6 @@ def fail_registration(message):
   return jsonify(success=False, message=message)
 
 def success_registration():
-  # TODO Ditto here
   return jsonify(success=True)
 
 @app.route('/register', methods=['POST'])
@@ -70,7 +68,7 @@ def add_user():
   if not confirmed_password_valid(password, confirmation):
     return fail_registration(
         "Your password and confirmation didn't match up.")
-  if len(password) == 0:
+  if password.strip() == '':
     return fail_registration("Passwords can not be blank.")
   if ' ' in password:
     return fail_registration("Passwords can not have spaces")
@@ -103,7 +101,7 @@ def pages_by_user():
     page_dicts = map(page_to_dict, pages)
     return jsonify(pages=page_dicts)
   else:
-    reserved_urls = ('login', 'register', 'pages')
+    reserved_urls = ('login', 'register', 'pages', 'logout')
     make_short_url = create_url_shortener(g.database_service)
     url_to_shorten = request.form['originalUrl']
     if url_to_shorten.strip() == '':
@@ -140,6 +138,11 @@ def access_short_url(shortened_url):
   visit_time = int(time.time())
   g.database_service.add_visit_for_page(page, visit_time)
   return redirect(destination)
+
+@app.route('/logout')
+def logout():
+  session.pop('user', None)
+  return redirect(url_for('index'))
 
 if __name__ == '__main__':
   app.run(debug=True)
