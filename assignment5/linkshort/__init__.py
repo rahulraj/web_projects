@@ -37,7 +37,9 @@ def shutdown_session(response):
 @app.route('/')
 def index():
   """ Return the initial index template. """
-  return render_template('index.html', root_url=request.url_root)
+  logged_in = 'user' in session
+  return render_template('index.html', root_url=request.url_root,
+      logged_in=logged_in)
 
 def fail_login(message):
   """

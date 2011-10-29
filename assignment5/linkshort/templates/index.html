@@ -3,6 +3,7 @@
 
   Args:
     root_url the root URL.
+    logged_in whether or not the user is logged in
 #}
 {% extends "layout.html" %}
 {% block title_content %}
@@ -26,6 +27,12 @@
     /** @const */ shortener.pagesUrl = "{{ url_for('pages_by_user') }}";
     /** @const */ shortener.logoutUrl = "{{ url_for('logout') }}";
     /** @const */ shortener.rootUrl = "{{ root_url }}";
+    /** @const */ shortener.loggedIn = 
+        {% if logged_in %}
+          true
+        {% else %}
+          false
+        {% endif %}
   </script>
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/factory.js') }}"></script>

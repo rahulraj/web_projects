@@ -7,6 +7,16 @@ shortener.Factory.onAuthentication =
   shortener.Factory.createPageManager(parentElement);
 };
 
+shortener.Factory.onStart = function(loggedIn, parentElement) {
+  if (loggedIn) {
+    shortener.Factory.createPageManager(parentElement); 
+  } else {
+    /** @const */ var forms =
+        shortener.Factory.createInitialForms(parentElement);  
+    shortener.Factory.attachForms(forms, parentElement);
+  }
+};
+
 shortener.Factory.createInitialForms = function(parentElement) {
   /** @const */ var loginForm = shortener.LoginForm.newForm();
   /** @const */ var registerForm =
@@ -46,6 +56,23 @@ shortener.Factory.createInitialForms = function(parentElement) {
   loginForm.submitClickEvent(onLoginClick);
   registerForm.submitClickEvent(onRegisterClick);
   return [loginForm, registerForm];
+};
+
+shortener.Factory.attachForms = function(forms, parentElement) {
+  /** @const */ var loginForm = forms[0];
+  /** @const */ var registerForm = forms[1];
+  /** @const */ var loginDiv = $('<div>', {
+    'class': 'grid_6'
+  });
+  /** @const */ var registerDiv = $('<div>', {
+    'class': 'grid_6'
+  });
+  loginForm.attachTo(loginDiv);
+  registerForm.attachTo(registerDiv);
+  /** @const */ var clearDiv = $('<div>', {
+    'class': 'clear'
+  });
+  parentElement.append(loginDiv).append(registerDiv).append(clearDiv);
 };
 
 shortener.Factory.createPageManager = function(parentElement) {
