@@ -1,5 +1,15 @@
+
+
 /** @const */ shortener.Factory = {};
 
+
+/**
+ * Call this when a form is submitted successfully.
+ * @param {shortener.LoginForm} loginForm the login form.
+ * @param {shortener.RegisterForm} registerForm the register form.
+ * @param {jQueryObject} parentElement the parent.
+ * @const
+ */
 shortener.Factory.onAuthentication =
     function(loginForm, registerForm, parentElement) {
   loginForm.fadeOut();
@@ -7,16 +17,30 @@ shortener.Factory.onAuthentication =
   shortener.Factory.createPageManager(parentElement);
 };
 
+
+/**
+ * Call this when the application starts.
+ * @param {boolean} loggedIn whether the user is logged in.
+ * @param {jQueryObject} parentElement the parent element for UI elements.
+ * @const
+ */
 shortener.Factory.onStart = function(loggedIn, parentElement) {
   if (loggedIn) {
-    shortener.Factory.createPageManager(parentElement); 
+    shortener.Factory.createPageManager(parentElement);
   } else {
     /** @const */ var forms =
-        shortener.Factory.createInitialForms(parentElement);  
+        shortener.Factory.createInitialForms(parentElement);
     shortener.Factory.attachForms(forms, parentElement);
   }
 };
 
+
+/**
+ * Create the initial set of forms and return them.
+ * @param {jQueryObject} parentElement the parent for the forms.
+ * @return {Array.<*>} a tuple with the login and register forms.
+ * @const
+ */
 shortener.Factory.createInitialForms = function(parentElement) {
   /** @const */ var loginForm = shortener.LoginForm.newForm();
   /** @const */ var registerForm =
@@ -58,6 +82,13 @@ shortener.Factory.createInitialForms = function(parentElement) {
   return [loginForm, registerForm];
 };
 
+
+/**
+ * Attach the forms to the parent.
+ * @param {Array.<*>} forms the forms.
+ * @param {jQueryObject} parentElement the parent.
+ * @const
+ */
 shortener.Factory.attachForms = function(forms, parentElement) {
   /** @const */ var loginForm = forms[0];
   /** @const */ var registerForm = forms[1];
@@ -75,8 +106,19 @@ shortener.Factory.attachForms = function(forms, parentElement) {
   parentElement.append(loginDiv).append(registerDiv).append(clearDiv);
 };
 
+
+/**
+ * Create the page manager GUI
+ * @param {jQueryObject} parentElement the parent.
+ * @const
+ */
 shortener.Factory.createPageManager = function(parentElement) {
-  /** @const */ var drawPage = function(data) {
+  /**
+   * Function to call after receiving JSON from the server
+   * @param {*} data a JSON record containing the user's pages.
+   * @const
+   */
+  var drawPage = function(data) {
     parentElement.html('');
     /** @const */ var pages = data.pages;
     /** @const */ var view = shortener.PageManagerView.of(pages);

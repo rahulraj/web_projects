@@ -61,7 +61,8 @@ shortener.PageManagerView.prototype.showMessage = function(message) {
 
 /**
  * Factory function to create a new view.
- * @param {*} pagesAsJson a JSON object from the server describing the format.
+ * @param {Array.<shortener.PageJson>} pagesAsJson an array of
+ *     JSON objects from the server describing the format.
  * @return {shortener.PageManagerView} the new view.
  * @const
  */
@@ -150,7 +151,8 @@ shortener.PageManagerView.Builder.prototype.shortenButton = function() {
 
 /**
  * Add the page data.
- * @param {*} pagesAsJson the describing JSON object.
+ * @param {Array.<shortener.PageJson>} pagesAsJson a list of the 
+ *     the describing JSON objects.
  * @return {shortener.PageManagerView.Builder} the Builder for chaining.
  * @const
  */

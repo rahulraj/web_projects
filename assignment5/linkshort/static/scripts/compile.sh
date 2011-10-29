@@ -7,6 +7,7 @@
 
 java -jar /home/rahulraj/dls/closure-compiler/compiler.jar \
   --js=shortener.js \
+  --js=jsonData.js \
   --js=formFields.js \
   --js=loginForm.js \
   --js=registerForm.js \

@@ -4,3 +4,4 @@ shortener.addUserUrl = shortener.addUserUrl || '';
 shortener.pagesUrl = shortener.pagesUrl || '';
 shortener.rootUrl = shortener.rootUrl || '';
 shortener.logoutUrl = shortener.logoutUrl || '';
+shortener.loggedIn = shortener.loggedIn || false;
