@@ -46,10 +46,21 @@ shortener.LoginForm.prototype.submitClickEvent = function(handler) {
   });
 };
 
+
+/**
+ * Display a message.
+ * @param {string} message the message to display.
+ * @const
+ */
 shortener.LoginForm.prototype.displayMessage = function(message) {
   this.formFeedback.html(message);
 };
 
+
+/**
+ * Fade out this element.
+ * @const
+ */
 shortener.LoginForm.prototype.fadeOut = function() {
   this.formElement.fadeOut();
 };
@@ -89,6 +100,12 @@ shortener.LoginForm.Builder = function() {
   this.formFeedback = $('<p>');
 };
 
+
+/**
+ * Add a heading for the form
+ * @return {shortener.LoginForm.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.LoginForm.Builder.prototype.formHeading = function() {
   /** @const */ var heading = $('<p>', {html: 'Have an account? Log in here.'});
   this.formElement.append(heading);

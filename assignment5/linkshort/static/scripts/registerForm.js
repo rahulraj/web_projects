@@ -43,17 +43,28 @@ shortener.RegisterForm.prototype.attachTo = function(parentElement) {
 shortener.RegisterForm.prototype.submitClickEvent = function(handler) {
   /** @const */ var self = this;
   this.submitButton.bind('click', function(event) {
-    /** @const */ var inputtedUsername = self.usernameField.val(); 
+    /** @const */ var inputtedUsername = self.usernameField.val();
     /** @const */ var inputtedPassword = self.passwordField.val();
     /** @const */ var confirmedPassword = self.confirmationField.val();
     handler(inputtedUsername, inputtedPassword, confirmedPassword);
   });
 };
 
+
+/**
+ * Display a message to the user
+ * @param {string} message the message.
+ * @const
+ */
 shortener.RegisterForm.prototype.displayMessage = function(message) {
   this.formFeedback.html(message);
 };
 
+
+/**
+ * Fade out this form
+ * @const
+ */
 shortener.RegisterForm.prototype.fadeOut = function() {
   this.formElement.fadeOut();
 };
@@ -92,11 +103,17 @@ shortener.RegisterForm.Builder = function() {
 };
 
 
+/**
+ * Add a heading to the form.
+ * @return {shortener.RegisterForm.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.RegisterForm.Builder.prototype.formHeading = function() {
   /** @const */ var heading = $('<p>', {html: 'First time? Register here.'});
   this.formElement.append(heading);
   return this;
-}
+};
+
 
 /**
  * Add a username field.

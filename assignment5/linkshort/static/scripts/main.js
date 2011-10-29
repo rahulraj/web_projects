@@ -14,7 +14,7 @@ shortener.onUserValidated = function(parentElement) {
           console.log('shortened URL to ' + result.shortenedUrl);
           $.getJSON(shortener.pagesUrl, function(data) {
             // Recur asynchronously to update the page.
-            drawPage(data); 
+            drawPage(data);
           });
         } else {
           view.showMessage('Failed: ' + result.message);

@@ -1,5 +1,18 @@
+
+
+
 /**
+ * Class representing a GUI to manage the pages created by a user.
+ * @param {jQueryObject} viewElement the element containing the view.
+ * @param {jQueryObject} urlToShortenField the field containing inputs
+ *     asking the shorten the URL.
+ * @param {jQueryObject} outputUrlField a field where the user can specify
+ *     a shorter version if desired.
+ * @param {jQueryObject} shortenButton the button to click to shorten URLs.
+ * @param {jQueryObject} messageElement the element in which to leave messages
+ *     to the user.
  * @constructor
+ * @const
  */
 shortener.PageManagerView = function(viewElement, urlToShortenField,
     outputUrlField, shortenButton, messageElement)  {
@@ -10,10 +23,22 @@ shortener.PageManagerView = function(viewElement, urlToShortenField,
   /** @const */ this.messageElement = messageElement;
 };
 
+
+/**
+ * Attach this to a parent.
+ * @param {jQueryObject} parentElement the parent for this element.
+ * @const
+ */
 shortener.PageManagerView.prototype.attachTo = function(parentElement) {
   parentElement.append(this.viewElement);
 };
 
+
+/**
+ * Set a handler function for clicks on the shorten button.
+ * @param {function(string, string)} handler a function to call. The
+ *     entered URL and desired shortened version will be passed in.
+ */
 shortener.PageManagerView.prototype.submitClickEvent = function(handler) {
   /** @const */ var self = this;
   this.shortenButton.bind('click', function(event) {
@@ -23,10 +48,23 @@ shortener.PageManagerView.prototype.submitClickEvent = function(handler) {
   });
 };
 
+
+/**
+ * Show a message to the user.
+ * @param {string} message the message to show.
+ * @const
+ */
 shortener.PageManagerView.prototype.showMessage = function(message) {
   this.messageElement.html(message);
 };
 
+
+/**
+ * Factory function to create a new view.
+ * @param {*} pagesAsJson a JSON object from the server describing the format.
+ * @return {shortener.PageManagerView} the new view.
+ * @const
+ */
 shortener.PageManagerView.of = function(pagesAsJson) {
   return new shortener.PageManagerView.Builder().
       urlToShortenField().
@@ -36,8 +74,12 @@ shortener.PageManagerView.of = function(pagesAsJson) {
       build();
 };
 
+
+
 /**
+ * Builder for a PageManagerView
  * @constructor
+ * @const
  */
 shortener.PageManagerView.Builder = function() {
   /** @const */ this.viewElement = $('<div>');
@@ -48,6 +90,12 @@ shortener.PageManagerView.Builder = function() {
   this.shortenButtonElement = null;
 };
 
+
+/**
+ * Add a url to shorten field
+ * @return {shortener.PageManagerView.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.PageManagerView.Builder.prototype.urlToShortenField = function() {
   /** @const */ var urlToShortenLabel = $('<label>', {
     'for': 'urlToShorten',
@@ -63,6 +111,12 @@ shortener.PageManagerView.Builder.prototype.urlToShortenField = function() {
   return this;
 };
 
+
+/**
+ * Add an output url field.
+ * @return {shortener.PageManagerView.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.PageManagerView.Builder.prototype.outputUrlField = function() {
   /** @const */ var outputLabel = $('<label>', {
     'for': 'outputUrl',
@@ -77,6 +131,12 @@ shortener.PageManagerView.Builder.prototype.outputUrlField = function() {
   return this;
 };
 
+
+/**
+ * Add a shorten button
+ * @return {shortener.PageManagerView.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.PageManagerView.Builder.prototype.shortenButton = function() {
   this.shortenButtonElement = $('<input>', {
     type: 'button',
@@ -87,6 +147,13 @@ shortener.PageManagerView.Builder.prototype.shortenButton = function() {
   return this;
 };
 
+
+/**
+ * Add the page data.
+ * @param {*} pagesAsJson the describing JSON object.
+ * @return {shortener.PageManagerView.Builder} the Builder for chaining.
+ * @const
+ */
 shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
   /** @const */ var viewList = this.viewList;
   /** @const */ var headingListItem = $('<li>');
@@ -108,7 +175,7 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
   _(pagesAsJson).each(function(pageAsJson) {
     /** @const */ var pageListItem = $('<li>');
     /** @const */ var originalUrlAnchor = $('<a>', {
-      href: 'http://' + pageAsJson.originalUrl, 
+      href: 'http://' + pageAsJson.originalUrl,
       html: pageAsJson.originalUrl,
       'class': 'grid_4'
     });
@@ -124,14 +191,14 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
     /** @const */ var analyticsList = $('<ul>');
     if (pageAsJson.visits.length === 0) {
       /** @const */ var visitMessage = $('<li>', {
-        html: "No visits yet :("
+        html: 'No visits yet :('
       });
       analyticsList.append(visitMessage);
     }
     else {
-        _(pageAsJson.visits).each(function(visit) {
+      _(pageAsJson.visits).each(function(visit) {
         /** @const */ var visitItem = $('<li>', {
-          html: visit.timeVisited 
+          html: visit.timeVisited
         });
         analyticsList.append(visitItem);
       });
@@ -142,10 +209,10 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
       value: 'Show Details'
     });
     detailsButton.bind('click', function(event) {
-      analyticsList.slideToggle(); 
+      analyticsList.slideToggle();
       /** @const */ var action = detailsButton.val() === 'Show Details' ?
           'Hide Details' : 'Show Details';
-      detailsButton.val(action)
+      detailsButton.val(action);
     });
     numberOfAnalytics.append(detailsButton);
     numberOfAnalytics.append(analyticsList);
@@ -159,13 +226,18 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
 };
 
 
+/**
+ * Build the PageManagerView.
+ * @return {shortener.PageManagerView} the new view.
+ * @const
+ */
 shortener.PageManagerView.Builder.prototype.build = function() {
   this.viewElement.append(this.messageElement);
   this.viewElement.append($('<h2>', {html: 'Your Pages'}));
   this.viewElement.append(this.viewList);
   this.viewElement.append($('<a>', {
     href: shortener.logoutUrl,
-    html: "Log out"
+    html: 'Log out'
   }));
   return new shortener.PageManagerView(this.viewElement,
       this.urlToShortenFieldElement, this.outputUrlFieldElement,
