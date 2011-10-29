@@ -131,6 +131,12 @@ class LinkShortTest(unittest.TestCase):
     self.assertTrue(result['success'])
     self.assertEquals('search', result['shortenedUrl'])
 
+  def test_shortened_urls_must_be_unique(self):
+    self.test_shorten_page_provided_value()
+    add_page = partial(self.add_page, 'www.duckduckgo.com', 'search')
+    result = self.dict_from_request(add_page)
+    self.assertFalse(result['success'])
+
   def test_shortened_pages_are_added_to_users_pages(self):
     self.test_simple_shorten_page()
     result = self.dict_from_request(self.get_pages)
