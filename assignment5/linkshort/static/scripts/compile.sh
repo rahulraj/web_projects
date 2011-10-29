@@ -11,6 +11,8 @@ java -jar /home/rahulraj/dls/closure-compiler/compiler.jar \
   --js=loginForm.js \
   --js=registerForm.js \
   --js=pageManagerView.js \
+  --js=urls.js \
+  --js=factory.js \
   --js=main.js \
   --externs=externs.js --warning_level=VERBOSE \
   --compilation_level=SIMPLE_OPTIMIZATIONS \

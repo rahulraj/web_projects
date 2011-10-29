@@ -43,6 +43,8 @@ jQueryObject.prototype.hide = function() {};
 jQueryObject.prototype.remove = function() {};
 jQueryObject.prototype.after = function(arg) {};
 jQueryObject.prototype.before = function(arg) {};
+jQueryObject.prototype.fadeOut = function() {};
+jQueryObject.prototype.slideToggle = function() {};
 
 
 /**
@@ -55,6 +57,7 @@ jQueryObject.prototype.before = function(arg) {};
 function $(element, opt_attributes) {}
 $.get = function(arg1, arg2) {};
 $.post = function(arg1, arg2, arg3) {};
+$.getJSON = function(arg1, arg2) {};
 
 
 
