@@ -15,6 +15,9 @@ input {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+input[type="button"] {
+  background-color: #439400;
+}
 ul {
   list-style-type: none;
 }
@@ -48,4 +51,3 @@ h2 {
 #pageManager li {
   padding-top: 15px;
 }
-/* TODO #439400 use for buttons */

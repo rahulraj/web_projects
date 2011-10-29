@@ -106,6 +106,8 @@ def pages_by_user():
     reserved_urls = ('login', 'register', 'pages')
     make_short_url = create_url_shortener(g.database_service)
     url_to_shorten = request.form['originalUrl']
+    if url_to_shorten.strip() == '':
+      return jsonify(success=False, message="URL is blank")
     if url_to_shorten.startswith('http://'):
       # Don't store the protocol in the database, if it was specified.
       # This avoids client-side postprocessing later.

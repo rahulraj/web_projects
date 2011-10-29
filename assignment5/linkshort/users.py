@@ -83,7 +83,7 @@ class Users(object):
       The logged in User, or None for a failure.
     """
     if not self.has_user(username):
-      return False
+      return None
     user_data = self.database_service.find_user_by_name(username)
     users_salt = user_data.get_salt()
     to_hash = combine_password_with_salt(password, users_salt)

@@ -17,7 +17,7 @@ shortener.onUserValidated = function(parentElement) {
             drawPage(data); 
           });
         } else {
-          console.log('Failed: ' + result.message);
+          view.showMessage('Failed: ' + result.message);
         }
       });
     };

@@ -2,11 +2,12 @@
  * @constructor
  */
 shortener.PageManagerView = function(viewElement, urlToShortenField,
-    outputUrlField, shortenButton)  {
+    outputUrlField, shortenButton, messageElement)  {
   /** @const */ this.viewElement = viewElement;
   /** @const */ this.urlToShortenField = urlToShortenField;
   /** @const */ this.outputUrlField = outputUrlField;
   /** @const */ this.shortenButton = shortenButton;
+  /** @const */ this.messageElement = messageElement;
 };
 
 shortener.PageManagerView.prototype.attachTo = function(parentElement) {
@@ -20,6 +21,10 @@ shortener.PageManagerView.prototype.submitClickEvent = function(handler) {
     /** @const */ var outputUrl = self.outputUrlField.val();
     handler(urlToShorten, outputUrl);
   });
+};
+
+shortener.PageManagerView.prototype.showMessage = function(message) {
+  this.messageElement.html(message);
 };
 
 shortener.PageManagerView.of = function(pagesAsJson) {
@@ -37,6 +42,7 @@ shortener.PageManagerView.of = function(pagesAsJson) {
 shortener.PageManagerView.Builder = function() {
   /** @const */ this.viewElement = $('<div>');
   /** @const */ this.viewList = $('<ul>', {id: 'pageManager'});
+  /** @const */ this.messageElement = $('<p>');
   this.urlToShortenFieldElement = null;
   this.outputUrlFieldElement = null;
   this.shortenButtonElement = null;
@@ -116,6 +122,35 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
       html: pageAsJson.visits.length,
       'class': 'grid_4'
     });
+    /** @const */ var analyticsList = $('<ul>');
+    if (pageAsJson.visits.length === 0) {
+      /** @const */ var visitMessage = $('<li>', {
+        html: "No visits yet :("
+      });
+      analyticsList.append(visitMessage);
+    }
+    else {
+        _(pageAsJson.visits).each(function(visit) {
+        /** @const */ var visitItem = $('<li>', {
+          html: visit.timeVisited 
+        });
+        analyticsList.append(visitItem);
+      });
+    }
+    analyticsList.hide();
+    /** @const */ var detailsButton = $('<input>', {
+      type: 'button',
+      value: 'Show Details'
+    });
+    detailsButton.bind('click', function(event) {
+      analyticsList.slideToggle(); 
+      /** @const */ var action = detailsButton.val() === 'Show Details' ?
+          'Hide Details' : 'Show Details';
+      detailsButton.val(action)
+    });
+    numberOfAnalytics.append(detailsButton);
+    numberOfAnalytics.append(analyticsList);
+
     /** @const */ var clearDiv = $('<div>', {'class': 'clear'});
     pageListItem.append(originalUrlAnchor).append(shortenedUrlAnchor).
         append(numberOfAnalytics).append(clearDiv);
@@ -125,9 +160,10 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
 };
 
 shortener.PageManagerView.Builder.prototype.build = function() {
+  this.viewElement.append(this.messageElement);
   this.viewElement.append($('<h2>', {html: 'Your Pages'}));
   this.viewElement.append(this.viewList);
   return new shortener.PageManagerView(this.viewElement,
       this.urlToShortenFieldElement, this.outputUrlFieldElement,
-      this.shortenButtonElement);
+      this.shortenButtonElement, this.messageElement);
 };

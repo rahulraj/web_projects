@@ -291,7 +291,14 @@ class Page(object):
     def visit_to_dict(visit):
       local_time = time.localtime(visit.get_time_visited())
       formatted_time = time.strftime('%a %d %b %Y %H:%M:%S', local_time)
-      return {'time_visited': formatted_time}
+      visit_dict = {'timeVisited': formatted_time}
+      visit_dict['year'] = local_time.tm_year
+      visit_dict['month'] = local_time.tm_mon
+      visit_dict['day'] = local_time.tm_mday
+      visit_dict['hour'] = local_time.tm_hour
+      visit_dict['minute'] = local_time.tm_min
+      visit_dict['second'] = local_time.tm_sec
+      return visit_dict
     result['visits'] = map(visit_to_dict, visits)
     return result
 with_getters_for(Page, 'id', 'created_by_user', 'original_url', 'shortened_url')
