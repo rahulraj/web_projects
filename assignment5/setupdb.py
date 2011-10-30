@@ -18,7 +18,7 @@ NOTE:
   There's copies of this script in both directories. Run the one
   inside the directory that the database should be in.
 """
-import __init__ as linkshort
+import linkshort # Import differs based on the directory
 
 if __name__ == '__main__':
   linkshort.initialize_database()
