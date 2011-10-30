@@ -207,6 +207,24 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
       analyticsList.append(visitMessage);
     }
     else {
+      analyticsList.append($('<li>', {
+        html: pageAsJson.sinceLastHour + ' visit(s) in the last hour'
+      }));
+      analyticsList.append($('<li>', {
+        html: pageAsJson.sinceLastDay  + ' visit(s) in the last day'
+      }));
+      analyticsList.append($('<li>', {
+        html: pageAsJson.sinceLastWeek + ' visit(s) in the last week'
+      }));
+      analyticsList.append($('<li>', {
+        html: pageAsJson.sinceLastMonth + ' visit(s) in the last month'
+      }));
+      analyticsList.append($('<li>', {
+        html: pageAsJson.sinceLastYear + ' visit(s) in the last year'
+      }));
+      analyticsList.append($('<li>', {
+        html: 'The exact visit times are: '
+      }));
       _(pageAsJson.visits).each(function(visit) {
         /** @const */ var visitItem = $('<li>', {
           html: visit.timeVisited

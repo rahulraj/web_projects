@@ -1,5 +1,6 @@
 import sqlite3
 import time
+import datetime
 from contextlib import closing
 from inject import assign_injectables
 from getters import with_getters_for
@@ -273,6 +274,29 @@ class User(object):
     assign_injectables(self, locals())
 with_getters_for(User, 'id', 'username', 'hashed_password', 'salt')
 
+def time_comparisons(visits):
+  hour_ago = datetime.timedelta(hours=1)
+  day_ago = datetime.timedelta(days=1)
+  week_ago = datetime.timedelta(weeks=1)
+  approximately_month_ago = datetime.timedelta(days=30)
+  year_ago = datetime.timedelta(days=365)
+  def visit_was_since_delta(delta, visit):
+    visit_time = visit.get_time_visited() 
+    visit_date = datetime.date.fromtimestamp(visit_time)
+    now = datetime.date.fromtimestamp(time.time())
+    earliest = now - delta
+    return earliest < visit_date
+  descriptions = ['sinceLastHour', 'sinceLastDay', 'sinceLastWeek',
+                  'sinceLastMonth', 'sinceLastYear']
+  deltas = [hour_ago, day_ago, week_ago, approximately_month_ago, year_ago]
+  comparisons = {}
+  for description, delta in zip(descriptions, deltas):
+    visits_in_interval = [visit for visit in visits if \
+        visit_was_since_delta(delta, visit)]
+    comparisons[description] = len(visits_in_interval)
+  return comparisons
+
+
 class Page(object):
   def __init__(self, created_by_user, original_url, shortened_url, id=None):
     assign_injectables(self, locals())
@@ -292,14 +316,11 @@ class Page(object):
       local_time = time.localtime(visit.get_time_visited())
       formatted_time = time.strftime('%a %d %b %Y %H:%M:%S', local_time)
       visit_dict = {'timeVisited': formatted_time}
-      visit_dict['year'] = local_time.tm_year
-      visit_dict['month'] = local_time.tm_mon
-      visit_dict['day'] = local_time.tm_mday
-      visit_dict['hour'] = local_time.tm_hour
-      visit_dict['minute'] = local_time.tm_min
-      visit_dict['second'] = local_time.tm_sec
       return visit_dict
     result['visits'] = map(visit_to_dict, visits)
+    comparisons = time_comparisons(visits)
+    for description, times_in_interval in comparisons.iteritems():
+      result[description] = times_in_interval
     return result
 with_getters_for(Page, 'id', 'created_by_user', 'original_url', 'shortened_url')
 
