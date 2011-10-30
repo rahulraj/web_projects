@@ -164,7 +164,7 @@ shortener.PageManagerView.Builder.prototype.addHeading = function() {
     'class': 'grid_4'
   });
   /** @const */ var analyticsLabel = $('<h3>', {
-    html: 'Analytics',
+    html: 'Visits',
     'class': 'grid_4'
   });
   /** @const */ var clearDiv = $('<div>', {'class': 'clear'});
