@@ -145,3 +145,6 @@ class DatabaseServiceTest(unittest.TestCase):
 
   def tearDown(self):
     os.unlink(self.database_file)
+
+if __name__ == '__main__':
+  unittest.main()
