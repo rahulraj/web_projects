@@ -17,6 +17,15 @@ input {
 }
 input[type="button"] {
   background-color: #439400;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+input[type="text"] {
+  background-color: #C0FF33;
+}
+input[type="password"] {
+  background-color: #C0FF33;
 }
 ul {
   list-style-type: none;
@@ -25,6 +34,14 @@ li {
   /* remove the indentation */
   position: relative;
   right: 30px;
+}
+.analytics {
+  position: relative;
+  bottom: 7px;
+}
+.pageCount {
+  font-size: 16px;
+  padding-right: 10px;
 }
 .container_12 {
   margin-top: 15px;
@@ -48,6 +65,8 @@ h2 {
   padding-top: 15px;
   text-align: center;
 }
-#pageManager li {
+#pageManager > li {
   padding-top: 15px;
+  border-bottom: 1px dashed;
+  padding-bottom: 5px;
 }

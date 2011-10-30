@@ -155,15 +155,15 @@ shortener.PageManagerView.Builder.prototype.shortenButton = function() {
  */
 shortener.PageManagerView.Builder.prototype.addHeading = function() {
   /** @const */ var headingListItem = $('<li>');
-  /** @const */ var originalUrlLabel = $('<span>', {
+  /** @const */ var originalUrlLabel = $('<h3>', {
     html: 'Original URL',
     'class': 'grid_4'
   });
-  /** @const */ var shortenedUrlLabel = $('<span>', {
+  /** @const */ var shortenedUrlLabel = $('<h3>', {
     html: 'Shortened URL',
     'class': 'grid_4'
   });
-  /** @const */ var analyticsLabel = $('<span>', {
+  /** @const */ var analyticsLabel = $('<h3>', {
     html: 'Analytics',
     'class': 'grid_4'
   });
@@ -195,10 +195,13 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
       html: shortener.rootUrl + pageAsJson.shortenedUrl,
       'class': 'grid_4'
     });
-    /** @const */ var numberOfAnalytics = $('<span>', {
-      html: pageAsJson.visits.length,
-      'class': 'grid_4'
+    /** @const */ var analytics = $('<span>', {
+      'class': 'grid_4 analytics'
     });
+    analytics.append($('<span>', {
+      html: pageAsJson.visits.length,
+      'class': 'pageCount'
+    }));
     /** @const */ var analyticsList = $('<ul>');
     if (pageAsJson.visits.length === 0) {
       /** @const */ var visitMessage = $('<li>', {
@@ -223,7 +226,7 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
         html: pageAsJson.sinceLastYear + ' visit(s) in the last year'
       }));
       analyticsList.append($('<li>', {
-        html: 'The exact visit times are: '
+        html: 'The exact visit time(s) are: '
       }));
       _(pageAsJson.visits).each(function(visit) {
         /** @const */ var visitItem = $('<li>', {
@@ -243,12 +246,12 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
           'Hide Details' : 'Show Details';
       detailsButton.val(action);
     });
-    numberOfAnalytics.append(detailsButton);
-    numberOfAnalytics.append(analyticsList);
+    analytics.append(detailsButton);
+    analytics.append(analyticsList);
 
     /** @const */ var clearDiv = $('<div>', {'class': 'clear'});
     pageListItem.append(originalUrlAnchor).append(shortenedUrlAnchor).
-        append(numberOfAnalytics).append(clearDiv);
+        append(analytics).append(clearDiv);
     viewList.append(pageListItem);
   });
   return this;
