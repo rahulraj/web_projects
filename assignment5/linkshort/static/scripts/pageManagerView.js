@@ -160,7 +160,7 @@ shortener.PageManagerView.Builder.prototype.addHeading = function() {
     'class': 'grid_4'
   });
   /** @const */ var shortenedUrlLabel = $('<h3>', {
-    html: 'Shortened URL',
+    html: 'Shortened URL (Relative)',
     'class': 'grid_4'
   });
   /** @const */ var analyticsLabel = $('<h3>', {
@@ -192,7 +192,9 @@ shortener.PageManagerView.Builder.prototype.of = function(pagesAsJson) {
     });
     /** @const */ var shortenedUrlAnchor = $('<a>', {
       href: shortener.rootUrl + pageAsJson.shortenedUrl,
-      html: shortener.rootUrl + pageAsJson.shortenedUrl,
+      // When displaying the links, don't display the root URL,
+      // because on scripts.mit.edu this is actually longer.
+      html: '/' + pageAsJson.shortenedUrl,
       'class': 'grid_4'
     });
     /** @const */ var analytics = $('<span>', {
