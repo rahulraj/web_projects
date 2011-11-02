@@ -178,6 +178,7 @@ def post_pages_by_user(user):
        g.database_service.try_get_shortened_url(output_url) is not None:
     return jsonify(success=False, message='URL is taken')
   elif '/' in output_url:
+    # Disallow /'s, Flask will think it's a subdirectory
     return jsonify(success=False, message='URLs can not have "/"\'s in them ')
   else:
     shortened_url = output_url
