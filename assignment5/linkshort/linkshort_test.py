@@ -137,6 +137,12 @@ class LinkShortTest(unittest.TestCase):
     result = self.dict_from_request(add_page)
     self.assertFalse(result['success'])
 
+  def test_shortened_urls_cant_have_forward_slashes(self):
+    self.register_test_user()
+    add_page = partial(self.add_page, 'www.google.com', 'a/search/engine')
+    result = self.dict_from_request(add_page)
+    self.assertFalse(result['success'])
+
   def test_shortened_pages_are_added_to_users_pages(self):
     self.test_simple_shorten_page()
     result = self.dict_from_request(self.get_pages)

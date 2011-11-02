@@ -177,6 +177,8 @@ def post_pages_by_user(user):
   elif output_url in reserved_urls or \
        g.database_service.try_get_shortened_url(output_url) is not None:
     return jsonify(success=False, message='URL is taken')
+  elif '/' in output_url:
+    return jsonify(success=False, message='URLs can not have "/"\'s in them ')
   else:
     shortened_url = output_url
   # Now store the shortened URL
