@@ -26,7 +26,7 @@ create table exits (
   description string not null,
   from_room integer not null,
   to_room integer not null,
-  locked boolean not null,
+  locked boolean not null
 );
 create table item_unlocking_items (
   id integer primary key autoincrement,
