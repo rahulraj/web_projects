@@ -33,6 +33,8 @@ create table item_unlocking_items (
   name string not null,
   description string not null,
   owned_by_player integer, -- Can be null if not yet picked up
+  in_room integer not null,
+  locked boolean not null,
   unlocks_item integer not null
 );
 create table exit_unlocking_items (
@@ -40,5 +42,7 @@ create table exit_unlocking_items (
   name string not null,
   description string not null,
   owned_by_player integer, -- Can be null if not yet picked up
+  in_room integer not null,
+  locked boolean not null,
   unlocks_exit integer not null
 );

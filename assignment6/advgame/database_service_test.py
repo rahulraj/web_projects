@@ -19,6 +19,8 @@ class DatabaseServiceTest(unittest.TestCase):
     # Test data
     self.test_room = databaseservice.Room('A test room',
         'This room was created for testing')
+    self.second_room = databaseservice.Room('A second room',
+        'This room was created for more complex tests')
 
     self.test_user = databaseservice.User('rahulraj', 'fake_hash', 'fake_salt')
     self.second_user = databaseservice.User('second', 'fake_hash2', 'fake_salt2')
@@ -49,6 +51,22 @@ class DatabaseServiceTest(unittest.TestCase):
     self.database.add_room(self.test_room)
     room = self.database.find_room_by_name(self.test_room.get_name())
     self.assertEquals(self.test_room.get_description(), room.get_description())
+
+  def test_room_with_exit(self):
+    first_room = self.database.add_room(self.test_room)
+    second_room = self.database.add_room(self.second_room)
+    description = "An Exit from first to second"
+    exit = databaseservice.Exit(
+        name="Exit 1",
+        description=description,
+        from_room=first_room.get_id(),
+        to_room=second_room.get_id(),
+        locked=False)
+    self.database.add_exit(exit)
+
+    result = self.database.find_exits_from_room_with_id(first_room.get_id())
+    self.assertEquals(1, len(result))
+    self.assertEquals(description, result[0].get_description())
 
   def tearDown(self):
     os.unlink(self.database_file)

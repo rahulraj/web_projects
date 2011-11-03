@@ -114,6 +114,31 @@ class DatabaseService(object):
     row = self.cursor.fetchone()
     return Room(row[1], row[2], id=row[0])
 
+  def add_exit(self, exit):
+    self.cursor.execute( \
+        """
+        insert into exits values (null, :name, :description, :from_room,
+            :to_room, :locked)
+        """,
+        {'name': exit.get_name(), 'description': exit.get_description(),
+         'from_room': exit.get_from_room(), 'to_room': exit.get_to_room(),
+         'locked': exit.is_locked()})
+    self.connection.commit()
+    return Exit(exit.get_name(), exit.get_description(), exit.get_from_room(),
+        exit.get_to_room(), exit.is_locked(), id=self.cursor.lastrowid)
+
+  def find_exits_from_room_with_id(self, room_id):
+    self.cursor.execute( \
+        """    
+        select id, name, description, from_room, to_room, locked 
+        from exits where from_room=:room_id
+        """, {'room_id': room_id})
+    def exit_from_row(row):
+      (id, name, description, from_room, to_room, locked) = row
+      return Exit(name, description, from_room, to_room, locked, id=id)
+    exits_rows = self.cursor.fetchall()
+    return map(exit_from_row, exits_rows)
+
 
 """ Data access objects, representing rows in the database tables.  """
 class User(object):
@@ -154,17 +179,22 @@ class Item(GameEntity):
   """
   Abstract base class for objects which players can add to their inventory.
   """
-  pass
-with_getters_for(Item, 'id', 'owned_by_player')
+  def is_locked(self):
+    """
+    An Item is locked if the player can not pick it up without
+    doing some other action first.
+    """
+    return self.locked
+with_getters_for(Item, 'id', 'owned_by_player', 'in_room')
 
 class ItemUnlockingItem(Item):
   def __init__(self, name,  description,
-      owned_by_player, unlocks_item, id=None):
+      owned_by_player, in_room, locked, unlocks_item, id=None):
     assign_injectables(self, locals())
 with_getters_for(ItemUnlockingItem, 'unlocks_item')
 
 class ExitUnlockingItem(Item):
   def __init__(self, name, description,
-      owned_by_player, unlocks_exit, id=None):
+      owned_by_player, in_room, locked, unlocks_exit, id=None):
     assign_injectables(self, locals())
 with_getters_for(ExitUnlockingItem, 'unlocks_exit')
