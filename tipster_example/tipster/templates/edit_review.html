@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Editing review of {{ subject.name }}</h2>
+
+<div class=myform>
+    <form class=form action="{{ url_for('update_review', sid=subject.id, rid=review.id) }}" method=POST>
+        <label>Review
+        <span class="small">Enter your review here</span>
+        </label>
+        <textarea cols=20 rows=5 name=content>{{ review.content }}</textarea>
+        <label>Rating
+        <span class="small">One star is bad</span>
+        </label>
+        <input type=hidden name=rating class=starwidget value='{{ review.rating }}'></input>        
+        <div class = spacer></div>
+        <input class=button type=submit value="Submit review"></input>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% macro autocomplete() %}
+<script>
+$("#name_input").autocomplete(
+	{source: function(term, suggest) {
+        //pass request to server
+        $.getJSON('/get_subject_suggestions', term=term, function(response) {
+	        suggest(response.suggestions);
+			});
+		}
+	// listener for when item is selected from suggestion list
+	/*
+	select: function (event, ui) {
+		// ui.item is item selected (an object, not the string)
+		$('#button').val('Select');
+	}
+	*/
+	});
+$("#category_input").autocomplete(
+	{source: function(term, suggest) {
+        //pass request to server
+        $.getJSON('/get_category_suggestions', term=term, function(response) {
+	        suggest(response.suggestions);
+			});
+		}
+	});
+</script>
+{% endmacro %}

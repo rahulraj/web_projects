@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% from "_subject_short.html" import display_subject %}
+
+<h2>
+Recently reviewed...
+</h2>
+
+{% for s in subjects %}
+	{{ display_subject(s) }}
+{% endfor %}
+
+{% endblock %}

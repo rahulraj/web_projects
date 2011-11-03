@@ -1,0 +1,20 @@
+{% macro display_review(review) %}
+<div class=review>
+<div class=reviewheader>
+    <span class=by>{{ review.user.first }} {{ review.user.last }}</span>
+	{% if review.edit_url %}
+	<a href="{{ review.edit_url}}" class=editlink>[Edit]</a>
+	{% endif %}	
+    <span class=date>({{ review.created }})</span>
+	{% if review.rating != 0 %}
+    <span class=starwidget value="{{ review.rating }}"></span><br>
+	{% endif %}
+</div>
+<div class=reviewcontent>
+{{ review.content }}
+{% if review.more_url %}
+...<a href="{{ review.more_url}}" class=morelink>more</a>
+{% endif %}	
+</div>
+</div>
+{% endmacro %}

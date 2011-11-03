@@ -1,0 +1,97 @@
+{% macro star_widget() %}
+
+    <!--
+    to create a star widget, include this macro
+    along with elements of class "starwidget"
+    for each such element, a star widget will be inserted just before it in the DOM
+    if the element is an input, the widget will be editable
+    the value attribute of the element sets the initial value of the star widget
+    eg: for an editable star widget
+        <input id=ratingInput type=hidden name=rating class=starwidget value=3>
+    -->
+    
+	<script>
+		/* define an array iteration function */		
+		function iter (arr, f) {
+			var i;
+			for (i = 0; i < arr.length; i = i+1) {
+				f (arr[i]);
+				}
+			}
+		
+		/* invoke f(i) from 0..hi */
+ 		function doupto (hi, f) {
+			for (var i = 0; i <= hi; i = i+1) { f(i); }
+			}
+
+		/* insert star widget just before HTML element with id widget_sibling_id
+		    if initial_value is null, then acts as if no initial value set
+		    if editable is false, mouse clicks and hovers have no effect
+		    value is between 1 and 5; 0 means value is not set
+		    set_value is a function that is called whenever the value is changed
+		*/
+		function makeStarWidget (widget_sibling_id, initial_value, editable, set_value) {
+		    var star_element = document.createElement("div");
+		    star_element.className = "stars";
+			var stars = [];
+			var value = initial_value;
+			for (var i = 0; i < 5; i = i+1) {
+				(function (i) {
+					var star = document.createElement("span");
+					star_element.appendChild(star);
+					if (i >= initial_value)
+					    star.className = "star star-basic";
+					else
+				        star.className = "star star-on";
+					stars[i] = star;
+					var setPrefixClass = function (_class) {
+						doupto (i,
+							function (j) {stars[j].className = _class;}
+							);
+						};
+					if (!editable) return;
+					star.addEventListener("mouseover", function () {
+						if (0 == value) {
+							setPrefixClass("star star-hover");
+							};
+						}, false);
+					star.addEventListener("mouseout", function () {
+						if (0 == value) {
+							setPrefixClass("star star-basic");
+							};
+						}, false);
+					star.addEventListener("mousedown", function () {
+						if (i + 1 == value) {
+							value = 0;
+							set_value(0);
+							setPrefixClass("star star-basic");
+						} else if (0 == value)  {
+							value = i + 1;
+							set_value(i + 1);
+							setPrefixClass("star star-on");
+							};
+						}, false);
+					}) (i);
+				};
+			return star_element;
+		}
+
+        window.onload = function () {
+            // find all elements with id starwidget
+        	var containers = document.getElementsByClassName("starwidget");
+        	iter (containers, function (elt) {
+                // if input element, then make editable and set form value updater
+                var editable = (elt.tagName == "INPUT");
+                var set_value = function (v) {elt.value = v;};
+                // get element value to initialize stars; set to zero if missing
+                var initial_value = elt.getAttribute("value");
+                if (initial_value == null)
+                    initial_value = 0;                    
+                // create star widget
+        		var star_element = makeStarWidget(elt, initial_value, editable, set_value);
+        		// insert just before the element
+    		    elt.parentNode.insertBefore(star_element, elt);
+        		});
+        	}
+		</script>
+{% endmacro %}
