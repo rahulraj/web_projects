@@ -131,7 +131,7 @@ class DatabaseService(object):
     self.cursor.execute( \
         """    
         select id, name, description, from_room, to_room, locked 
-        from exits where from_room=:room_id
+        from exits where from_room=:room_id order by id
         """, {'room_id': room_id})
     def exit_from_row(row):
       (id, name, description, from_room, to_room, locked) = row

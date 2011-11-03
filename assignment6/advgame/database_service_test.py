@@ -21,6 +21,8 @@ class DatabaseServiceTest(unittest.TestCase):
         'This room was created for testing')
     self.second_room = databaseservice.Room('A second room',
         'This room was created for more complex tests')
+    self.third_room = databaseservice.Room('A third room',
+        'This room was created for even more complex tests')
 
     self.test_user = databaseservice.User('rahulraj', 'fake_hash', 'fake_salt')
     self.second_user = databaseservice.User('second', 'fake_hash2', 'fake_salt2')
@@ -67,6 +69,33 @@ class DatabaseServiceTest(unittest.TestCase):
     result = self.database.find_exits_from_room_with_id(first_room.get_id())
     self.assertEquals(1, len(result))
     self.assertEquals(description, result[0].get_description())
+
+  def test_multiple_exits_from_a_room(self):
+    first_room = self.database.add_room(self.test_room)
+    second_room = self.database.add_room(self.second_room)
+    third_room = self.database.add_room(self.third_room)
+    first_description = "An Exit from first to second"
+    first_exit = databaseservice.Exit(
+        name="Exit 1",
+        description=first_description,
+        from_room=first_room.get_id(),
+        to_room=second_room.get_id(),
+        locked=False)
+    self.database.add_exit(first_exit)
+
+    second_description = "An Exit from first to third"
+    second_exit = databaseservice.Exit(
+        name="Exit 2",
+        description=second_description,
+        from_room=first_room.get_id(),
+        to_room=third_room.get_id(),
+        locked=False)
+    self.database.add_exit(second_exit)
+
+    result = self.database.find_exits_from_room_with_id(first_room.get_id())
+    self.assertEquals(2, len(result))
+    self.assertEquals(first_description, result[0].get_description())
+    self.assertEquals(second_description, result[1].get_description())
 
   def tearDown(self):
     os.unlink(self.database_file)
