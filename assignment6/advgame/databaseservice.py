@@ -24,6 +24,31 @@ def initialize_database(database_file, schema):
     database.cursor().executescript(schema.read())
     database.commit()
 
+class DatabaseService(object):
+  def __init__(self, connection, cursor):
+    assign_injectables(self, locals())
+
+  def add_user(self, user):
+    """
+    Ignores the ID attribute of user, allowing the database to create
+    a new autoincrement ID. Use the returned User to make calls to find_*
+
+    Args:
+      user a User object containing the row data (except for the ID)
+
+    Returns:
+      A new User object with the ID field filled in.
+    """
+    # Pass in null for the ID; sqlite will automatically generate an ID.
+    self.database.execute( \
+        'insert into users values (null, :username, :hashed_password, :salt)',
+        {'username': user.get_username(), 
+         'hashed_password': user.get_hashed_password(),
+         'salt': user.get_salt()})
+    self.connection.commit()
+    return User(user.get_username(), user.get_hashed_password(),
+        user.get_salt(), id=self.database.lastrowid)
+
 """ Data access objects, representing rows in the database tables.  """
 class User(object):
   def __init__(self, username, hashed_password, salt, id=None):
