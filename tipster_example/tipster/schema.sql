@@ -1,3 +1,11 @@
+"""
+Tipster: A Little Recommendations App
+
+An example application written for 6170.
+Copyright (c) 2011 Daniel Jackson and MIT
+License: MIT
+"""
+
 -- all dates in Unix epoch seconds
 create table if not exists subjects (
     id integer primary key,
