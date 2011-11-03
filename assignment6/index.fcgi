@@ -40,6 +40,7 @@ import threading
 from flup.server.fcgi import WSGIServer
 from advgame import app
 
+app.debug = True
 _mtimes = {}
 def code_changed(): # lovingly stolen from django. See above.
     global _mtimes
