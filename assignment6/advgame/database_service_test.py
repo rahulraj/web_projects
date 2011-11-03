@@ -17,15 +17,15 @@ class DatabaseServiceTest(unittest.TestCase):
         self.database_connection, self.database_cursor)
 
     # Test data
+    self.test_user = databaseservice.User('rahulraj', 'fake_hash', 'fake_salt')
+    self.second_user = databaseservice.User('second', 'fake_hash2', 'fake_salt2')
+
     self.test_room = databaseservice.Room('A test room',
         'This room was created for testing')
     self.second_room = databaseservice.Room('A second room',
         'This room was created for more complex tests')
     self.third_room = databaseservice.Room('A third room',
         'This room was created for even more complex tests')
-
-    self.test_user = databaseservice.User('rahulraj', 'fake_hash', 'fake_salt')
-    self.second_user = databaseservice.User('second', 'fake_hash2', 'fake_salt2')
 
   def test_user_not_initially_in_database(self):
     self.assertFalse( \
@@ -96,6 +96,35 @@ class DatabaseServiceTest(unittest.TestCase):
     self.assertEquals(2, len(result))
     self.assertEquals(first_description, result[0].get_description())
     self.assertEquals(second_description, result[1].get_description())
+
+  def test_add_player(self):
+    user_id = 2
+    current_room_id = 5
+    player = databaseservice.Player(user_id, current_room_id)
+    result_player = self.database.add_player(player)
+    self.database_cursor.execute(
+        'select * from players where id=:id', {'id': result_player.get_id()})
+    database_output = self.database_cursor.fetchone()
+    self.assertEquals(user_id, database_output[1])
+    self.assertEquals(current_room_id, database_output[2])
+
+  def test_find_item_in_a_room(self):
+    first_room = self.database.add_room(self.test_room)
+    first_item_name = 'First item'
+    first_item = databaseservice.ItemUnlockingItem(
+        name=first_item_name,
+        description='First description',
+        use_message='You used First item',
+        owned_by_player=None,
+        in_room=first_room.get_id(),
+        locked=False,
+        unlocks_item=5)
+    self.database.add_item_unlocking_item(first_item)
+    result = self.database.find_unlocked_items_in_room_with_id( \
+        first_room.get_id())
+    self.assertEquals(1, len(result))
+    self.assertEquals(first_item_name, result[0].get_name())
+
 
   def tearDown(self):
     os.unlink(self.database_file)

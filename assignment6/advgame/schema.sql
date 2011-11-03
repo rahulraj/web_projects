@@ -32,8 +32,9 @@ create table item_unlocking_items (
   id integer primary key autoincrement,
   name string not null,
   description string not null,
+  use_message string not null,
   owned_by_player integer, -- Can be null if not yet picked up
-  in_room integer not null,
+  in_room integer, -- Can be null if picked up
   locked boolean not null,
   unlocks_item integer not null
 );
@@ -41,8 +42,9 @@ create table exit_unlocking_items (
   id integer primary key autoincrement,
   name string not null,
   description string not null,
+  use_message string not null,
   owned_by_player integer, -- Can be null if not yet picked up
-  in_room integer not null,
+  in_room integer, -- Can be null if picked up
   locked boolean not null,
   unlocks_exit integer not null
 );

@@ -108,6 +108,8 @@ class DatabaseService(object):
         id=self.cursor.lastrowid)
 
   def find_room_by_name(self, room_name):
+    """ TODO Replace, there could be multiple rooms with the
+    same name, in multiple instances of the game. """
     self.cursor.execute( \
         'select * from rooms where name=:name',
         {'name': room_name})
@@ -138,6 +140,76 @@ class DatabaseService(object):
       return Exit(name, description, from_room, to_room, locked, id=id)
     exits_rows = self.cursor.fetchall()
     return map(exit_from_row, exits_rows)
+
+  def add_player(self, player):
+    self.cursor.execute( \
+        """
+        insert into players values
+            (null, :created_by_user, :currently_in_room)
+        """, 
+        {'created_by_user': player.get_created_by_user(),
+         'currently_in_room': player.get_currently_in_room()})
+    return Player(player.get_created_by_user(), player.get_currently_in_room(),
+        id=self.cursor.lastrowid)
+
+  def add_item_unlocking_item(self, item):
+    self.cursor.execute( \
+        """
+        insert into item_unlocking_items values (null, :name, :description,
+            :use_message, :owned_by_player, :in_room, :locked, :unlocks_item)
+        """,
+        {'name': item.get_name(), 'description': item.get_description(),
+         'use_message': item.get_use_message(),
+         'owned_by_player': item.get_owned_by_player(),
+         'in_room': item.get_in_room(), 'locked': item.is_locked(),
+         'unlocks_item': item.get_unlocks_item()})
+    return ItemUnlockingItem(item.get_name(), item.get_description(),
+        item.get_use_message(),
+        item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
+        item.get_unlocks_item(), id=self.cursor.lastrowid)
+
+  def add_exit_unlocking_item(self, item):
+    self.cursor.execute( \
+        """
+        insert into exit_unlocking_items values (null, :name, :description,
+            :use_message, :owned_by_player, :in_room, :locked, :unlocks_exit)
+        """,
+        {'name': item.get_name(), 'description': item.get_description(),
+         'use_message': item.get_use_message(),
+         'owned_by_player': item.get_owned_by_player(),
+         'in_room': item.get_in_room(), 'locked': item.is_locked(),
+         'unlocks_exit': item.get_unlocks_exit()})
+    return ExitUnlockingItem(item.get_name(), item.get_description(),
+        item.get_use_message(),
+        item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
+        item.get_unlocks_exit(), id=self.cursor.lastrowid)
+
+  def find_unlocked_items_in_room_with_id(self, room_id):
+    # TODO Test
+    self.cursor.execute( \
+        """
+        select * from item_unlocking_items
+        where id=:room_id and not locked order by id
+        """, {'room_id': room_id})
+    def item_unlocking_item_from_row(row):
+      (id, name, description, use_message, owned_by_player,
+          in_room, locked, unlocks_item) = row
+      return ItemUnlockingItem(name, description, use_message, owned_by_player,
+          in_room, locked, unlocks_item, id=id)
+    items = map(item_unlocking_item_from_row, self.cursor.fetchall())
+
+    self.cursor.execute( \
+        """
+        select * from exit_unlocking_items
+        where id=:room_id and not locked order by id
+        """, {'room_id': room_id})
+    def exit_unlocking_item_from_row(row):
+      (id, name, description, use_message, owned_by_player,
+          in_room, locked, unlocks_exit) = row
+      return ExitUnlockingItem(name, description, use_message, owned_by_player,
+          in_room, locked, unlocks_exit, id=id)
+    items.extend(map(exit_unlocking_item_from_row, self.cursor.fetchall()))
+    return items
 
 
 """ Data access objects, representing rows in the database tables.  """
@@ -185,16 +257,16 @@ class Item(GameEntity):
     doing some other action first.
     """
     return self.locked
-with_getters_for(Item, 'id', 'owned_by_player', 'in_room')
+with_getters_for(Item, 'id', 'use_message', 'owned_by_player', 'in_room')
 
 class ItemUnlockingItem(Item):
-  def __init__(self, name,  description,
+  def __init__(self, name,  description, use_message,
       owned_by_player, in_room, locked, unlocks_item, id=None):
     assign_injectables(self, locals())
 with_getters_for(ItemUnlockingItem, 'unlocks_item')
 
 class ExitUnlockingItem(Item):
-  def __init__(self, name, description,
+  def __init__(self, name, description, use_message,
       owned_by_player, in_room, locked, unlocks_exit, id=None):
     assign_injectables(self, locals())
 with_getters_for(ExitUnlockingItem, 'unlocks_exit')
