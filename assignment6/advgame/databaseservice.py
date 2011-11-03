@@ -24,6 +24,10 @@ def initialize_database(database_file, schema):
     database.cursor().executescript(schema.read())
     database.commit()
 
+class NoSuchUser(Exception):
+  """ The user requested does not exist. """
+  pass
+
 class DatabaseService(object):
   def __init__(self, connection, cursor):
     assign_injectables(self, locals())
