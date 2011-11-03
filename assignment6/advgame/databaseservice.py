@@ -99,6 +99,22 @@ class DatabaseService(object):
       raise NoSuchUser
     return User(row[1], row[2], row[3], id=row[0])
 
+  def add_room(self, room):
+    self.cursor.execute( \
+        'insert into rooms values (null, :name, :description)',
+        {'name': room.get_name(), 'description': room.get_description()})
+    self.connection.commit()
+    return Room(room.get_name(), room.get_description(),
+        id=self.cursor.lastrowid)
+
+  def find_room_by_name(self, room_name):
+    self.cursor.execute( \
+        'select * from rooms where name=:name',
+        {'name': room_name})
+    row = self.cursor.fetchone()
+    return Room(row[1], row[2], id=row[0])
+
+
 """ Data access objects, representing rows in the database tables.  """
 class User(object):
   def __init__(self, username, hashed_password, salt, id=None):

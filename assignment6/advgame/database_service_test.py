@@ -17,6 +17,9 @@ class DatabaseServiceTest(unittest.TestCase):
         self.database_connection, self.database_cursor)
 
     # Test data
+    self.test_room = databaseservice.Room('A test room',
+        'This room was created for testing')
+
     self.test_user = databaseservice.User('rahulraj', 'fake_hash', 'fake_salt')
     self.second_user = databaseservice.User('second', 'fake_hash2', 'fake_salt2')
 
@@ -41,6 +44,11 @@ class DatabaseServiceTest(unittest.TestCase):
     result_row = self.database_cursor.fetchone()
     self.assertEquals(row_id, result_row[0])
     self.assertTrue(result_row[0] is not None)
+
+  def test_add_room(self):
+    self.database.add_room(self.test_room)
+    room = self.database.find_room_by_name(self.test_room.get_name())
+    self.assertEquals(self.test_room.get_description(), room.get_description())
 
   def tearDown(self):
     os.unlink(self.database_file)
