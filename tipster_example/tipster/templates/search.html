@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class=explanation>
+    Enter search here...Can leave any field blank...
+</div>
+<div class=myform>
+<form class=form action="{{ url_for('search') }}" method=POST>
+    <label>Name
+    <span class="small">Name of business</span>
+    </label>
+    <input id=name_input type=text name="name"/>
+
+    <label for="category">Category
+    <span class="small">eg, Restaurant, Plumber</span>
+    </label>
+    <input id=category_input type=text name="category_name"/>
+
+    <!-- currently unused
+    <label for="category">Keywords
+    <span class="small">any that appear in </span>
+    </label>
+    <input id=keyword_input type=text name="keywords"/>
+    -->
+    <input id=button class=button type=submit value="Submit"/>
+    
+    <div class="spacer"></div>
+</form>
+</div>
+
+{% from "_subject_autocomplete.html" import autocomplete %}
+{{ autocomplete() }}
+
+{% endblock %}

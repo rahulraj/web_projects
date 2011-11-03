@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+{% from "_subject_short.html" import display_subject %}
+
+{% for s in subjects %}
+	{{ display_subject(s) }}
+{% endfor %}
+{% endblock %}
