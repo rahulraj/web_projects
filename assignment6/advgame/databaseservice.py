@@ -152,33 +152,37 @@ class DatabaseService(object):
     return Player(player.get_created_by_user(), player.get_currently_in_room(),
         id=self.cursor.lastrowid)
 
-  def add_item_unlocking_item(self, item):
+  def insert_item_query(self, item):
     self.cursor.execute( \
         """
-        insert into item_unlocking_items values (null, :name, :description,
-            :use_message, :owned_by_player, :in_room, :locked, :unlocks_item)
-        """,
+        insert into items values (null, :name, :description,
+            :use_message, :owned_by_player, :in_room, :locked)
+        """, 
         {'name': item.get_name(), 'description': item.get_description(),
          'use_message': item.get_use_message(),
          'owned_by_player': item.get_owned_by_player(),
-         'in_room': item.get_in_room(), 'locked': item.is_locked(),
-         'unlocks_item': item.get_unlocks_item()})
+         'in_room': item.get_in_room(), 'locked': item.is_locked()})
+    return self.cursor.lastrowid
+
+  def add_item_unlocking_item(self, item):
+    item_id = self.insert_item_query(item)
+    self.cursor.execute( \
+        """
+        insert into item_unlocking_items values (:item_id, :unlocks_item)
+        """,
+        {'item_id': item_id, 'unlocks_item': item.get_unlocks_item()})
     return ItemUnlockingItem(item.get_name(), item.get_description(),
         item.get_use_message(),
         item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
         item.get_unlocks_item(), id=self.cursor.lastrowid)
 
   def add_exit_unlocking_item(self, item):
+    item_id = self.insert_item_query(item)
     self.cursor.execute( \
         """
-        insert into exit_unlocking_items values (null, :name, :description,
-            :use_message, :owned_by_player, :in_room, :locked, :unlocks_exit)
+        insert into exit_unlocking_items values (:item_id, :unlocks_exit)
         """,
-        {'name': item.get_name(), 'description': item.get_description(),
-         'use_message': item.get_use_message(),
-         'owned_by_player': item.get_owned_by_player(),
-         'in_room': item.get_in_room(), 'locked': item.is_locked(),
-         'unlocks_exit': item.get_unlocks_exit()})
+        {'item_id': item_id, 'unlocks_exit': item.get_unlocks_exit()})
     return ExitUnlockingItem(item.get_name(), item.get_description(),
         item.get_use_message(),
         item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
@@ -187,8 +191,13 @@ class DatabaseService(object):
   def find_unlocked_items_in_room_with_id(self, room_id):
     self.cursor.execute( \
         """
-        select * from item_unlocking_items
-        where in_room=:room_id and not locked order by id
+        select items.id, items.name, items.description, items.use_message,
+            items.owned_by_player, items.in_room, items.locked,
+            item_unlocking_items.unlocks_item
+        from items, item_unlocking_items
+        where items.id=item_unlocking_items.item_id and items.in_room=:room_id
+            and not items.locked
+        order by id
         """, {'room_id': room_id})
     def item_unlocking_item_from_row(row):
       (id, name, description, use_message, owned_by_player,
@@ -199,8 +208,13 @@ class DatabaseService(object):
 
     self.cursor.execute( \
         """
-        select * from exit_unlocking_items
-        where in_room=:room_id and not locked order by id
+        select items.id, items.name, items.description, items.use_message,
+            items.owned_by_player, items.in_room, items.locked,
+            exit_unlocking_items.unlocks_exit
+        from items, exit_unlocking_items
+        where items.id=exit_unlocking_items.item_id and items.in_room=:room_id
+            and not items.locked
+        order by id
         """, {'room_id': room_id})
     def exit_unlocking_item_from_row(row):
       (id, name, description, use_message, owned_by_player,
@@ -210,6 +224,15 @@ class DatabaseService(object):
     items.extend(map(exit_unlocking_item_from_row, self.cursor.fetchall()))
     return items
 
+  def move_item_unlocking_item_to_player(self, item_id, player_id):
+    self.cursor.execute( \
+        """
+        update item_unlocking_items
+        set owned_by_player=:player_id
+            in_room=null
+        where id=:item_id
+        """, {'player_id': player_id, 'item_id': item_id})
+    self.connection.commit()
 
 """ Data access objects, representing rows in the database tables.  """
 class User(object):
