@@ -161,6 +161,21 @@ class DatabaseServiceTest(unittest.TestCase):
     self.assertEquals(1, len(result))
     self.assertEquals(first_item_name, result[0].get_name())
 
+  def test_player_picks_up_items(self):
+    user_id = 2
+    current_room_id = 5
+    player = databaseservice.Player(user_id, current_room_id)
+    first_player = self.database.add_player(player)
+    make_item1 = self.make_item(databaseservice.ItemUnlockingItem,
+        'First item', current_room_id, locked=False) 
+    first_item = self.database.add_item_unlocking_item(make_item1)
+    make_item2 = self.make_item(databaseservice.ExitUnlockingItem,
+        'Second item', current_room_id, locked=False)
+    self.database.add_exit_unlocking_item(make_item2)
+    self.database.move_item_to_player(first_item.get_id(), first_player.get_id())
+    result = self.database.find_items_owned_by_player(first_player.get_id())
+    self.assertEquals(1, len(result))
+    self.assertEquals(first_item.get_id(), result[0].get_id())
 
   def tearDown(self):
     os.unlink(self.database_file)

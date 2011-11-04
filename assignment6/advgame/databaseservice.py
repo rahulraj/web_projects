@@ -28,6 +28,9 @@ class NoSuchUser(Exception):
   """ The user requested does not exist. """
   pass
 
+class NoSuchItem(Exception):
+  pass
+
 class DatabaseService(object):
   def __init__(self, connection, cursor):
     assign_injectables(self, locals())
@@ -223,7 +226,7 @@ class DatabaseService(object):
     self.cursor.execute( \
         """
         update items
-        set owned_by_player=:player_id
+        set owned_by_player=:player_id,
             in_room=null
         where id=:item_id
         """, {'player_id': player_id, 'item_id': item_id})
@@ -232,10 +235,35 @@ class DatabaseService(object):
   def find_items_owned_by_player(self, player_id):
     self.cursor.execute( \
         """
-        select * from items
+        select *
+        from items
         where owned_by_player=:player_id
         order by id
         """, {'player_id': player_id})
+    def item_from_row(row):
+      item_id = row[0]
+      self.cursor.execute( \
+          """
+          select *
+          from item_unlocking_items
+          where item_id=:item_id
+          """, {'item_id': item_id})
+      result = self.cursor.fetchone()
+      if result is not None:
+        return ItemUnlockingItem.from_row(row + (result[1],))
+      # It's in exit_unlocking_items
+      self.cursor.execute( \
+          """
+          select *
+          from exit_unlocking_items
+          where item_id=:item_id
+          """, {'item_id': item_id})
+      result = self.cursor.fetchone()
+      if result is not None:
+        return ExitUnlockingItem.from_row(row + (result[1],))
+      else:
+        raise NoSuchItem
+    return map(item_from_row, self.cursor)
 
 
 """ Data access objects, representing rows in the database tables.  """
