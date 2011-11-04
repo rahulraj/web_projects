@@ -33,6 +33,9 @@ class FakeDatabaseService(object):
   def find_items_owned_by_player(self, player_id):
     return self.players_to_items[player_id]
 
+  def move_player(self, player_id, new_room_id):
+    self.players_to_rooms[player_id] = new_room_id
+
 class GameEngineTest(unittest.TestCase):
   def setUp(self):
     self.database = FakeDatabaseService()
@@ -58,25 +61,34 @@ class GameEngineTest(unittest.TestCase):
     prompt = self.game_engine.prompt_for_player()
     self.assertTrue(self.test_room.get_name() in prompt)
 
-  def test_exits_displayed(self):
+  def add_test_room_and_test_exit(self):
     self.database.add_player_occupied_room(self.player_id, self.test_room)
     self.database.add_room_exit(self.test_room.get_id(), self.test_exit)
+
+  def test_exits_displayed(self):
+    self.add_test_room_and_test_exit()
     prompt = self.game_engine.prompt_for_player()
     self.assertTrue(self.test_exit.get_name() in prompt)
 
   def test_possible_actions_displays_exit(self):
-    self.test_exits_displayed()
+    self.add_test_room_and_test_exit()
     actions = self.game_engine.possible_actions()
     self.assertEquals(1, len(actions))
     self.assertTrue(self.test_exit.get_name() in actions[0])
 
   def test_possible_actions_displays_items(self):
-    self.test_possible_actions_displays_exit()
+    self.add_test_room_and_test_exit()
     self.database.add_item_to_player(self.player_id, self.test_item)
     actions = self.game_engine.possible_actions()
     self.assertEquals(2, len(actions))
     item_action = [action for action in actions if 'use' in action][0]
     self.assertTrue(self.test_item.get_name() in item_action)
+
+  def test_step_move_through_exit_changes_room(self):
+    self.add_test_room_and_test_exit()
+    self.game_engine.step('exit ' + self.test_exit.get_name())
+    self.assertEquals(self.production_room.get_id(),
+        self.database.players_to_rooms[self.player_id])
 
 if __name__ == '__main__':
   unittest.main()

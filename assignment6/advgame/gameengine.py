@@ -47,9 +47,15 @@ class GameEngine(object):
     if action not in possible_actions:
       return "I don't know what you mean by " + action
     if action.startswith('exit'):
-      exit_name = action[:len('exit')].strip()
+      exit_name = action[len('exit'):].strip()
       (_, exits) = self.room_and_exits()
       exit_in_use = [exit for exit in exits if exit.get_name() == exit_name][0]
       if exit_in_use.is_locked():
         return 'That exit is locked'
-      next_room = exit_in_use.get_to_room() 
+      self.database_service.move_player(self.player_id,
+          exit_in_use.get_to_room())
+      return 'You went through ' + exit_in_use.get_name()
+    elif action.startswith('use'):
+      raise NotImplementedError
+    else:
+      raise NotImplementedError
