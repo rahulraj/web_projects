@@ -351,6 +351,15 @@ class DatabaseService(object):
         raise NoSuchItem
     return map(item_from_row, self.cursor)
 
+  def find_room_occupied_by_player(self, player_id):
+    self.cursor.execute( \
+        """
+        select rooms.id, rooms.name, rooms.description
+        from rooms, players
+        where players.id=:player_id and players.currently_in_room=rooms.id
+        """, {'player_id': player_id})
+    return Room.from_row(self.cursor.fetchone())
+
 
 """ Data access objects, representing rows in the database tables.  """
 class User(object):
