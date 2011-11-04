@@ -114,16 +114,16 @@ class DatabaseServiceTest(unittest.TestCase):
         first_room.get_id())
     self.assertEquals(0, len(items))
     
-  def make_item(self, constructor, item_name, room_id):
+  def make_item(self, constructor, item_name, room_id, locked):
     return constructor(
         item_name, 'Item description for %s' % (item_name),
-        'You used %s' % (item_name), None, room_id, False, 5)
+        'You used %s' % (item_name), None, room_id, locked, 5)
 
   def test_find_item_in_a_room(self):
     first_room = self.database.add_room(self.test_room)
     first_item_name = 'First item'
     first_item = self.make_item(databaseservice.ItemUnlockingItem,
-        first_item_name, first_room.get_id())
+        first_item_name, first_room.get_id(), locked=False)
     self.database.add_item_unlocking_item(first_item)
     result = self.database.find_unlocked_items_in_room_with_id( \
         first_room.get_id())
@@ -134,17 +134,32 @@ class DatabaseServiceTest(unittest.TestCase):
     first_room = self.database.add_room(self.test_room)
     first_item_name = 'First item'
     first_item = self.make_item(databaseservice.ItemUnlockingItem,
-        first_item_name, first_room.get_id()) 
+        first_item_name, first_room.get_id(), locked=False) 
     self.database.add_item_unlocking_item(first_item)
     second_item_name = 'Second item'
     second_item = self.make_item(databaseservice.ExitUnlockingItem,
-        second_item_name, first_room.get_id())
+        second_item_name, first_room.get_id(), locked=False)
     self.database.add_exit_unlocking_item(second_item)
     result = self.database.find_unlocked_items_in_room_with_id( \
         first_room.get_id()) 
     self.assertEquals(2, len(result))
     self.assertEquals(first_item_name, result[0].get_name())
     self.assertEquals(second_item_name, result[1].get_name())
+
+  def test_finding_items_ignores_locked_items(self):
+    first_room = self.database.add_room(self.test_room)
+    first_item_name = 'First item'
+    first_item = self.make_item(databaseservice.ItemUnlockingItem,
+        first_item_name, first_room.get_id(), locked=False) 
+    self.database.add_item_unlocking_item(first_item)
+    second_item_name = 'Second item'
+    second_item = self.make_item(databaseservice.ExitUnlockingItem,
+        second_item_name, first_room.get_id(), locked=True)
+    self.database.add_exit_unlocking_item(second_item)
+    result = self.database.find_unlocked_items_in_room_with_id( \
+        first_room.get_id()) 
+    self.assertEquals(1, len(result))
+    self.assertEquals(first_item_name, result[0].get_name())
 
 
   def tearDown(self):
