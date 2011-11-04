@@ -50,8 +50,8 @@ class DatabaseService(object):
          'hashed_password': user.get_hashed_password(),
          'salt': user.get_salt()})
     self.connection.commit()
-    return User(user.get_username(), user.get_hashed_password(),
-        user.get_salt(), id=self.cursor.lastrowid)
+    return User.from_row((self.cursor.lastrowid, user.get_username(), 
+        user.get_hashed_password(), user.get_salt()))
 
   def user_query(self, username):
     """
@@ -97,15 +97,15 @@ class DatabaseService(object):
     row = self.user_query(username)
     if row is None:
       raise NoSuchUser
-    return User(row[1], row[2], row[3], id=row[0])
+    return User.from_row(row)
 
   def add_room(self, room):
     self.cursor.execute( \
         'insert into rooms values (null, :name, :description)',
         {'name': room.get_name(), 'description': room.get_description()})
     self.connection.commit()
-    return Room(room.get_name(), room.get_description(),
-        id=self.cursor.lastrowid)
+    return Room.from_row((self.cursor.lastrowid, room.get_name(),
+        room.get_description()))
 
   def find_room_by_name(self, room_name):
     """ TODO Replace, there could be multiple rooms with the
@@ -114,7 +114,7 @@ class DatabaseService(object):
         'select * from rooms where name=:name',
         {'name': room_name})
     row = self.cursor.fetchone()
-    return Room(row[1], row[2], id=row[0])
+    return Room.from_row(row)
 
   def add_exit(self, exit):
     self.cursor.execute( \
@@ -126,8 +126,9 @@ class DatabaseService(object):
          'from_room': exit.get_from_room(), 'to_room': exit.get_to_room(),
          'locked': exit.is_locked()})
     self.connection.commit()
-    return Exit(exit.get_name(), exit.get_description(), exit.get_from_room(),
-        exit.get_to_room(), exit.is_locked(), id=self.cursor.lastrowid)
+    return Exit.from_row((self.cursor.lastrowid, exit.get_name(),
+        exit.get_description(), exit.get_from_room(), exit.get_to_room(),
+        exit.is_locked()))
 
   def find_exits_from_room_with_id(self, room_id):
     self.cursor.execute( \
@@ -135,11 +136,7 @@ class DatabaseService(object):
         select id, name, description, from_room, to_room, locked 
         from exits where from_room=:room_id order by id
         """, {'room_id': room_id})
-    def exit_from_row(row):
-      (id, name, description, from_room, to_room, locked) = row
-      return Exit(name, description, from_room, to_room, locked, id=id)
-    exits_rows = self.cursor.fetchall()
-    return map(exit_from_row, exits_rows)
+    return map(Exit.from_row, self.cursor)
 
   def add_player(self, player):
     self.cursor.execute( \
@@ -149,8 +146,8 @@ class DatabaseService(object):
         """, 
         {'created_by_user': player.get_created_by_user(),
          'currently_in_room': player.get_currently_in_room()})
-    return Player(player.get_created_by_user(), player.get_currently_in_room(),
-        id=self.cursor.lastrowid)
+    return Player.from_row((self.cursor.lastrowid,
+        player.get_created_by_user(), player.get_currently_in_room()))
 
   def insert_item_query(self, item):
     self.cursor.execute( \
@@ -171,10 +168,11 @@ class DatabaseService(object):
         insert into item_unlocking_items values (:item_id, :unlocks_item)
         """,
         {'item_id': item_id, 'unlocks_item': item.get_unlocks_item()})
-    return ItemUnlockingItem(item.get_name(), item.get_description(),
+    return ItemUnlockingItem.from_row((self.cursor.lastrowid, item.get_name(),
+        item.get_description(),
         item.get_use_message(),
         item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
-        item.get_unlocks_item(), id=self.cursor.lastrowid)
+        item.get_unlocks_item()))
 
   def add_exit_unlocking_item(self, item):
     item_id = self.insert_item_query(item)
@@ -183,10 +181,11 @@ class DatabaseService(object):
         insert into exit_unlocking_items values (:item_id, :unlocks_exit)
         """,
         {'item_id': item_id, 'unlocks_exit': item.get_unlocks_exit()})
-    return ExitUnlockingItem(item.get_name(), item.get_description(),
+    return ExitUnlockingItem.from_row((self.cursor.lastrowid, item.get_name(),
+        item.get_description(),
         item.get_use_message(),
         item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
-        item.get_unlocks_exit(), id=self.cursor.lastrowid)
+        item.get_unlocks_exit()))
 
   def find_unlocked_items_in_room_with_id(self, room_id):
     self.cursor.execute( \
@@ -199,13 +198,10 @@ class DatabaseService(object):
             and not items.locked
         order by id
         """, {'room_id': room_id})
-    def item_unlocking_item_from_row(row):
-      (id, name, description, use_message, owned_by_player,
-          in_room, locked, unlocks_item) = row
-      return ItemUnlockingItem(name, description, use_message, owned_by_player,
-          in_room, locked, unlocks_item, id=id)
-    items = map(item_unlocking_item_from_row, self.cursor.fetchall())
+    items = map(ItemUnlockingItem.from_row, self.cursor)
 
+    # There is some repetition in SQL unfortunately. As far as I know, I can't
+    # make a "function" that takes a table, and execute that for the two tables.
     self.cursor.execute( \
         """
         select items.id, items.name, items.description, items.use_message,
@@ -216,33 +212,51 @@ class DatabaseService(object):
             and not items.locked
         order by id
         """, {'room_id': room_id})
-    def exit_unlocking_item_from_row(row):
-      (id, name, description, use_message, owned_by_player,
-          in_room, locked, unlocks_exit) = row
-      return ExitUnlockingItem(name, description, use_message, owned_by_player,
-          in_room, locked, unlocks_exit, id=id)
-    items.extend(map(exit_unlocking_item_from_row, self.cursor.fetchall()))
+    items.extend(map(ExitUnlockingItem.from_row, self.cursor))
     return items
 
-  def move_item_unlocking_item_to_player(self, item_id, player_id):
+  def move_item_to_player(self, item_id, player_id):
+    """
+    Extracting an items table does avoid having to make two separate
+    queries here though.
+    """
     self.cursor.execute( \
         """
-        update item_unlocking_items
+        update items
         set owned_by_player=:player_id
             in_room=null
         where id=:item_id
         """, {'player_id': player_id, 'item_id': item_id})
     self.connection.commit()
 
+  def find_items_owned_by_player(self, player_id):
+    self.cursor.execute( \
+        """
+        select * from items
+        where owned_by_player=:player_id
+        order by id
+        """, {'player_id': player_id})
+
+
 """ Data access objects, representing rows in the database tables.  """
 class User(object):
   def __init__(self, username, hashed_password, salt, id=None):
     assign_injectables(self, locals())
+
+  @classmethod
+  def from_row(clazz, row):
+    (id, username, hashed_password, salt) = row
+    return clazz(username, hashed_password, salt, id=id)
 with_getters_for(User, 'id', 'username', 'hashed_password', 'salt')
 
 class Player(object):
   def __init__(self, created_by_user, currently_in_room, id=None):
     assign_injectables(self, locals())
+
+  @classmethod
+  def from_row(clazz, row):
+    (id, created_by_user, currently_in_room) = row
+    return clazz(created_by_user, currently_in_room, id=id)
 with_getters_for(Player, 'id', 'created_by_user', 'currently_in_room')
 
 class GameEntity(object):
@@ -255,6 +269,11 @@ with_getters_for(GameEntity, 'id', 'name', 'description')
 class Room(GameEntity):
   def __init__(self, name, description, id=None):
     assign_injectables(self, locals())
+
+  @classmethod
+  def from_row(clazz, row):
+    (id, name, description) = row
+    return clazz(name, description, id=id)
 # GameEntity already implements all the necessary getters
 
 class Exit(GameEntity):
@@ -267,6 +286,11 @@ class Exit(GameEntity):
     get_locked which is less natural-sounding for a boolean.
     """
     return self.locked
+
+  @classmethod
+  def from_row(clazz, row):
+    (id, name, description, from_room, to_room, locked) = row
+    return clazz(name, description, from_room, to_room, locked, id=id)
 with_getters_for(Exit, 'from_room', 'to_room')
 
 class Item(GameEntity):
@@ -285,10 +309,24 @@ class ItemUnlockingItem(Item):
   def __init__(self, name,  description, use_message,
       owned_by_player, in_room, locked, unlocks_item, id=None):
     assign_injectables(self, locals())
+
+  @classmethod
+  def from_row(clazz, row):
+    (id, name, description, use_message, owned_by_player,
+        in_room, locked, unlocks_item) = row
+    return clazz(name, description, use_message, owned_by_player,
+        in_room, locked, unlocks_item, id=id)
 with_getters_for(ItemUnlockingItem, 'unlocks_item')
 
 class ExitUnlockingItem(Item):
   def __init__(self, name, description, use_message,
       owned_by_player, in_room, locked, unlocks_exit, id=None):
     assign_injectables(self, locals())
+
+  @classmethod
+  def from_row(clazz, row):
+    (id, name, description, use_message, owned_by_player,
+        in_room, locked, unlocks_exit) = row
+    return clazz(name, description, use_message, owned_by_player,
+        in_room, locked, unlocks_exit, id=id)
 with_getters_for(ExitUnlockingItem, 'unlocks_exit')
