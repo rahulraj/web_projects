@@ -114,21 +114,17 @@ class DatabaseServiceTest(unittest.TestCase):
         first_room.get_id())
     self.assertEquals(0, len(items))
     
-  def add_item(self, item_name, room_id):
-    item = databaseservice.ItemUnlockingItem(
-        name=item_name,
-        description='Item description for %s' % (item_name),
-        use_message='You used %s' % (item_name),
-        owned_by_player=None,
-        in_room=room_id,
-        locked=False,
-        unlocks_item=5)
-    return self.database.add_item_unlocking_item(item)
+  def make_item(self, constructor, item_name, room_id):
+    return constructor(
+        item_name, 'Item description for %s' % (item_name),
+        'You used %s' % (item_name), None, room_id, False, 5)
 
   def test_find_item_in_a_room(self):
     first_room = self.database.add_room(self.test_room)
     first_item_name = 'First item'
-    self.add_item(first_item_name, first_room.get_id()) 
+    first_item = self.make_item(databaseservice.ItemUnlockingItem,
+        first_item_name, first_room.get_id())
+    self.database.add_item_unlocking_item(first_item)
     result = self.database.find_unlocked_items_in_room_with_id( \
         first_room.get_id())
     self.assertEquals(1, len(result))
@@ -137,9 +133,13 @@ class DatabaseServiceTest(unittest.TestCase):
   def test_multiple_items_in_a_room(self):
     first_room = self.database.add_room(self.test_room)
     first_item_name = 'First item'
-    self.add_item(first_item_name, first_room.get_id()) 
+    first_item = self.make_item(databaseservice.ItemUnlockingItem,
+        first_item_name, first_room.get_id()) 
+    self.database.add_item_unlocking_item(first_item)
     second_item_name = 'Second item'
-    self.add_item(second_item_name, first_room.get_id())
+    second_item = self.make_item(databaseservice.ExitUnlockingItem,
+        second_item_name, first_room.get_id())
+    self.database.add_exit_unlocking_item(second_item)
     result = self.database.find_unlocked_items_in_room_with_id( \
         first_room.get_id()) 
     self.assertEquals(2, len(result))
