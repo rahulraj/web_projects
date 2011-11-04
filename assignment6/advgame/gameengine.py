@@ -28,4 +28,12 @@ class GameEngine(object):
         '\n'.join(exit_names))
 
   def possible_actions(self, player_id):
-    pass
+    current_room = self.database_service.find_room_occupied_by_player(player_id)
+    exits = self.database_service.find_exits_from_room_with_id( \
+        current_room.get_id())
+    # Go through an exit
+    actions = ['exit ' + exit.get_name() for exit in exits]
+    inventory = self.database_service.find_items_owned_by_player(player_id)
+    # Use an item
+    actions.extend(['use ' + item.get_name() for item in inventory])
+    return actions

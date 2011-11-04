@@ -1,12 +1,13 @@
 import unittest
 from collections import defaultdict
 from gameengine import GameEngine
-from databaseservice import PlayerNotInRoom, Room, Exit
+from databaseservice import PlayerNotInRoom, Room, Exit, ItemUnlockingItem
 
 class FakeDatabaseService(object):
   def __init__(self):
     self.players_to_rooms = {}
     self.rooms_to_exits = defaultdict(lambda: [])
+    self.players_to_items = defaultdict(lambda: [])
 
   def add_player_occupied_room(self, player_id, room):
     self.players_to_rooms[player_id] = room
@@ -24,6 +25,14 @@ class FakeDatabaseService(object):
       return []
     return self.rooms_to_exits[room_id]
 
+  def add_item_to_player(self, player_id, item):
+    item.owned_by_player = player_id
+    item.in_room = None
+    self.players_to_items[player_id].append(item)
+
+  def find_items_owned_by_player(self, player_id):
+    return self.players_to_items[player_id]
+
 class GameEngineTest(unittest.TestCase):
   def setUp(self):
     self.database = FakeDatabaseService()
@@ -37,6 +46,12 @@ class GameEngineTest(unittest.TestCase):
     self.test_exit = Exit(name='West',
         description='The west exit', from_room=self.test_room.get_id(),
         to_room=self.production_room.get_id(), locked=False, id=7)
+    self.test_item = ItemUnlockingItem(name='TPS Report',
+        description='A testing specification',
+        use_message='You read the report',
+        owned_by_player=None,
+        in_room=self.test_room.get_id(),
+        locked=False, unlocks_item=2, id=9)
 
   def test_prompt_for_player(self):
     self.database.add_player_occupied_room(self.player_id, self.test_room)
@@ -48,6 +63,20 @@ class GameEngineTest(unittest.TestCase):
     self.database.add_room_exit(self.test_room.get_id(), self.test_exit)
     prompt = self.game_engine.prompt_for_player(self.player_id)
     self.assertTrue(self.test_exit.get_name() in prompt)
+
+  def test_possible_actions_displays_exit(self):
+    self.test_exits_displayed()
+    actions = self.game_engine.possible_actions(self.player_id)
+    self.assertEquals(1, len(actions))
+    self.assertTrue(self.test_exit.get_name() in actions[0])
+
+  def test_possible_actions_displays_items(self):
+    self.test_possible_actions_displays_exit()
+    self.database.add_item_to_player(self.player_id, self.test_item)
+    actions = self.game_engine.possible_actions(self.player_id)
+    self.assertEquals(2, len(actions))
+    item_action = [action for action in actions if 'use' in action][0]
+    self.assertTrue(self.test_item.get_name() in item_action)
 
 if __name__ == '__main__':
   unittest.main()
