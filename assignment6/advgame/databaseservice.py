@@ -364,7 +364,7 @@ class DatabaseService(object):
     result = self.cursor.fetchone()
     if result is None:
       raise PlayerNotInRoom
-    return Room.from_row(self.cursor.fetchone())
+    return Room.from_row(result)
 
 
 """ Data access objects, representing rows in the database tables.  """

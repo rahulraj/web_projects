@@ -179,7 +179,8 @@ class DatabaseServiceTest(unittest.TestCase):
 
   def test_player_room_occupied(self):
     test_room = self.database.add_room(self.test_room)
-    player = databaseservice.Player(1, test_room.get_id())
+    player = databaseservice.Player(created_by_user=1,
+        currently_in_room=test_room.get_id())
     test_player = self.database.add_player(player)
     room_result = self.database.find_room_occupied_by_player( \
         test_player.get_id())

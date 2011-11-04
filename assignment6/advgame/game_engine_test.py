@@ -36,7 +36,6 @@ class FakeDatabaseService(object):
 class GameEngineTest(unittest.TestCase):
   def setUp(self):
     self.database = FakeDatabaseService()
-    self.game_engine = GameEngine(self.database)
     self.test_room = Room('The Test Room',
         'In this room, you see a Pythonista writing unittest test cases',
         id=2)
@@ -52,28 +51,29 @@ class GameEngineTest(unittest.TestCase):
         owned_by_player=None,
         in_room=self.test_room.get_id(),
         locked=False, unlocks_item=2, id=9)
+    self.game_engine = GameEngine(self.database, self.player_id)
 
   def test_prompt_for_player(self):
     self.database.add_player_occupied_room(self.player_id, self.test_room)
-    prompt = self.game_engine.prompt_for_player(self.player_id)
+    prompt = self.game_engine.prompt_for_player()
     self.assertTrue(self.test_room.get_name() in prompt)
 
   def test_exits_displayed(self):
     self.database.add_player_occupied_room(self.player_id, self.test_room)
     self.database.add_room_exit(self.test_room.get_id(), self.test_exit)
-    prompt = self.game_engine.prompt_for_player(self.player_id)
+    prompt = self.game_engine.prompt_for_player()
     self.assertTrue(self.test_exit.get_name() in prompt)
 
   def test_possible_actions_displays_exit(self):
     self.test_exits_displayed()
-    actions = self.game_engine.possible_actions(self.player_id)
+    actions = self.game_engine.possible_actions()
     self.assertEquals(1, len(actions))
     self.assertTrue(self.test_exit.get_name() in actions[0])
 
   def test_possible_actions_displays_items(self):
     self.test_possible_actions_displays_exit()
     self.database.add_item_to_player(self.player_id, self.test_item)
-    actions = self.game_engine.possible_actions(self.player_id)
+    actions = self.game_engine.possible_actions()
     self.assertEquals(2, len(actions))
     item_action = [action for action in actions if 'use' in action][0]
     self.assertTrue(self.test_item.get_name() in item_action)
