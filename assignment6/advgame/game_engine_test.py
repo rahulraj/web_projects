@@ -6,6 +6,7 @@ from databaseservice import PlayerNotInRoom, Room, Exit, ItemUnlockingItem
 class FakeDatabaseService(object):
   def __init__(self):
     self.players_to_rooms = {}
+    self.players_to_room_ids = {}
     self.rooms_to_exits = defaultdict(lambda: [])
     self.players_to_items = defaultdict(lambda: [])
 
@@ -34,7 +35,7 @@ class FakeDatabaseService(object):
     return self.players_to_items[player_id]
 
   def move_player(self, player_id, new_room_id):
-    self.players_to_rooms[player_id] = new_room_id
+    self.players_to_room_ids[player_id] = new_room_id
 
 class GameEngineTest(unittest.TestCase):
   def setUp(self):
@@ -88,7 +89,14 @@ class GameEngineTest(unittest.TestCase):
     self.add_test_room_and_test_exit()
     self.game_engine.step('exit ' + self.test_exit.get_name())
     self.assertEquals(self.production_room.get_id(),
-        self.database.players_to_rooms[self.player_id])
+        self.database.players_to_room_ids[self.player_id])
+
+  def test_step_does_not_change_room_if_exit_locked(self):
+    self.test_exit.locked = True
+    self.add_test_room_and_test_exit()
+    self.game_engine.step('exit ' + self.test_exit.get_name())
+    self.assertEquals(self.test_room.get_id(),
+        self.database.players_to_rooms[self.player_id].get_id())
 
 if __name__ == '__main__':
   unittest.main()
