@@ -103,6 +103,15 @@ class DatabaseService(object):
     return User.from_row(row)
 
   def add_room(self, room):
+    """
+    Add a room to the configuration.
+
+    Args:
+      room the room to add.
+
+    Returns:
+      A Room object with id set to the database value.
+    """
     self.cursor.execute( \
         'insert into rooms values (null, :name, :description)',
         {'name': room.get_name(), 'description': room.get_description()})
@@ -120,6 +129,15 @@ class DatabaseService(object):
     return Room.from_row(row)
 
   def add_exit(self, exit):
+    """
+    Add an exit.
+
+    Args:
+      exit the Exit to add.
+
+    Returns:
+      An Exit with id set.
+    """
     self.cursor.execute( \
         """
         insert into exits values (null, :name, :description, :from_room,
@@ -134,6 +152,15 @@ class DatabaseService(object):
         exit.is_locked()))
 
   def find_exits_from_room_with_id(self, room_id):
+    """
+    Find the exits for a room
+
+    Args:
+      room_id the ID of the room.
+
+    Returns:
+      A list of Exits for that room.
+    """
     self.cursor.execute( \
         """    
         select id, name, description, from_room, to_room, locked 
@@ -142,6 +169,15 @@ class DatabaseService(object):
     return map(Exit.from_row, self.cursor)
 
   def add_player(self, player):
+    """
+    Add a player to start a game
+
+    Args:
+      player the Player to add.
+
+    Returns:
+      A Player with id set.
+    """
     self.cursor.execute( \
         """
         insert into players values
@@ -153,6 +189,15 @@ class DatabaseService(object):
         player.get_created_by_user(), player.get_currently_in_room()))
 
   def insert_item_query(self, item):
+    """
+    Helper method to insert an item into the database
+
+    Args:
+      item the item.
+
+    Returns:
+      The row ID for that item.
+    """
     self.cursor.execute( \
         """
         insert into items values (null, :name, :description,
@@ -165,6 +210,15 @@ class DatabaseService(object):
     return self.cursor.lastrowid
 
   def add_item_unlocking_item(self, item):
+    """
+    Add an item-unlocking item.
+
+    Args:
+      item the item.
+
+    Returns:
+      An ItemUnlockingItem with id set.
+    """
     item_id = self.insert_item_query(item)
     self.cursor.execute( \
         """
@@ -178,6 +232,15 @@ class DatabaseService(object):
         item.get_unlocks_item()))
 
   def add_exit_unlocking_item(self, item):
+    """
+    Add an exit-unlocking item.
+
+    Args:
+      item the item.
+
+    Returns:
+      An ExitUnlockingItem with id set.
+    """
     item_id = self.insert_item_query(item)
     self.cursor.execute( \
         """
@@ -191,6 +254,15 @@ class DatabaseService(object):
         item.get_unlocks_exit()))
 
   def find_unlocked_items_in_room_with_id(self, room_id):
+    """
+    Find the unlocked items in a room.
+
+    Args:
+      room_id the ID for the room.
+
+    Returns:
+      A List of Items in that room which are not locked.
+    """
     self.cursor.execute( \
         """
         select items.id, items.name, items.description, items.use_message,
@@ -220,8 +292,13 @@ class DatabaseService(object):
 
   def move_item_to_player(self, item_id, player_id):
     """
+    Move an Item to a Player's possesion, taking it out of a room.
     Extracting an items table does avoid having to make two separate
-    queries here though.
+    queries here.
+
+    Args:
+      item_id the ID for the item.
+      player_id the ID for the player.
     """
     self.cursor.execute( \
         """
@@ -233,6 +310,15 @@ class DatabaseService(object):
     self.connection.commit()
 
   def find_items_owned_by_player(self, player_id):
+    """
+    Retrieve the Items that a Player has.
+
+    Args:
+      player_id the ID of the player.
+
+    Returns:
+      A List of Items that the Player has.
+    """
     self.cursor.execute( \
         """
         select *
