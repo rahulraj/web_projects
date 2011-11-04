@@ -366,6 +366,15 @@ class DatabaseService(object):
       raise PlayerNotInRoom
     return Room.from_row(result)
 
+  def move_player(self, player_id, new_room_id):
+    self.cursor.execute( \
+        """
+        update players
+        set currently_in_room=:new_room_id
+        where id=:player_id
+        """, {'new_room_id': new_room_id, 'player_id': player_id})
+    self.connection.commit()
+
 
 """ Data access objects, representing rows in the database tables.  """
 class User(object):

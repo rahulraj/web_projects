@@ -186,6 +186,17 @@ class DatabaseServiceTest(unittest.TestCase):
         test_player.get_id())
     self.assertEquals(test_room.get_id(), room_result.get_id())
 
+  def test_move_player(self):
+    test_room = self.database.add_room(self.test_room)
+    second_room = self.database.add_room(self.second_room)
+    player = databaseservice.Player(created_by_user=1,
+        currently_in_room=test_room.get_id())
+    test_player = self.database.add_player(player)
+    self.database.move_player(test_player.get_id(), second_room.get_id())
+    result = self.database.find_room_occupied_by_player( \
+        test_player.get_id()) 
+    self.assertEquals(second_room.get_id(), result.get_id())
+
   def tearDown(self):
     os.unlink(self.database_file)
 
