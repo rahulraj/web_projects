@@ -31,6 +31,9 @@ class NoSuchUser(Exception):
 class NoSuchItem(Exception):
   pass
 
+class PlayerNotInRoom(Exception):
+  pass
+
 class DatabaseService(object):
   def __init__(self, connection, cursor):
     assign_injectables(self, locals())
@@ -358,7 +361,10 @@ class DatabaseService(object):
         from rooms, players
         where players.id=:player_id and players.currently_in_room=rooms.id
         """, {'player_id': player_id})
-    return Room.from_row(self.cursor.fetchone())
+    result = self.cursor.fetchone()
+    if result is None:
+      raise PlayerNotInRoom
+    return Room.from_row(result)
 
 
 """ Data access objects, representing rows in the database tables.  """
