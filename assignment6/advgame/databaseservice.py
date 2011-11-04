@@ -185,11 +185,10 @@ class DatabaseService(object):
         item.get_unlocks_exit(), id=self.cursor.lastrowid)
 
   def find_unlocked_items_in_room_with_id(self, room_id):
-    # TODO Test
     self.cursor.execute( \
         """
         select * from item_unlocking_items
-        where id=:room_id and not locked order by id
+        where in_room=:room_id and not locked order by id
         """, {'room_id': room_id})
     def item_unlocking_item_from_row(row):
       (id, name, description, use_message, owned_by_player,
@@ -201,7 +200,7 @@ class DatabaseService(object):
     self.cursor.execute( \
         """
         select * from exit_unlocking_items
-        where id=:room_id and not locked order by id
+        where in_room=:room_id and not locked order by id
         """, {'room_id': room_id})
     def exit_unlocking_item_from_row(row):
       (id, name, description, use_message, owned_by_player,
