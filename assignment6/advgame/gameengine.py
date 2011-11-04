@@ -42,19 +42,22 @@ class GameEngine(object):
     actions.extend(['use ' + item.get_name() for item in inventory])
     return actions
 
+  def try_exit(self, exit_name):
+    (_, exits) = self.room_and_exits()
+    exit_in_use = [exit for exit in exits if exit.get_name() == exit_name][0]
+    if exit_in_use.is_locked():
+      return 'That exit is locked'
+    self.database_service.move_player(self.player_id,
+        exit_in_use.get_to_room())
+    return 'You went through ' + exit_in_use.get_name()
+
   def step(self, action):
     possible_actions = self.possible_actions()
     if action not in possible_actions:
       return "I don't know what you mean by " + action
     if action.startswith('exit'):
       exit_name = action[len('exit'):].strip()
-      (_, exits) = self.room_and_exits()
-      exit_in_use = [exit for exit in exits if exit.get_name() == exit_name][0]
-      if exit_in_use.is_locked():
-        return 'That exit is locked'
-      self.database_service.move_player(self.player_id,
-          exit_in_use.get_to_room())
-      return 'You went through ' + exit_in_use.get_name()
+      return self.try_exit(exit_name)
     elif action.startswith('use'):
       raise NotImplementedError
     else:
