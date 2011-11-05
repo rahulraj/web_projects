@@ -57,6 +57,19 @@ class FakeDatabaseService(object):
         break
     self.players_to_items[player_id].append(moved_item)
 
+  def unlock_exit(self, exit_id):
+    room_with_exit = [room for room in self.rooms_to_exits \
+        if exit_id in self.rooms_to_exits[room]][0]
+    self.rooms_to_exits[room_with_exit].locked = False
+
+  def delete_item(self, item_id):
+    for room in self.rooms_to_items:
+      self.rooms_to_items[room] = [item for item in self.rooms_to_items[room] \
+          if item.get_id() != item_id]
+    for player in self.players_to_items:
+      self.players_to_items[player] = [item for item in \
+          self.players_to_items[player] if item.get_id() != item_id]
+
 class GameEngineTest(unittest.TestCase):
   def setUp(self):
     self.database = FakeDatabaseService()
@@ -142,6 +155,16 @@ class GameEngineTest(unittest.TestCase):
         self.database.rooms_to_items[self.test_room.get_id()])
     self.assertTrue(self.test_item in \
         self.database.players_to_items[self.player_id])
+
+  def test_step_take_item_if_item_doesnt_exits(self):
+    self.add_test_room_and_test_exit()
+    self.database.stub_add_item_to_room(self.test_item, self.test_room.get_id())
+    self.game_engine.step('take NonExistentItem')
+    self.assertTrue(self.test_item in \
+        self.database.rooms_to_items[self.test_room.get_id()])
+    self.assertFalse('NonExistentItem' in \
+        self.database.players_to_items[self.player_id])
+
 
 if __name__ == '__main__':
   unittest.main()
