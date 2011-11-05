@@ -221,6 +221,16 @@ class DatabaseServiceTest(unittest.TestCase):
     exit_result = self.database.find_exits_from_room(first_room.get_id())[0]
     self.assertFalse(exit_result.is_locked())
 
+  def test_unlock_item(self):
+    (first_room, _, _, _) = self.add_rooms_with_exit()
+    exit_item = self.make_item(ExitUnlockingItem,
+        'To unlock', first_room.get_id(), locked=True)
+    locked_item = self.database.add_exit_unlocking_item(exit_item)
+    self.database.unlock_item(locked_item.get_id())
+    items = self.database.find_unlocked_items_in_room(first_room.get_id())
+    self.assertEquals(1, len(items))
+    self.assertEquals(locked_item.get_id(), items[0].get_id())
+
   def test_delete_item(self):
     room_id = 2
     item = self.make_item(ItemUnlockingItem,

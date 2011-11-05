@@ -422,6 +422,15 @@ class DatabaseService(object):
         """, {'exit_id': exit_id})
     self.connection.commit()
 
+  def unlock_item(self, item_id):
+    self.cursor.execute( \
+        """
+        update items
+        set locked=0
+        where id=:item_id
+        """, {'item_id': item_id})
+    self.connection.commit()
+
   def delete_item(self, item_id):
     self.cursor.execute( \
         """
