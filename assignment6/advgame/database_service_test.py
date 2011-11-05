@@ -164,6 +164,21 @@ class DatabaseServiceTest(unittest.TestCase):
     self.assertEquals(1, len(result))
     self.assertEquals(first_item_name, result[0].get_name())
 
+  def test_find_locked_items_in_room(self):
+    first_room = self.database.add_room(self.test_room)
+    first_item_name = 'First item'
+    first_item = self.make_item(ItemUnlockingItem,
+        first_item_name, first_room.get_id(), locked=False) 
+    self.database.add_item_unlocking_item(first_item)
+    second_item_name = 'Second item'
+    second_item = self.make_item(ExitUnlockingItem,
+        second_item_name, first_room.get_id(), locked=True)
+    self.database.add_exit_unlocking_item(second_item)
+    result = self.database.find_locked_items_in_room( \
+        first_room.get_id())
+    self.assertEquals(1, len(result))
+    self.assertEquals(second_item_name, result[0].get_name())
+
   def test_player_picks_up_items(self):
     user_id = 2
     current_room_id = 5

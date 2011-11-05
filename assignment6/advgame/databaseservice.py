@@ -293,6 +293,44 @@ class DatabaseService(object):
     items.extend(map(ExitUnlockingItem.from_row, self.cursor))
     return items
 
+  def find_locked_items_in_room(self, room_id):
+    """
+    Find the locked items in a room.
+
+    Args:
+      room_id the ID for the room.
+
+    Returns:
+      A List of Items in that room which are locked.
+    """
+    self.cursor.execute( \
+        """
+        select items.id, items.name, items.description, items.use_message,
+            items.owned_by_player, items.in_room, items.locked,
+            item_unlocking_items.unlocks_item
+        from items, item_unlocking_items
+        where items.id=item_unlocking_items.item_id and items.in_room=:room_id
+            and items.locked
+        order by id
+        """, {'room_id': room_id})
+    items = map(ItemUnlockingItem.from_row, self.cursor)
+
+    # There is some repetition in SQL unfortunately. As far as I know, I can't
+    # make a "function" that takes a table, and execute that for the two tables.
+    self.cursor.execute( \
+        """
+        select items.id, items.name, items.description, items.use_message,
+            items.owned_by_player, items.in_room, items.locked,
+            exit_unlocking_items.unlocks_exit
+        from items, exit_unlocking_items
+        where items.id=exit_unlocking_items.item_id and items.in_room=:room_id
+            and items.locked
+        order by id
+        """, {'room_id': room_id})
+    items.extend(map(ExitUnlockingItem.from_row, self.cursor))
+    return items
+
+
   def move_item_to_player(self, item_id, player_id):
     """
     Move an Item to a Player's possesion, taking it out of a room.
