@@ -1,6 +1,9 @@
 from flask import Flask, g, session, render_template, jsonify, request, redirect, url_for
 import databaseservice
 from users import Users, confirmed_password_valid
+from gamebuilder import GameBuilder
+from gameengine import GameEngine
+from gameconfigurations import simple_testing_game
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -128,6 +131,22 @@ def add_user():
   new_user = users.register_user(username, password)
   session['user'] = new_user
   return success_registration()
+
+@app.route('/game/new', methods=['POST'])
+def new_game():
+  if 'user' not in session:
+    return redirect(url_for('index'))
+  user = session['user']
+  game_builder = GameBuilder(g.database_service).for_user(user.get_id())
+  player_id = simple_testing_game(game_builder)
+  session['player_id'] = player_id
+  game_engine = GameEngine(g.database_service, player_id)
+  return jsonify(prompt=game_engine.prompt())
+
+@app.route('/game', methods=['POST'])
+def step_game():
+  pass
+
 
 @app.route('/logout')
 def logout():
