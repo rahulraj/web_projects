@@ -72,6 +72,19 @@ class GameEngine(object):
         exit_in_use.get_to_room())
     return 'You went through ' + exit_in_use.get_name()
 
+  def try_unlock_exit(self, item_name, item):
+    (_, exits) = self.room_and_exits()
+    unlockable_exits = [exit for exit in exits if \
+        exit.get_id() == item.get_unlocks_exit()]
+    if len(unlockable_exits) == 0:
+      return "Using %s didn't do anything." % (item_name,)
+    exit = unlockable_exits[0]
+    self.database_service.unlock_exit(exit.get_id())
+    self.database_service.delete_item(item.get_id())
+    return """
+        You used the %s, and the %s was unlocked. You can go through it now.
+        """ % (item_name, exit.get_name())
+
   def try_use_item(self, item_name):
     inventory = self.inventory()
     inventory_names = [item.get_name() for item in inventory]
@@ -81,17 +94,7 @@ class GameEngine(object):
     if isinstance(item, ItemUnlockingItem):
       raise NotImplementedError
     elif isinstance(item, ExitUnlockingItem):
-      (_, exits) = self.room_and_exits()
-      unlockable_exits = [exit for exit in exits if \
-          exit.get_id() == item.get_unlocks_exit()]
-      if len(unlockable_exits) == 0:
-        return "Using %s didn't do anything." % (item_name,)
-      exit = unlockable_exits[0]
-      self.database_service.unlock_exit(exit.get_id())
-      self.database_service.delete_item(item.get_id())
-      return """
-          You used the %s, and the %s was unlocked. You can go through it now.
-          """ % (item_name, exit.get_name())
+      return self.try_unlock_exit(item_name, item)
     else:
       raise UnknownItemType
 
