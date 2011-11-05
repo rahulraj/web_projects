@@ -405,6 +405,17 @@ class DatabaseService(object):
       raise PlayerNotInRoom
     return Room.from_row(result)
 
+  def player_in_final_room(self, player_id):
+    self.cursor.execute( \
+        """
+        select rooms.id
+        from rooms, players
+        where players.id=:player_id and players.currently_in_room=rooms.id
+            and rooms.final_room
+        """, {'player_id': player_id})
+    result = self.cursor.fetchone()
+    return result is not None
+
   def move_player(self, player_id, new_room_id):
     self.cursor.execute( \
         """
