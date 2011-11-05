@@ -13,6 +13,7 @@ class FakeDatabaseService(object):
 
   def stub_add_player_occupied_room(self, player_id, room):
     self.players_to_rooms[player_id] = room
+    self.players_to_room_ids[player_id] = room.get_id()
 
   def find_room_occupied_by_player(self, player_id):
     if player_id not in self.players_to_rooms:
@@ -44,17 +45,17 @@ class FakeDatabaseService(object):
 
   def move_player(self, player_id, new_room_id):
     self.players_to_room_ids[player_id] = new_room_id
+    # Not fully updated, but this is not inspected in testing
+    del self.players_to_rooms[player_id]
 
   def move_item_to_player(self, item_id, player_id):
-    room_with_item_id = self.players_to_room_ids[player_id]
-    room_with_item = [room for room in self.rooms_to_items.keys() if \
-        room.get_id() == room_with_item_id][0]
-    for item in self.rooms_to_items[room_with_item]:
+    room_with_item = self.players_to_rooms[player_id]
+    for item in self.rooms_to_items[room_with_item.get_id()]:
       if item.get_id() == item_id:
         moved_item = item
-        self.rooms_to_items[room_with_item].remove(item)
+        self.rooms_to_items[room_with_item.get_id()].remove(item)
         break
-    self.players_to_items[player_id] = moved_item
+    self.players_to_items[player_id].append(moved_item)
 
 class GameEngineTest(unittest.TestCase):
   def setUp(self):
@@ -132,6 +133,15 @@ class GameEngineTest(unittest.TestCase):
     self.game_engine.step('exit ' + self.test_exit.get_name())
     self.assertEquals(self.test_room.get_id(),
         self.database.players_to_rooms[self.player_id].get_id())
+
+  def test_step_take_item(self):
+    self.add_test_room_and_test_exit()
+    self.database.stub_add_item_to_room(self.test_item, self.test_room.get_id())
+    self.game_engine.step('take ' + self.test_item.get_name())
+    self.assertTrue(self.test_item not in \
+        self.database.rooms_to_items[self.test_room.get_id()])
+    self.assertTrue(self.test_item in \
+        self.database.players_to_items[self.player_id])
 
 if __name__ == '__main__':
   unittest.main()

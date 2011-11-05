@@ -77,7 +77,8 @@ class GameEngine(object):
   def try_take_item(self, item_name):
     (room, _) = self.room_and_exits()
     items = self.database_service.find_unlocked_items_in_room(room.get_id())
-    if item_name not in items:
+    item_names = [item.get_name() for item in items]
+    if item_name not in item_names:
       return "There isn't a %s in this room." % (item_name,)
     item_to_take = [item for item in items if item.get_name() == item_name][0]
     self.database_service.move_item_to_player(item_to_take.get_id(),
