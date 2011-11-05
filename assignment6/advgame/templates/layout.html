@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link rel="stylesheet" href="{{ url_for('static',
+        filename='style/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',
+        filename='style/text.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',
+        filename='style/960_grid_fluid.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',
+        filename='style/shortener_style.css') }}">
+    {% block title_content %}{% endblock %}
+  </head>
+  <body>
+    <div class="container container_12">
+      {% block header_content %}{% endblock %}
+      <div class="clear"></div>
+      {% block main_content %}{% endblock %}
+    </div>
+  </body>
+</html>

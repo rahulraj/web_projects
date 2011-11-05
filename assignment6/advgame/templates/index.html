@@ -1,0 +1,57 @@
+{#
+  Main template for the application.
+
+  Args:
+    root_url the root URL.
+    logged_in whether or not the user is logged in
+#}
+{% extends "layout.html" %}
+{% block title_content %}
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='lib/underscore.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='lib/jquery-1.6.4.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/shortener.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/jsonData.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/formFields.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/loginForm.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/registerForm.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/pageManagerView.js') }}"></script>
+  <script>
+    /** @const */ shortener.loginUrl = "{{ url_for('login') }}";
+    /** @const */ shortener.addUserUrl = "{{ url_for('add_user') }}";
+    /** @const */ shortener.pagesUrl = "{{ url_for('pages_by_user') }}";
+    /** @const */ shortener.logoutUrl = "{{ url_for('logout') }}";
+    /** @const */ shortener.rootUrl = "{{ root_url }}";
+    /** @const */ shortener.loggedIn = 
+        {% if logged_in %}
+          true
+        {% else %}
+          false
+        {% endif %}
+  </script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/factory.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/urls.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/main.js') }}"></script>
+  <title>Link Shortener</title>
+{% endblock %}
+{% block header_content %}
+  <header class="grid_12">
+    <h1>Link Shortener</h1>
+  </header>
+{% endblock %}
+{% block main_content %}
+  <div class="grid_12" id="main">
+    <!-- JavaScript populates this at runtime -->
+  </div>
+  <div class="clear"></div>
+{% endblock %}
