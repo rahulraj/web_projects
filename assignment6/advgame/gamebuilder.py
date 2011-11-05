@@ -62,7 +62,7 @@ class GameBuilder(object):
     self.item_names_to_ids[name] = added_item.get_id()
     return self
 
-  def start_in_room(self, room_name):
+  def start_in(self, room_name):
     """
     There's only one argument, so not using named arguments
     here is acceptable style.

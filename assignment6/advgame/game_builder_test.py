@@ -83,7 +83,7 @@ class GameBuilderTest(unittest.TestCase):
           unlocks='TPS Report', locked=False)
 
   def finish_build(self):
-    return self.builder.start_in_room('The testing room').build()
+    return self.builder.start_in('The testing room').build()
 
   def test_simple_room_building(self):
     self.add_rooms()
