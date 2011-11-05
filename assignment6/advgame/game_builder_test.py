@@ -67,5 +67,23 @@ class GameBuilderTest(unittest.TestCase):
     self.assertEquals(testing_room.get_id(),
         self.database.player.get_currently_in_room())
 
+  def test_rooms_with_exits(self):
+    self.builder.for_user(self.user_id). \
+        room(name='The testing room',
+          description='Room with a Pythonista writing test cases'). \
+        room(name='The production room',
+          description='Room with production servers'). \
+        exit(name='North', description='The north exit',
+          from_room='The testing room', to_room='The production room'). \
+        start_in_room('The testing room').build()
+    self.assertEquals(1, len(self.database.exits))
+    testing_room = [room for room in self.database.rooms \
+        if 'testing' in room.get_name()][0]
+    production_room = [room for room in self.database.rooms \
+        if 'production' in room.get_name()][0]
+    exit = self.database.exits[0]
+    self.assertEquals(testing_room.get_id(), exit.get_from_room())
+    self.assertEquals(production_room.get_id(), exit.get_to_room())
+
 if __name__ == '__main__':
   unittest.main()

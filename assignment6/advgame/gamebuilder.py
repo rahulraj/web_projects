@@ -34,8 +34,8 @@ class GameBuilder(object):
     from_room_id = self.room_names_to_ids[from_room]
     to_room_id = self.room_names_to_ids[to_room]
     exit = Exit(name, description, from_room_id, to_room_id, locked=locked)
-    self.exit_names_to_ids[name] = exit.get_id()
-    self.database_service.add_exit(exit)
+    added_exit = self.database_service.add_exit(exit)
+    self.exit_names_to_ids[name] = added_exit.get_id()
     return self
 
   def item(self, name, description, use_message, in_room, 
