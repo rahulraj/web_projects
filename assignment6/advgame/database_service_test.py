@@ -1,6 +1,7 @@
 import unittest
 import os
-import databaseservice
+from databaseservice import initialize_database, connect_database, DatabaseService
+from dataaccess import User, Room, Exit, Player, ItemUnlockingItem, ExitUnlockingItem
 
 class DatabaseServiceTest(unittest.TestCase):
   """
@@ -9,22 +10,21 @@ class DatabaseServiceTest(unittest.TestCase):
   def setUp(self):
     self.database_file = 'test.db'
     with open('schema.sql') as schema:
-      databaseservice.initialize_database(self.database_file, schema)
-    self.database_connection = \
-        databaseservice.connect_database(self.database_file)
+      initialize_database(self.database_file, schema)
+    self.database_connection = connect_database(self.database_file)
     self.database_cursor = self.database_connection.cursor()
-    self.database = databaseservice.DatabaseService( \
-        self.database_connection, self.database_cursor)
+    self.database = DatabaseService(self.database_connection,
+        self.database_cursor)
 
     # Test data
-    self.test_user = databaseservice.User('rahulraj', 'fake_hash', 'fake_salt')
-    self.second_user = databaseservice.User('second', 'fake_hash2', 'fake_salt2')
+    self.test_user = User('rahulraj', 'fake_hash', 'fake_salt')
+    self.second_user = User('second', 'fake_hash2', 'fake_salt2')
 
-    self.test_room = databaseservice.Room('A test room',
+    self.test_room = Room('A test room',
         'This room was created for testing')
-    self.second_room = databaseservice.Room('A second room',
+    self.second_room = Room('A second room',
         'This room was created for more complex tests')
-    self.third_room = databaseservice.Room('A third room',
+    self.third_room = Room('A third room',
         'This room was created for even more complex tests')
 
   def test_user_not_initially_in_database(self):
@@ -58,7 +58,7 @@ class DatabaseServiceTest(unittest.TestCase):
     first_room = self.database.add_room(self.test_room)
     second_room = self.database.add_room(self.second_room)
     description = "An Exit from first to second"
-    exit = databaseservice.Exit(
+    exit = Exit(
         name="Exit 1",
         description=description,
         from_room=first_room.get_id(),
@@ -78,7 +78,7 @@ class DatabaseServiceTest(unittest.TestCase):
     second_room = self.database.add_room(self.second_room)
     third_room = self.database.add_room(self.third_room)
     first_description = "An Exit from first to second"
-    first_exit = databaseservice.Exit(
+    first_exit = Exit(
         name="Exit 1",
         description=first_description,
         from_room=first_room.get_id(),
@@ -87,7 +87,7 @@ class DatabaseServiceTest(unittest.TestCase):
     self.database.add_exit(first_exit)
 
     second_description = "An Exit from first to third"
-    second_exit = databaseservice.Exit(
+    second_exit = Exit(
         name="Exit 2",
         description=second_description,
         from_room=first_room.get_id(),
@@ -103,7 +103,7 @@ class DatabaseServiceTest(unittest.TestCase):
   def test_add_player(self):
     user_id = 2
     current_room_id = 5
-    player = databaseservice.Player(user_id, current_room_id)
+    player = Player(user_id, current_room_id)
     result_player = self.database.add_player(player)
     self.database_cursor.execute(
         'select * from players where id=:id', {'id': result_player.get_id()})
@@ -125,7 +125,7 @@ class DatabaseServiceTest(unittest.TestCase):
   def test_find_item_in_a_room(self):
     first_room = self.database.add_room(self.test_room)
     first_item_name = 'First item'
-    first_item = self.make_item(databaseservice.ItemUnlockingItem,
+    first_item = self.make_item(ItemUnlockingItem,
         first_item_name, first_room.get_id(), locked=False)
     self.database.add_item_unlocking_item(first_item)
     result = self.database.find_unlocked_items_in_room( \
@@ -136,11 +136,11 @@ class DatabaseServiceTest(unittest.TestCase):
   def test_multiple_items_in_a_room(self):
     first_room = self.database.add_room(self.test_room)
     first_item_name = 'First item'
-    first_item = self.make_item(databaseservice.ItemUnlockingItem,
+    first_item = self.make_item(ItemUnlockingItem,
         first_item_name, first_room.get_id(), locked=False) 
     self.database.add_item_unlocking_item(first_item)
     second_item_name = 'Second item'
-    second_item = self.make_item(databaseservice.ExitUnlockingItem,
+    second_item = self.make_item(ExitUnlockingItem,
         second_item_name, first_room.get_id(), locked=False)
     self.database.add_exit_unlocking_item(second_item)
     result = self.database.find_unlocked_items_in_room( \
@@ -152,11 +152,11 @@ class DatabaseServiceTest(unittest.TestCase):
   def test_finding_items_ignores_locked_items(self):
     first_room = self.database.add_room(self.test_room)
     first_item_name = 'First item'
-    first_item = self.make_item(databaseservice.ItemUnlockingItem,
+    first_item = self.make_item(ItemUnlockingItem,
         first_item_name, first_room.get_id(), locked=False) 
     self.database.add_item_unlocking_item(first_item)
     second_item_name = 'Second item'
-    second_item = self.make_item(databaseservice.ExitUnlockingItem,
+    second_item = self.make_item(ExitUnlockingItem,
         second_item_name, first_room.get_id(), locked=True)
     self.database.add_exit_unlocking_item(second_item)
     result = self.database.find_unlocked_items_in_room( \
@@ -167,12 +167,12 @@ class DatabaseServiceTest(unittest.TestCase):
   def test_player_picks_up_items(self):
     user_id = 2
     current_room_id = 5
-    player = databaseservice.Player(user_id, current_room_id)
+    player = Player(user_id, current_room_id)
     first_player = self.database.add_player(player)
-    make_item1 = self.make_item(databaseservice.ItemUnlockingItem,
+    make_item1 = self.make_item(ItemUnlockingItem,
         'First item', current_room_id, locked=False) 
     first_item = self.database.add_item_unlocking_item(make_item1)
-    make_item2 = self.make_item(databaseservice.ExitUnlockingItem,
+    make_item2 = self.make_item(ExitUnlockingItem,
         'Second item', current_room_id, locked=False)
     self.database.add_exit_unlocking_item(make_item2)
     self.database.move_item_to_player(first_item.get_id(), first_player.get_id())
@@ -182,7 +182,7 @@ class DatabaseServiceTest(unittest.TestCase):
 
   def test_player_room_occupied(self):
     test_room = self.database.add_room(self.test_room)
-    player = databaseservice.Player(created_by_user=1,
+    player = Player(created_by_user=1,
         currently_in_room=test_room.get_id())
     test_player = self.database.add_player(player)
     room_result = self.database.find_room_occupied_by_player( \
@@ -192,7 +192,7 @@ class DatabaseServiceTest(unittest.TestCase):
   def test_move_player(self):
     test_room = self.database.add_room(self.test_room)
     second_room = self.database.add_room(self.second_room)
-    player = databaseservice.Player(created_by_user=1,
+    player = Player(created_by_user=1,
         currently_in_room=test_room.get_id())
     test_player = self.database.add_player(player)
     self.database.move_player(test_player.get_id(), second_room.get_id())
@@ -208,7 +208,7 @@ class DatabaseServiceTest(unittest.TestCase):
 
   def test_delete_item(self):
     room_id = 2
-    item = self.make_item(databaseservice.ItemUnlockingItem,
+    item = self.make_item(ItemUnlockingItem,
         'First item', room_id, locked=False)
     added_item = self.database.add_item_unlocking_item(item)
     self.database.delete_item(added_item.get_id())
