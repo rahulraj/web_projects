@@ -65,7 +65,22 @@ class GameBuilderTest(unittest.TestCase):
   def add_exit(self):
     self.builder. \
         exit(name='North', description='The north exit',
-          from_room='The testing room', to_room='The production room')
+          from_room='The testing room', to_room='The production room',
+          locked=True)
+
+  def add_items(self):
+    self.builder. \
+        item(name='TPS Report',
+          description="""A report explaining how to test a text-based
+            adventure game""",
+          use_message='You read the report to the guard blocking the North',
+          in_room='The testing room',
+          unlocks='North', locked=True). \
+        item(name='Key to the TPS report drawer',
+          description='An old metal key',
+          use_message='You put the key in the lock',
+          in_room='The testing room',
+          unlocks='TPS Report', locked=False)
 
   def finish_build(self):
     return self.builder.start_in_room('The testing room').build()
@@ -91,6 +106,18 @@ class GameBuilderTest(unittest.TestCase):
     exit = self.database.exits[0]
     self.assertEquals(testing_room.get_id(), exit.get_from_room())
     self.assertEquals(production_room.get_id(), exit.get_to_room())
+
+  def test_items_in_room(self):
+    self.add_rooms()
+    self.add_exit()
+    self.add_items()
+    self.assertEquals(1, len(self.database.item_unlocking_items))
+    self.assertEquals(1, len(self.database.exit_unlocking_items))
+    exit = self.database.exits[0]
+    tps_report = self.database.exit_unlocking_items[0]
+    self.assertEquals(exit.get_id(), tps_report.get_unlocks_exit())
+    drawer_key = self.database.item_unlocking_items[0]
+    self.assertEquals(tps_report.get_id(), drawer_key.get_unlocks_item())
 
 if __name__ == '__main__':
   unittest.main()
