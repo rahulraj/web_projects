@@ -11,8 +11,10 @@ class GameEngine(object):
         current_room.get_id())
     return (current_room, exits)
 
+  def inventory(self):
+    return self.database_service.find_items_owned_by_player(self.player_id)
 
-  def prompt_for_player(self):
+  def prompt(self):
     """
     Uses player_id to query the database and determine
     the prompt to provide to the player.
@@ -25,20 +27,31 @@ class GameEngine(object):
     """
     (current_room, exits) = self.room_and_exits()
     exit_names = [exit.get_name() for exit in exits]
-    return """
+    items_in_room = \
+        self.database_service.find_unlocked_items_in_room(current_room.get_id())
+    item_names = [item.get_name() for item in items_in_room]
+    prompt = """
     You are in the %s.
     %s
-    You see the following exit(s):
-    %s
-    """ % (current_room.get_name(), current_room.get_description(),
-        '\n'.join(exit_names))
+    """ % (current_room.get_name(), current_room.get_description())
+    if len(item_names) != 0:
+      prompt += """
+      You see the following item(s)
+      %s
+      """ % ('\n'.join(item_names))
+    if len(exit_names) != 0:
+      prompt += """
+      You see the following exit(s):
+      %s
+      """ % ('\n'.join(exit_names))
+    return prompt
 
   def possible_actions(self):
     (current_room, exits) = self.room_and_exits()
     # Go through an exit
     actions = ['exit ' + exit.get_name() for exit in exits]
     # Use an item
-    inventory = self.database_service.find_items_owned_by_player(self.player_id)
+    inventory = self.inventory()
     actions.extend(['use ' + item.get_name() for item in inventory])
     # Take an item
     """

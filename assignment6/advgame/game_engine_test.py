@@ -8,6 +8,7 @@ class FakeDatabaseService(object):
     self.players_to_rooms = {}
     self.players_to_room_ids = {}
     self.rooms_to_exits = defaultdict(lambda: [])
+    self.rooms_to_items = defaultdict(lambda: [])
     self.players_to_items = defaultdict(lambda: [])
 
   def add_player_occupied_room(self, player_id, room):
@@ -26,13 +27,20 @@ class FakeDatabaseService(object):
       return []
     return self.rooms_to_exits[room_id]
 
-  def add_item_to_player(self, player_id, item):
+  def add_item_to_player(self, item, player_id):
     item.owned_by_player = player_id
     item.in_room = None
     self.players_to_items[player_id].append(item)
 
   def find_items_owned_by_player(self, player_id):
     return self.players_to_items[player_id]
+
+  def add_item_to_room(self, item, room_id):
+    self.rooms_to_items[room_id].append(item)
+
+  def find_unlocked_items_in_room(self, room_id):
+    return [item for item in self.rooms_to_items[room_id] \
+        if not item.is_locked()]
 
   def move_player(self, player_id, new_room_id):
     self.players_to_room_ids[player_id] = new_room_id
@@ -59,7 +67,7 @@ class GameEngineTest(unittest.TestCase):
 
   def test_prompt_for_player(self):
     self.database.add_player_occupied_room(self.player_id, self.test_room)
-    prompt = self.game_engine.prompt_for_player()
+    prompt = self.game_engine.prompt()
     self.assertTrue(self.test_room.get_name() in prompt)
 
   def add_test_room_and_test_exit(self):
@@ -68,8 +76,14 @@ class GameEngineTest(unittest.TestCase):
 
   def test_exits_displayed(self):
     self.add_test_room_and_test_exit()
-    prompt = self.game_engine.prompt_for_player()
+    prompt = self.game_engine.prompt()
     self.assertTrue(self.test_exit.get_name() in prompt)
+
+  def test_items_displayed(self):
+    self.add_test_room_and_test_exit()
+    self.database.add_item_to_room(self.test_item, self.test_room.get_id())
+    prompt = self.game_engine.prompt()
+    self.assertTrue(self.test_item.get_name() in prompt)
 
   def test_possible_actions_displays_exit(self):
     self.add_test_room_and_test_exit()
@@ -79,7 +93,7 @@ class GameEngineTest(unittest.TestCase):
 
   def test_possible_actions_displays_items(self):
     self.add_test_room_and_test_exit()
-    self.database.add_item_to_player(self.player_id, self.test_item)
+    self.database.add_item_to_player(self.test_item, self.player_id)
     actions = self.game_engine.possible_actions()
     self.assertEquals(2, len(actions))
     item_action = [action for action in actions if 'use' in action][0]
