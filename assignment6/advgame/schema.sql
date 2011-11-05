@@ -19,7 +19,8 @@ create table players (
 create table rooms (
   id integer primary key autoincrement,
   name string not null,
-  description string not null
+  description string not null,
+  final_room boolean not null
 );
 create table exits (
   id integer primary key autoincrement,

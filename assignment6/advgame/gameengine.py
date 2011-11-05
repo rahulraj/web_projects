@@ -91,10 +91,14 @@ class GameEngine(object):
     # Use an item
     inventory = self.inventory()
     actions.extend(['use ' + item.get_name() for item in inventory])
+    # Examine an item
+    actions.extend(['examine ' + item.get_name() for item in inventory])
     # Take an item
     available_items = \
         self.database_service.find_unlocked_items_in_room(current_room.get_id())
     actions.extend(['take ' + item.get_name() for item in available_items])
+    actions.append('inventory')
+    actions.append('help')
     return actions
 
   def try_exit(self, exit_name):
@@ -183,6 +187,14 @@ class GameEngine(object):
     else:
       raise UnknownItemType
 
+  def try_examine_item(self, item_name):
+    inventory = self.inventory()
+    items_with_name = [item for item in inventory \
+        if item.get_name() == item_name]
+    if len(items_with_name == 0):
+      return "You don't have a " + item_name
+    return items_with_name[0].get_description()
+
   def try_take_item(self, item_name):
     """
     Try to take an item from the current room
@@ -203,6 +215,9 @@ class GameEngine(object):
         self.player_id)
     return "You took the %s." % (item_name,)
 
+  def inventory_names(self):
+    return [item.get_name() for item in self.inventory()]
+
   def step(self, action):
     """
     Execute one step throug the game.
@@ -216,14 +231,25 @@ class GameEngine(object):
     possible_actions = self.possible_actions()
     if action not in possible_actions:
       return "I don't know what you mean by " + action
-    if action.startswith('exit'):
+    elif action.startswith('exit'):
       exit_name = action[len('exit'):].strip()
       return self.try_exit(exit_name)
     elif action.startswith('use'):
       item_name = action[len('use'):].strip()
       return self.try_use_item(item_name)
+    elif action.startswith('examine'):
+      item_name = action[len('examine'):].strip()
+      return self.try_examine_item(item_name)
     elif action.startswith('take'):
       item_name = action[len('take'):].strip()
       return self.try_take_item(item_name)
+    elif action == 'inventory':
+      return '\n'.join(self.inventory_names())
+    elif action == 'help':
+      return """
+          You can do the following action(s):
+          %s
+          """ % ('\n'.join(possible_actions),)
     else:
+      # There's a bug if we came here.
       raise NotImplementedError

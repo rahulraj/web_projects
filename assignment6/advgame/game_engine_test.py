@@ -124,8 +124,9 @@ class GameEngineTest(unittest.TestCase):
   def test_possible_actions_displays_exit(self):
     self.add_test_room_and_test_exit()
     actions = self.game_engine.possible_actions()
-    self.assertEquals(1, len(actions))
-    self.assertTrue(self.test_exit.get_name() in actions[0])
+    exit_actions = [action for action in actions if 'exit' in action]
+    self.assertEquals(1, len(exit_actions))
+    self.assertTrue(self.test_exit.get_name() in exit_actions[0])
 
   def test_possible_actions_displays_items_that_the_player_has(self):
     self.add_test_room_and_test_exit()

@@ -116,11 +116,12 @@ class DatabaseService(object):
       A Room object with id set to the database value.
     """
     self.cursor.execute( \
-        'insert into rooms values (null, :name, :description)',
-        {'name': room.get_name(), 'description': room.get_description()})
+        'insert into rooms values (null, :name, :description, :final_room)',
+        {'name': room.get_name(), 'description': room.get_description(),
+         'final_room': room.is_final_room()})
     self.connection.commit()
     return Room.from_row((self.cursor.lastrowid, room.get_name(),
-        room.get_description()))
+        room.get_description(), room.is_final_room()))
 
   def find_room_by_name(self, room_name):
     """ TODO Replace, there could be multiple rooms with the
@@ -395,7 +396,7 @@ class DatabaseService(object):
   def find_room_occupied_by_player(self, player_id):
     self.cursor.execute( \
         """
-        select rooms.id, rooms.name, rooms.description
+        select rooms.id, rooms.name, rooms.description, rooms.final_room
         from rooms, players
         where players.id=:player_id and players.currently_in_room=rooms.id
         """, {'player_id': player_id})

@@ -51,14 +51,17 @@ class GameEntity(DatabaseObject):
 with_getters_for(GameEntity, 'name', 'description')
 
 class Room(GameEntity):
-  def __init__(self, name, description, id=None):
+  def __init__(self, name, description, final_room=False, id=None):
     assign_injectables(self, locals())
     super(Room, self).__init__()
 
+  def is_final_room(self):
+    return self.final_room
+
   @classmethod
   def from_row(clazz, row):
-    (id, name, description) = row
-    return clazz(name, description, id=id)
+    (id, name, description, final_room) = row
+    return clazz(name, description, final_room, id=id)
 # GameEntity already implements all the necessary getters
 
 class Exit(GameEntity):
