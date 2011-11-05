@@ -54,7 +54,7 @@ class DatabaseServiceTest(unittest.TestCase):
     room = self.database.find_room_by_name(self.test_room.get_name())
     self.assertEquals(self.test_room.get_description(), room.get_description())
 
-  def test_room_with_exit(self):
+  def add_rooms_with_exit(self, locked=False):
     first_room = self.database.add_room(self.test_room)
     second_room = self.database.add_room(self.second_room)
     description = "An Exit from first to second"
@@ -63,9 +63,12 @@ class DatabaseServiceTest(unittest.TestCase):
         description=description,
         from_room=first_room.get_id(),
         to_room=second_room.get_id(),
-        locked=False)
-    self.database.add_exit(exit)
+        locked=locked)
+    added_exit = self.database.add_exit(exit)
+    return (first_room, second_room, description, added_exit)
 
+  def test_room_with_exit(self):
+    (first_room, _, description, _) = self.add_rooms_with_exit()
     result = self.database.find_exits_from_room(first_room.get_id())
     self.assertEquals(1, len(result))
     self.assertEquals(description, result[0].get_description())
@@ -196,6 +199,13 @@ class DatabaseServiceTest(unittest.TestCase):
     result = self.database.find_room_occupied_by_player( \
         test_player.get_id()) 
     self.assertEquals(second_room.get_id(), result.get_id())
+
+  def test_unlock_exit(self):
+    (first_room, _, _, exit) = self.add_rooms_with_exit(locked=True)
+    self.database.unlock_exit(exit.get_id())
+    exit_result = self.database.find_exits_from_room(first_room.get_id())[0]
+    self.assertFalse(exit_result.is_locked())
+
 
   def tearDown(self):
     os.unlink(self.database_file)

@@ -1,4 +1,8 @@
 from inject import assign_injectables
+from databaseservice import ItemUnlockingItem, ExitUnlockingItem
+
+class UnknownItemType(Exception):
+  pass
 
 class GameEngine(object):
   def __init__(self, database_service, player_id):
@@ -72,7 +76,18 @@ class GameEngine(object):
     inventory = self.inventory()
     if item_name not in inventory:
       return "You don't have a " + item_name
-    raise NotImplementedError
+    item = [item for item in inventory if item.get_name() == item_name][0]
+    if isinstance(item, ItemUnlockingItem):
+      pass
+    elif isinstance(item, ExitUnlockingItem):
+      (_, exits) = self.room_and_exits()
+      unlockable_exits = [exit for exit in exits if \
+          exit.get_id() == item.get_unlocks_exit()]
+      if len(unlockable_exits) == 0:
+        return "Using %s didn't do anything." % (item_name,)
+      exit = unlockable_exits[0]
+    else:
+      raise UnknownItemType
 
   def try_take_item(self, item_name):
     (room, _) = self.room_and_exits()
