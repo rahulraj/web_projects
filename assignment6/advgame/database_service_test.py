@@ -206,6 +206,14 @@ class DatabaseServiceTest(unittest.TestCase):
     exit_result = self.database.find_exits_from_room(first_room.get_id())[0]
     self.assertFalse(exit_result.is_locked())
 
+  def test_delete_item(self):
+    room_id = 2
+    item = self.make_item(databaseservice.ItemUnlockingItem,
+        'First item', room_id, locked=False)
+    added_item = self.database.add_item_unlocking_item(item)
+    self.database.delete_item(added_item.get_id())
+    in_room = self.database.find_unlocked_items_in_room(room_id)
+    self.assertEquals(0, len(in_room))
 
   def tearDown(self):
     os.unlink(self.database_file)

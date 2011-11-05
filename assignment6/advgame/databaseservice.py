@@ -385,6 +385,14 @@ class DatabaseService(object):
         """, {'exit_id': exit_id})
     self.connection.commit()
 
+  def delete_item(self, item_id):
+    self.cursor.execute( \
+        """
+        delete from items
+        where id=:item_id
+        """, {'item_id': item_id})
+    self.connection.commit()
+
 
 """ Data access objects, representing rows in the database tables.  """
 class NoneId(Exception):
