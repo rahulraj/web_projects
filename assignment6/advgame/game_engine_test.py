@@ -177,6 +177,16 @@ class GameEngineTest(unittest.TestCase):
     self.assertTrue(self.test_item not in \
         self.database.players_to_items[self.player_id])
 
+  def test_step_use_item_fails_if_nothing_to_unlock(self):
+    self.add_test_room_exit_and_item_to_room()
+    self.test_exit.locked = True
+    self.test_item.unlocks_exit = 45 # Not self.test_exit
+    self.game_engine.step('take ' + self.test_item.get_name())
+    self.game_engine.step('use ' + self.test_item.get_name())
+    self.assertTrue(self.test_exit.locked)
+    self.assertTrue(self.test_item in \
+        self.database.players_to_items[self.player_id])
+
 
 if __name__ == '__main__':
   unittest.main()
