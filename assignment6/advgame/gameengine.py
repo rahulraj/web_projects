@@ -72,18 +72,33 @@ class GameEngine(object):
         exit_in_use.get_to_room())
     return 'You went through ' + exit_in_use.get_name()
 
-  def try_unlock_exit(self, item_name, item):
+  def try_unlock_exit(self, item):
     (_, exits) = self.room_and_exits()
     unlockable_exits = [exit for exit in exits if \
         exit.get_id() == item.get_unlocks_exit()]
     if len(unlockable_exits) == 0:
-      return "Using %s didn't do anything." % (item_name,)
+      return "Using %s didn't do anything." % (item.get_name(),)
     exit = unlockable_exits[0]
     self.database_service.unlock_exit(exit.get_id())
     self.database_service.delete_item(item.get_id())
     return """
         You used the %s, and the %s was unlocked. You can go through it now.
-        """ % (item_name, exit.get_name())
+        """ % (item.get_name(), exit.get_name())
+
+  def try_unlock_item(self, unlocking_item):
+    (room, _) = self.room_and_exits()
+    locked_items  = self.database_service.find_locked_items_in_room( \
+        room.get_id())
+    unlockable_items = [item for item in locked_items if \
+        item.get_id() == unlocking_item.get_unlocks_item()]
+    if len(unlockable_items) == 0:
+      return "Using %s didn't do anything." % (unlocking_item.get_name(),)
+    to_unlock = unlockable_items[0] 
+    self.database_service.unlock_item(to_unlock.get_id())
+    self.database_service.delete_item(unlocking_item.get_id())
+    return """
+        You used the %s, and the %s was unlocked. You can take it now. 
+        """ % (unlocking_item.get_name(), to_unlock.get_name())
 
   def try_use_item(self, item_name):
     inventory = self.inventory()
@@ -92,9 +107,9 @@ class GameEngine(object):
       return "You don't have a " + item_name
     item = [item for item in inventory if item.get_name() == item_name][0]
     if isinstance(item, ItemUnlockingItem):
-      raise NotImplementedError
+      return self.try_unlock_item(item)
     elif isinstance(item, ExitUnlockingItem):
-      return self.try_unlock_exit(item_name, item)
+      return self.try_unlock_exit(item)
     else:
       raise UnknownItemType
 

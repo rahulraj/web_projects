@@ -1,7 +1,7 @@
 import unittest
 from collections import defaultdict
 from gameengine import GameEngine
-from databaseservice import PlayerNotInRoom, Room, Exit, ExitUnlockingItem
+from databaseservice import PlayerNotInRoom, Room, Exit, ExitUnlockingItem, ItemUnlockingItem
 
 class FakeDatabaseService(object):
   def __init__(self):
@@ -43,6 +43,10 @@ class FakeDatabaseService(object):
     return [item for item in self.rooms_to_items[room_id] \
         if not item.is_locked()]
 
+  def find_locked_items_in_room(self, room_id):
+    return [item for item in self.rooms_to_items[room_id] \
+        if item.is_locked()]
+
   def move_player(self, player_id, new_room_id):
     self.players_to_room_ids[player_id] = new_room_id
     # Not fully updated, but this is not inspected in testing
@@ -62,6 +66,12 @@ class FakeDatabaseService(object):
       for exit in self.rooms_to_exits[room]:
         if exit.get_id() == exit_id:
           exit.locked = False
+
+  def unlock_item(self, item_id):
+    for room in self.rooms_to_items:
+      for item in self.rooms_to_items[room]:
+        if item.get_id() == item_id:
+          item.locked = False
 
   def delete_item(self, item_id):
     for room in self.rooms_to_items:
@@ -187,6 +197,22 @@ class GameEngineTest(unittest.TestCase):
     self.assertTrue(self.test_item in \
         self.database.players_to_items[self.player_id])
 
+  def test_step_use_item_to_unlock_item(self):
+    self.add_test_room_exit_and_item_to_room()
+    self.test_item.locked = True
+    key = ItemUnlockingItem(
+        name='Key to the TPS report drawer',
+        description='A metal key',
+        use_message='You put the key in the lock and turned it',
+        owned_by_player=None,
+        in_room=self.test_room.get_id(),
+        locked=False,
+        unlocks_item=self.test_item.get_id(),
+        id=19)
+    self.database.stub_add_item_to_room(key, self.test_room.get_id())
+    self.game_engine.step('take ' + key.get_name())
+    self.game_engine.step('use ' + key.get_name())
+    self.assertFalse(self.test_item.locked)
 
 if __name__ == '__main__':
   unittest.main()
