@@ -74,11 +74,12 @@ class GameEngine(object):
 
   def try_use_item(self, item_name):
     inventory = self.inventory()
-    if item_name not in inventory:
+    inventory_names = [item.get_name() for item in inventory]
+    if item_name not in inventory_names:
       return "You don't have a " + item_name
     item = [item for item in inventory if item.get_name() == item_name][0]
     if isinstance(item, ItemUnlockingItem):
-      pass
+      raise NotImplementedError
     elif isinstance(item, ExitUnlockingItem):
       (_, exits) = self.room_and_exits()
       unlockable_exits = [exit for exit in exits if \
@@ -86,6 +87,11 @@ class GameEngine(object):
       if len(unlockable_exits) == 0:
         return "Using %s didn't do anything." % (item_name,)
       exit = unlockable_exits[0]
+      self.database_service.unlock_exit(exit.get_id())
+      self.database_service.delete_item(item.get_id())
+      return """
+          You used the %s, and the %s was unlocked. You can go through it now.
+          """ % (item_name, exit.get_name())
     else:
       raise UnknownItemType
 

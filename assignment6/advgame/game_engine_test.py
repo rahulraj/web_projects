@@ -1,7 +1,7 @@
 import unittest
 from collections import defaultdict
 from gameengine import GameEngine
-from databaseservice import PlayerNotInRoom, Room, Exit, ItemUnlockingItem
+from databaseservice import PlayerNotInRoom, Room, Exit, ExitUnlockingItem
 
 class FakeDatabaseService(object):
   def __init__(self):
@@ -58,9 +58,10 @@ class FakeDatabaseService(object):
     self.players_to_items[player_id].append(moved_item)
 
   def unlock_exit(self, exit_id):
-    room_with_exit = [room for room in self.rooms_to_exits \
-        if exit_id in self.rooms_to_exits[room]][0]
-    self.rooms_to_exits[room_with_exit].locked = False
+    for room in self.rooms_to_exits:
+      for exit in self.rooms_to_exits[room]:
+        if exit.get_id() == exit_id:
+          exit.locked = False
 
   def delete_item(self, item_id):
     for room in self.rooms_to_items:
@@ -82,12 +83,12 @@ class GameEngineTest(unittest.TestCase):
     self.test_exit = Exit(name='West',
         description='The west exit', from_room=self.test_room.get_id(),
         to_room=self.production_room.get_id(), locked=False, id=7)
-    self.test_item = ItemUnlockingItem(name='TPS Report',
+    self.test_item = ExitUnlockingItem(name='TPS Report',
         description='A testing specification',
         use_message='You read the report',
         owned_by_player=None,
         in_room=self.test_room.get_id(),
-        locked=False, unlocks_item=2, id=9)
+        locked=False, unlocks_exit=7, id=9)
     self.game_engine = GameEngine(self.database, self.player_id)
 
   def test_prompt_for_player(self):
@@ -158,12 +159,22 @@ class GameEngineTest(unittest.TestCase):
     self.assertTrue(self.test_item in \
         self.database.players_to_items[self.player_id])
 
-  def test_step_take_item_if_item_doesnt_exits(self):
+  def test_step_take_item_does_nothing_if_item_doesnt_exist(self):
     self.add_test_room_exit_and_item_to_room()
     self.game_engine.step('take NonExistentItem')
     self.assertTrue(self.test_item in \
         self.database.rooms_to_items[self.test_room.get_id()])
     self.assertFalse('NonExistentItem' in \
+        self.database.players_to_items[self.player_id])
+
+  def test_step_use_item_to_unlock_exit(self):
+    self.add_test_room_exit_and_item_to_room()
+    # self.test_item is set in setUp to unlock self.test_exit
+    self.test_exit.locked = True
+    self.game_engine.step('take ' + self.test_item.get_name())
+    self.game_engine.step('use ' + self.test_item.get_name())
+    self.assertFalse(self.test_exit.locked)
+    self.assertTrue(self.test_item not in \
         self.database.players_to_items[self.player_id])
 
 
