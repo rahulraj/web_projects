@@ -74,6 +74,15 @@ class GameEngine(object):
       return "You don't have a " + item_name
     raise NotImplementedError
 
+  def try_take_item(self, item_name):
+    (room, _) = self.room_and_exits()
+    items = self.database_service.find_unlocked_items_in_room(room.get_id())
+    if item_name not in items:
+      return "There isn't a %s in this room." % (item_name,)
+    item_to_take = [item for item in items if item.get_name() == item_name][0]
+    self.database_service.move_item_to_player(item_to_take.get_id(),
+        self.player_id)
+    return "You took the %s." % (item_name,)
 
   def step(self, action):
     possible_actions = self.possible_actions()
@@ -86,6 +95,7 @@ class GameEngine(object):
       item_name = action[len('use'):].strip()
       return self.try_use_item(item_name)
     elif action.startswith('take'):
-      raise NotImplementedError
+      item_name = action[len('take'):].strip()
+      return self.try_take_item(item_name)
     else:
       raise NotImplementedError
