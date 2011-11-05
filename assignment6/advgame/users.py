@@ -2,7 +2,7 @@ import hashlib
 import string
 from random import randint
 from inject import assign_injectables
-from databaseservice import User
+from dataaccess import User
 
 salt_length = 10
 

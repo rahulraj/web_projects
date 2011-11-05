@@ -2,7 +2,6 @@
   Main template for the application.
 
   Args:
-    root_url the root URL.
     logged_in whether or not the user is logged in
 #}
 {% extends "layout.html" %}
@@ -12,22 +11,22 @@
   <script type="text/javascript" src="{{ url_for('static',
       filename='lib/jquery-1.6.4.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',
-      filename='scripts/game.js') }}"></script>
+      filename='lib/jquery.terminal-0.4.3.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',
-      filename='scripts/jsonData.js') }}"></script>
+      filename='scripts/game.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/formFields.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/loginForm.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static',
       filename='scripts/registerForm.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',
+      filename='scripts/factory.js') }}"></script>
   <script>
-    /** @const */ shortener.loginUrl = "{{ url_for('login') }}";
-    /** @const */ shortener.addUserUrl = "{{ url_for('add_user') }}";
-    /** @const */ shortener.pagesUrl = "{{ url_for('pages_by_user') }}";
-    /** @const */ shortener.logoutUrl = "{{ url_for('logout') }}";
-    /** @const */ shortener.rootUrl = "{{ root_url }}";
-    /** @const */ shortener.loggedIn = 
+    /** @const */ game.loginUrl = "{{ url_for('login') }}";
+    /** @const */ game.addUserUrl = "{{ url_for('add_user') }}";
+    /** @const */ game.logoutUrl = "{{ url_for('logout') }}";
+    /** @const */ game.loggedIn = 
         {% if logged_in %}
           true
         {% else %}

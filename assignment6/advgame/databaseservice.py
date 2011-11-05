@@ -450,3 +450,6 @@ class DatabaseService(object):
         where id=:item_id
         """, {'item_id': item_id})
     self.connection.commit()
+
+  def close(self):
+    self.cursor.close()
