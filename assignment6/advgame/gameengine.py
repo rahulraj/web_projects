@@ -218,6 +218,9 @@ class GameEngine(object):
   def inventory_names(self):
     return [item.get_name() for item in self.inventory()]
 
+  def game_is_over(self):
+    return self.database_service.player_in_final_room(self.player_id)
+
   def step(self, action):
     """
     Execute one step throug the game.
