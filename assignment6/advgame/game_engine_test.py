@@ -125,9 +125,12 @@ class GameEngineTest(unittest.TestCase):
     item_action = item_actions[0]
     self.assertTrue(self.test_item.get_name() in item_action)
 
-  def test_possible_actions_displays_takeable_items(self):
+  def add_test_room_exit_and_item_to_room(self):
     self.add_test_room_and_test_exit()
     self.database.stub_add_item_to_room(self.test_item, self.test_room.get_id())
+
+  def test_possible_actions_displays_takeable_items(self):
+    self.add_test_room_exit_and_item_to_room()
     actions = self.game_engine.possible_actions()
     take_actions = [action for action in actions if 'take' in action]
     self.assertEquals(1, len(take_actions))
@@ -148,8 +151,7 @@ class GameEngineTest(unittest.TestCase):
         self.database.players_to_rooms[self.player_id].get_id())
 
   def test_step_take_item(self):
-    self.add_test_room_and_test_exit()
-    self.database.stub_add_item_to_room(self.test_item, self.test_room.get_id())
+    self.add_test_room_exit_and_item_to_room()
     self.game_engine.step('take ' + self.test_item.get_name())
     self.assertTrue(self.test_item not in \
         self.database.rooms_to_items[self.test_room.get_id()])
@@ -157,8 +159,7 @@ class GameEngineTest(unittest.TestCase):
         self.database.players_to_items[self.player_id])
 
   def test_step_take_item_if_item_doesnt_exits(self):
-    self.add_test_room_and_test_exit()
-    self.database.stub_add_item_to_room(self.test_item, self.test_room.get_id())
+    self.add_test_room_exit_and_item_to_room()
     self.game_engine.step('take NonExistentItem')
     self.assertTrue(self.test_item in \
         self.database.rooms_to_items[self.test_room.get_id()])
