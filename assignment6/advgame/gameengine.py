@@ -54,11 +54,9 @@ class GameEngine(object):
     inventory = self.inventory()
     actions.extend(['use ' + item.get_name() for item in inventory])
     # Take an item
-    """
     available_items = \
-        self.database_service.find_unlocked_items_in_room_with_id( \
-        current_room.get_id)
-    """
+        self.database_service.find_unlocked_items_in_room(current_room.get_id())
+    actions.extend(['take ' + item.get_name() for item in available_items])
     return actions
 
   def try_exit(self, exit_name):
@@ -71,9 +69,11 @@ class GameEngine(object):
     return 'You went through ' + exit_in_use.get_name()
 
   def try_use_item(self, item_name):
-    inventory = self.database_service.find_items_owned_by_player(self.player_id)
+    inventory = self.inventory()
     if item_name not in inventory:
       return "You don't have a " + item_name
+    raise NotImplementedError
+
 
   def step(self, action):
     possible_actions = self.possible_actions()

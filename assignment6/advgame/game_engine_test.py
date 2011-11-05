@@ -91,13 +91,23 @@ class GameEngineTest(unittest.TestCase):
     self.assertEquals(1, len(actions))
     self.assertTrue(self.test_exit.get_name() in actions[0])
 
-  def test_possible_actions_displays_items(self):
+  def test_possible_actions_displays_items_that_the_player_has(self):
     self.add_test_room_and_test_exit()
     self.database.add_item_to_player(self.test_item, self.player_id)
     actions = self.game_engine.possible_actions()
-    self.assertEquals(2, len(actions))
-    item_action = [action for action in actions if 'use' in action][0]
+    item_actions = [action for action in actions if 'use' in action]
+    self.assertEquals(1, len(item_actions))
+    item_action = item_actions[0]
     self.assertTrue(self.test_item.get_name() in item_action)
+
+  def test_possible_actions_displays_takeable_items(self):
+    self.add_test_room_and_test_exit()
+    self.database.add_item_to_room(self.test_item, self.test_room.get_id())
+    actions = self.game_engine.possible_actions()
+    take_actions = [action for action in actions if 'take' in action]
+    self.assertEquals(1, len(take_actions))
+    take_action = take_actions[0]
+    self.assertTrue(self.test_item.get_name() in take_action)
 
   def test_step_move_through_exit_changes_room(self):
     self.add_test_room_and_test_exit()
