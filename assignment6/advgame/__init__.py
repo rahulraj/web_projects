@@ -138,15 +138,25 @@ def new_game():
     return redirect(url_for('index'))
   user = session['user']
   game_builder = GameBuilder(g.database_service).for_user(user.get_id())
+  # TODO Maybe programatically pick a game to play
   player_id = simple_testing_game(game_builder)
   session['player_id'] = player_id
   game_engine = GameEngine(g.database_service, player_id)
   return jsonify(prompt=game_engine.prompt())
 
-@app.route('/game', methods=['POST'])
+@app.route('/game', methods=['GET', 'POST'])
 def step_game():
-  pass
-
+  if 'player_id' not in session:
+    return redirect(url_for('index'))
+  game_engine = GameEngine(g.database_service, session['player_id'])
+  if request.method == 'GET':
+    return jsonify(done=False, prompt=game_engine.prompt())
+  else:
+    if game_engine.game_is_over():
+      return jsonify(done=True, prompt=game_engine.prompt())
+    user_input = request.form['userInput']
+    result = game_engine.step(user_input)
+    return jsonify(done=False, prompt=result)
 
 @app.route('/logout')
 def logout():
