@@ -66,7 +66,7 @@ class DatabaseServiceTest(unittest.TestCase):
         locked=False)
     self.database.add_exit(exit)
 
-    result = self.database.find_exits_from_room_with_id(first_room.get_id())
+    result = self.database.find_exits_from_room(first_room.get_id())
     self.assertEquals(1, len(result))
     self.assertEquals(description, result[0].get_description())
 
@@ -92,7 +92,7 @@ class DatabaseServiceTest(unittest.TestCase):
         locked=False)
     self.database.add_exit(second_exit)
 
-    result = self.database.find_exits_from_room_with_id(first_room.get_id())
+    result = self.database.find_exits_from_room(first_room.get_id())
     self.assertEquals(2, len(result))
     self.assertEquals(first_description, result[0].get_description())
     self.assertEquals(second_description, result[1].get_description())

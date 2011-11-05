@@ -154,7 +154,7 @@ class DatabaseService(object):
         exit.get_description(), exit.get_from_room(), exit.get_to_room(),
         exit.is_locked()))
 
-  def find_exits_from_room_with_id(self, room_id):
+  def find_exits_from_room(self, room_id):
     """
     Find the exits for a room
 
