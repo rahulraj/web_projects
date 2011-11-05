@@ -10,6 +10,8 @@ java -jar /home/rahulraj/dls/closure-compiler/compiler.jar \
   --js=formFields.js \
   --js=loginForm.js \
   --js=registerForm.js \
+  --js=urls.js \
+  --js=factory.js \
   --externs=externs.js --warning_level=VERBOSE \
   --compilation_level=SIMPLE_OPTIMIZATIONS \
   > /dev/null # We only care about the error output
