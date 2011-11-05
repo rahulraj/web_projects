@@ -256,7 +256,7 @@ class DatabaseService(object):
         item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
         item.get_unlocks_exit()))
 
-  def find_unlocked_items_in_room_with_id(self, room_id):
+  def find_unlocked_items_in_room(self, room_id):
     """
     Find the unlocked items in a room.
 
