@@ -53,14 +53,26 @@ class GameBuilderTest(unittest.TestCase):
     self.database = FakeDatabaseService()
     self.builder = GameBuilder(self.database)
     self.user_id = 5
+    self.builder.for_user(self.user_id)
 
-  def test_simple_room_building(self):
-    self.builder.for_user(self.user_id). \
+  def add_rooms(self):
+    self.builder. \
         room(name='The testing room',
           description='Room with a Pythonista writing test cases'). \
         room(name='The production room',
-          description='Room with production servers'). \
-        start_in_room('The testing room').build()
+          description='Room with production servers')
+
+  def add_exit(self):
+    self.builder. \
+        exit(name='North', description='The north exit',
+          from_room='The testing room', to_room='The production room')
+
+  def finish_build(self):
+    return self.builder.start_in_room('The testing room').build()
+
+  def test_simple_room_building(self):
+    self.add_rooms()
+    self.finish_build()
     self.assertEquals(2, len(self.database.rooms))
     testing_room = [room for room in self.database.rooms \
         if 'testing' in room.get_name()][0]
@@ -68,14 +80,9 @@ class GameBuilderTest(unittest.TestCase):
         self.database.player.get_currently_in_room())
 
   def test_rooms_with_exits(self):
-    self.builder.for_user(self.user_id). \
-        room(name='The testing room',
-          description='Room with a Pythonista writing test cases'). \
-        room(name='The production room',
-          description='Room with production servers'). \
-        exit(name='North', description='The north exit',
-          from_room='The testing room', to_room='The production room'). \
-        start_in_room('The testing room').build()
+    self.add_rooms()
+    self.add_exit()
+    self.finish_build()
     self.assertEquals(1, len(self.database.exits))
     testing_room = [room for room in self.database.rooms \
         if 'testing' in room.get_name()][0]
