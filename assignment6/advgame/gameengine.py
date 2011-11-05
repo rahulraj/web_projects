@@ -134,8 +134,9 @@ class GameEngine(object):
     self.database_service.unlock_exit(exit.get_id())
     self.database_service.delete_item(item.get_id())
     return """
-        You used the %s, and the %s was unlocked. You can go through it now.
-        """ % (item.get_name(), exit.get_name())
+        %s
+        You can go through the %s now.
+        """ % (item.get_use_message(), exit.get_name())
 
   def try_unlock_item(self, unlocking_item):
     """
@@ -156,8 +157,9 @@ class GameEngine(object):
     self.database_service.unlock_item(to_unlock.get_id())
     self.database_service.delete_item(unlocking_item.get_id())
     return """
-        You used the %s, and the %s was unlocked. You can take it now. 
-        """ % (unlocking_item.get_name(), to_unlock.get_name())
+        %s
+        You can take the %s now. 
+        """ % (unlocking_item.get_use_message(), to_unlock.get_name())
 
   def try_use_item(self, item_name):
     """
