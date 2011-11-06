@@ -230,11 +230,16 @@ class DatabaseService(object):
         insert into item_unlocking_items values (:item_id, :unlocks_item)
         """,
         {'item_id': item_id, 'unlocks_item': item.get_unlocks_item()})
-    return ItemUnlockingItem.from_row((self.cursor.lastrowid, item.get_name(),
-        item.get_description(),
-        item.get_use_message(),
-        item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
-        item.get_unlocks_item()))
+    return ItemUnlockingItem(
+        name=item.get_name(),
+        description=item.get_description(),
+        use_message=item.get_use_message(),
+        owned_by_player=item.get_owned_by_player(),
+        in_room=item.get_in_room(),
+        locked=item.is_locked(),
+        unlocks_item=item.get_unlocks_item(),
+        id=item_id
+        )
 
   def add_exit_unlocking_item(self, item):
     """
@@ -252,11 +257,16 @@ class DatabaseService(object):
         insert into exit_unlocking_items values (:item_id, :unlocks_exit)
         """,
         {'item_id': item_id, 'unlocks_exit': item.get_unlocks_exit()})
-    return ExitUnlockingItem.from_row((self.cursor.lastrowid, item.get_name(),
-        item.get_description(),
-        item.get_use_message(),
-        item.get_owned_by_player(), item.get_in_room(), item.is_locked(),
-        item.get_unlocks_exit()))
+    return ExitUnlockingItem(
+        name=item.get_name(),
+        description=item.get_description(),
+        use_message=item.get_use_message(),
+        owned_by_player=item.get_owned_by_player(),
+        in_room=item.get_in_room(),
+        locked=item.is_locked(),
+        unlocks_exit=item.get_unlocks_exit(),
+        id=item_id
+        )
 
   def find_unlocked_items_in_room(self, room_id):
     """

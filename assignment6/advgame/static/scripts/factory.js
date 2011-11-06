@@ -118,9 +118,16 @@ game.Factory.attachForms = function(forms, parentElement) {
   parentElement.append(loginDiv).append(registerDiv).append(clearDiv);
 };
 
+
+/**
+ * Create a terminal and play the game.
+ * @param {jQueryObject} parentElement the parent.
+ * @const
+ */
 game.Factory.createGameTerminal = function(parentElement) {
   // start the game to get the initial message
   $.post(game.newGameUrl, {}, function(data) {
+    console.log('started a new game');
     /** @const */ var prompt = data.prompt; 
     parentElement.terminal(function(command, terminal) {
       $.post(game.stepGameUrl, {userInput: command}, function(data) {

@@ -117,7 +117,9 @@ class GameEngine(object):
       return 'That exit is locked'
     self.database_service.move_player(self.player_id,
         exit_in_use.get_to_room())
-    return 'You went through ' + exit_in_use.get_name()
+    new_room_description = self.prompt()
+    return 'You went through ' + exit_in_use.get_name() + \
+        '\n' + new_room_description
 
   def try_unlock_exit(self, item):
     """
