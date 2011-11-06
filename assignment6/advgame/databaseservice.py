@@ -361,6 +361,7 @@ class DatabaseService(object):
       item_id the ID for the item.
       player_id the ID for the player.
     """
+    #import ipdb; ipdb.set_trace()
     self.cursor.execute( \
         """
         update items
@@ -387,6 +388,7 @@ class DatabaseService(object):
         where owned_by_player=:player_id
         order by id
         """, {'player_id': player_id})
+    result = self.cursor.fetchall()
     def item_from_row(row):
       item_id = row[0]
       self.cursor.execute( \
@@ -410,7 +412,7 @@ class DatabaseService(object):
         return ExitUnlockingItem.from_row(row + (result[1],))
       else:
         raise NoSuchItem
-    return map(item_from_row, self.cursor)
+    return map(item_from_row, result)
 
   def find_room_occupied_by_player(self, player_id):
     self.cursor.execute( \

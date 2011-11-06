@@ -3,7 +3,7 @@ import databaseservice
 from users import Users, confirmed_password_valid
 from gamebuilder import GameBuilder
 from gameengine import GameEngine
-from gameconfigurations import simple_game
+from gameconfigurations import save_internet_game
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -139,7 +139,7 @@ def new_game():
   user_id = session['user_id']
   game_builder = GameBuilder(g.database_service).for_user(user_id)
   # TODO Maybe programatically pick a game to play
-  player_id = simple_game(game_builder)
+  player_id = save_internet_game(game_builder)
   session['player_id'] = player_id
   game_engine = GameEngine(g.database_service, player_id)
   return jsonify(prompt=game_engine.prompt())
