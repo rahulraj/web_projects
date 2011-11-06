@@ -129,7 +129,11 @@ game.Factory.createGameTerminal = function(parentElement) {
   $.post(game.newGameUrl, {}, function(data) {
     console.log('started a new game');
     /** @const */ var prompt = data.prompt; 
-    parentElement.terminal(function(command, terminal) {
+    /** @const */ var terminalDiv = $('<div>', {
+      id: 'terminal'
+    });
+    parentElement.append(terminalDiv);
+    terminalDiv.terminal(function(command, terminal) {
       $.post(game.stepGameUrl, {userInput: command}, function(data) {
         /** @const */ var prompt = data.prompt; 
         terminal.echo(prompt);
