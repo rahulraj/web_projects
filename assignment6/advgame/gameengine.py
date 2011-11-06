@@ -135,7 +135,7 @@ class GameEngine(object):
     unlockable_exits = [exit for exit in exits if \
         exit.get_id() == item.get_unlocks_exit()]
     if len(unlockable_exits) == 0:
-      return "Using %s didn't do anything." % (item.get_name(),)
+      return "\tUsing %s didn't do anything." % (item.get_name(),)
     exit = unlockable_exits[0]
     self.database_service.unlock_exit(exit.get_id())
     self.database_service.delete_item(item.get_id())
@@ -158,7 +158,7 @@ class GameEngine(object):
     unlockable_items = [item for item in locked_items if \
         item.get_id() == unlocking_item.get_unlocks_item()]
     if len(unlockable_items) == 0:
-      return "Using %s didn't do anything." % (unlocking_item.get_name(),)
+      return "\tUsing %s didn't do anything." % (unlocking_item.get_name(),)
     to_unlock = unlockable_items[0] 
     self.database_service.unlock_item(to_unlock.get_id())
     self.database_service.delete_item(unlocking_item.get_id())
@@ -178,9 +178,6 @@ class GameEngine(object):
       A message explaining the outcome.
     """
     inventory = self.inventory()
-    inventory_names = [item.get_name() for item in inventory]
-    if item_name not in inventory_names:
-      return "You don't have a " + item_name
     item = [item for item in inventory if item.get_name() == item_name][0]
     if isinstance(item, ItemUnlockingItem):
       return self.try_unlock_item(item)
@@ -193,8 +190,6 @@ class GameEngine(object):
     inventory = self.inventory()
     items_with_name = [item for item in inventory \
         if item.get_name() == item_name]
-    if len(items_with_name) == 0:
-      return "You don't have a " + item_name
     return items_with_name[0].get_description()
 
   def try_take_item(self, item_name):
@@ -209,13 +204,10 @@ class GameEngine(object):
     """
     (room, _) = self.room_and_exits()
     items = self.database_service.find_unlocked_items_in_room(room.get_id())
-    item_names = [item.get_name() for item in items]
-    if item_name not in item_names:
-      return "There isn't a %s in this room." % (item_name,)
     item_to_take = [item for item in items if item.get_name() == item_name][0]
     self.database_service.move_item_to_player(item_to_take.get_id(),
         self.player_id)
-    return "You took the %s." % (item_name,)
+    return "\tYou took the %s." % (item_name,)
 
   def inventory_names(self):
     return [item.get_name() for item in self.inventory()]
@@ -235,7 +227,11 @@ class GameEngine(object):
     """
     possible_actions = self.possible_actions()
     if action not in possible_actions:
-      return "I don't know what you mean by " + action
+      if action.startswith('use') or action.startswith('examine'):
+        return "\tYou don't have one of those."
+      elif action.startswith('take'):
+        return "\tThere isn't one of those here."
+      return "\tI don't know what you mean by %s."  % (action,)
     elif action.startswith('exit'):
       exit_name = action[len('exit'):].strip()
       return self.try_exit(exit_name)
@@ -251,14 +247,13 @@ class GameEngine(object):
     elif action == 'inventory':
       inventory_names = self.inventory_names()
       if len(inventory_names) == 0:
-        return "You don't have any items."
+        return "\tYou don't have any items."
       else:
         return '\n'.join(self.inventory_names())
     elif action == 'help':
-      return """
-          You can do the following action(s):
-          %s
-          """ % ('\n'.join(possible_actions),)
+      result = '\tYou can do the following action(s):\n\t\t' + \
+          '\n\t\t'.join(possible_actions)
+      return result
     else:
       # There's a bug if we came here.
       raise NotImplementedError

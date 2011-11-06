@@ -149,14 +149,13 @@ def step_game():
   if 'player_id' not in session:
     return redirect(url_for('index'))
   game_engine = GameEngine(g.database_service, session['player_id'])
-  if request.method == 'GET':
-    return jsonify(done=False, prompt=game_engine.prompt())
-  else:
-    if game_engine.game_is_over():
-      return jsonify(done=True, prompt=game_engine.prompt())
-    user_input = request.form['userInput']
-    result = game_engine.step(user_input)
-    return jsonify(done=False, prompt=result)
+  if game_engine.game_is_over():
+    return jsonify(prompt='You beat the game!')
+  user_input = request.form['userInput']
+  result = game_engine.step(user_input)
+  if game_engine.game_is_over():
+    return jsonify(prompt=result + '\nCongrats, you fulfilled the objective!')
+  return jsonify(prompt=result)
 
 @app.route('/logout')
 def logout():
