@@ -2,11 +2,12 @@ def simple_testing_game(builder):
   return builder. \
       room(
         name='The testing room',
-        description="""Room with a Pythonista writing test cases.
-                       There is a locked drawer with a key on top.
-                       You need to get to the production server room
-                       at the North exit,
-                       but management has stationed a guard to to stop you."""
+        description="""
+            Room with a Pythonista writing test cases.
+            There is a locked drawer with a key on top.
+            You need to get to the production server room
+            at the North exit,
+            but management has stationed a guard to to stop you."""
       ). \
       room(
         name='The production room',
