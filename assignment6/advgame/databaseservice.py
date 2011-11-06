@@ -189,6 +189,7 @@ class DatabaseService(object):
         """, 
         {'created_by_user': player.get_created_by_user(),
          'currently_in_room': player.get_currently_in_room()})
+    self.connection.commit()
     return Player.from_row((self.cursor.lastrowid,
         player.get_created_by_user(), player.get_currently_in_room()))
 

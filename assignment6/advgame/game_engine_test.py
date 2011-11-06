@@ -23,7 +23,7 @@ class FakeDatabaseService(object):
   def stub_add_room_exit(self, room_id, exit):
     self.rooms_to_exits[room_id].append(exit)
 
-  def find_exits_from_room_with_id(self, room_id):
+  def find_exits_from_room(self, room_id):
     if room_id not in self.rooms_to_exits:
       return []
     return self.rooms_to_exits[room_id]

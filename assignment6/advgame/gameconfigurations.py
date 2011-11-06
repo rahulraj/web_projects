@@ -1,4 +1,4 @@
-def simple_testing_game(builder):
+def simple_game(builder):
   return builder. \
       room(
         name='The testing room',
@@ -32,8 +32,8 @@ def simple_testing_game(builder):
         locked=True
       ). \
       item(
-        name='Key to the TPS report drawer',
-        description='An old metal key',
+        name='Drawer Key',
+        description='An old metal key to the TPS report drawer',
         use_message='You put the key in the lock',
         in_room='The testing room',
         unlocks='TPS Report', locked=False

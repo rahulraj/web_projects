@@ -90,6 +90,25 @@ class AdventureGameTest(unittest.TestCase):
     result = self.dict_from_request(self.login_test_user)
     self.assertTrue(result['success'])
 
+  def test_game_start(self):
+    self.register_test_user()
+    result = self.app.post('/game/new', data=dict(), follow_redirects=True)
+    self.assertTrue(len(result.data) > 0)
+
+  def test_get_initial_prompt(self):
+    self.register_test_user()
+    self.app.post('/game/new', data=dict(), follow_redirects=True)
+    result = self.app.get('/game', data=dict(), follow_redirects=True)
+    self.assertTrue(len(result.data) > 0)
+
+  def test_perform_action_in_game(self):
+    self.register_test_user()
+    self.app.post('/game/new', data=dict(), follow_redirects=True)
+    post_request = partial(self.app.post, '/game',
+        data=dict(userInput='inventory'), follow_redirects=True)
+    result = self.dict_from_request(post_request)
+    self.assertTrue(len(result['prompt']) > 0)
+
   def tearDown(self):
     os.close(self.database_handle)
     os.unlink(advgame.app.database)

@@ -191,7 +191,7 @@ class GameEngine(object):
     inventory = self.inventory()
     items_with_name = [item for item in inventory \
         if item.get_name() == item_name]
-    if len(items_with_name == 0):
+    if len(items_with_name) == 0:
       return "You don't have a " + item_name
     return items_with_name[0].get_description()
 
@@ -247,7 +247,11 @@ class GameEngine(object):
       item_name = action[len('take'):].strip()
       return self.try_take_item(item_name)
     elif action == 'inventory':
-      return '\n'.join(self.inventory_names())
+      inventory_names = self.inventory_names()
+      if len(inventory_names) == 0:
+        return "You don't have any items."
+      else:
+        return '\n'.join(self.inventory_names())
     elif action == 'help':
       return """
           You can do the following action(s):
