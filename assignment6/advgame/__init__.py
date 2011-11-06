@@ -38,7 +38,7 @@ def shutdown_session(response):
 @app.route('/')
 def index():
   """ Return the initial index template. """
-  logged_in = 'user' in session
+  logged_in = 'user_id' in session
   return render_template('index.html', logged_in=logged_in)
 
 def fail_login(message):
@@ -78,7 +78,7 @@ def login():
   if user is None:
     return fail_login('Login failed. Maybe you made a typo?')
   else:
-    session['user'] = user
+    session['user_id'] = user.get_id()
     return success_login()
 
 def fail_registration(message):
@@ -129,15 +129,15 @@ def add_user():
         """ % (username)
     return fail_registration(error)
   new_user = users.register_user(username, password)
-  session['user'] = new_user
+  session['user_id'] = new_user.get_id()
   return success_registration()
 
 @app.route('/game/new', methods=['POST'])
 def new_game():
-  if 'user' not in session:
+  if 'user_id' not in session:
     return redirect(url_for('index'))
-  user = session['user']
-  game_builder = GameBuilder(g.database_service).for_user(user.get_id())
+  user_id = session['user_id']
+  game_builder = GameBuilder(g.database_service).for_user(user_id)
   # TODO Maybe programatically pick a game to play
   player_id = simple_game(game_builder)
   session['player_id'] = player_id
@@ -160,7 +160,8 @@ def step_game():
 @app.route('/logout')
 def logout():
   """ Logout a user """
-  session.pop('user', None)
+  session.pop('user_id', None)
+  session.pop('player_id', None)
   return redirect(url_for('index'))
 
 if __name__ == '__main__':

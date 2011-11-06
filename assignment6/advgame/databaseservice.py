@@ -69,15 +69,17 @@ class DatabaseService(object):
     Returns:
       The row with that username.
     """
-    try:
-      self.cursor.execute( \
-          'select * from users where username=:username',
-          {'username': username})
+    #try:
+    self.cursor.execute( \
+        'select * from users where username=:username',
+        {'username': username})
+    """
     except Exception, e:
       import traceback
       with open('errors.txt', 'a') as error_file:
         traceback.print_exc(file=error_file)
       raise e
+    """
     return self.cursor.fetchone()
 
   def has_user_with_name(self, username):
