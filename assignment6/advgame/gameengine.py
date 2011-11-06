@@ -29,9 +29,9 @@ class GameEngine(object):
       A (room, exits) tuple containing the Room in the first position,
       and a list of Exits in the second position.
     """
-    current_room = self.database_service.find_room_occupied_by_player( \
+    current_room = self.database_service.find_room_occupied_by_player(
         self.player_id)
-    exits = self.database_service.find_exits_from_room_with_id( \
+    exits = self.database_service.find_exits_from_room(
         current_room.get_id())
     return (current_room, exits)
 
