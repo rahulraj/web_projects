@@ -1,3 +1,4 @@
+import random
 from inject import assign_injectables
 from databaseservice import ItemUnlockingItem, ExitUnlockingItem
 
@@ -231,7 +232,16 @@ class GameEngine(object):
         return "\tYou don't have one of those."
       elif action.startswith('take'):
         return "\tThere isn't one of those here."
-      return "\tI don't know what you mean by %s."  % (action,)
+      does_not_understand = [
+          "I don't know what you mean by %s." % (action,),
+          "That doesn't make any sense.",
+          "Stop babbling and give me an action.",
+          "Look, I know this game is tough, but that's no reason " +
+          "to give me gibberish.",
+          "You're kind of bad at this.",
+          "Type 'help' to get some help!"
+          ]
+      return '\t' + random.choice(does_not_understand)
     elif action.startswith('exit'):
       exit_name = action[len('exit'):].strip()
       return self.try_exit(exit_name)
