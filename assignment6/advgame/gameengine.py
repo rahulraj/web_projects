@@ -89,6 +89,7 @@ class GameEngine(object):
     (current_room, exits) = self.room_and_exits()
     # Go through an exit
     actions = ['exit ' + exit.get_name() for exit in exits]
+    actions.extend(['examine ' + exit.get_name() for exit in exits])
     # Use an item
     inventory = self.inventory()
     actions.extend(['use ' + item.get_name() for item in inventory])
@@ -189,9 +190,17 @@ class GameEngine(object):
 
   def try_examine_item(self, item_name):
     inventory = self.inventory()
-    items_with_name = [item for item in inventory \
-        if item.get_name() == item_name]
-    return items_with_name[0].get_description()
+    item_names = self.inventory_names()
+    if item_name in item_names:
+      items_with_name = [item for item in inventory \
+          if item.get_name() == item_name]
+      return items_with_name[0].get_description()
+    (_, exits) = self.room_and_exits()
+    exit_names = [exit.get_name() for exit in exits]
+    if item_name in exit_names:
+      exits_with_name = [exit for exit in exits \
+          if exit.get_name() == item_name]
+      return exits_with_name[0].get_description()
 
   def try_take_item(self, item_name):
     """
