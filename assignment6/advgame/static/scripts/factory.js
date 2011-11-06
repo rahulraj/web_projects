@@ -119,7 +119,14 @@ game.Factory.attachForms = function(forms, parentElement) {
 };
 
 game.Factory.createGameTerminal = function(parentElement) {
-  parentElement.terminal(function(command, terminal) {
-  
-  }, {prompt: '>', name: 'game'});
+  // start the game to get the initial message
+  $.post(game.newGameUrl, {}, function(data) {
+    /** @const */ var prompt = data.prompt; 
+    parentElement.terminal(function(command, terminal) {
+      $.post(game.stepGameUrl, {userInput: command}, function(data) {
+        /** @const */ var prompt = data.prompt; 
+        terminal.echo(prompt);
+      });
+    }, {greetings: prompt, prompt: '>', name: 'game'});
+  });
 };

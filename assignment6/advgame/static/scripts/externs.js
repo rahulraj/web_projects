@@ -45,6 +45,7 @@ jQueryObject.prototype.after = function(arg) {};
 jQueryObject.prototype.before = function(arg) {};
 jQueryObject.prototype.fadeOut = function() {};
 jQueryObject.prototype.slideToggle = function() {};
+jQueryObject.prototype.terminal = function() {};
 
 
 /**

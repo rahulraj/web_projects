@@ -148,6 +148,7 @@ def new_game():
 def step_game():
   if 'player_id' not in session:
     return redirect(url_for('index'))
+  #import ipdb; ipdb.set_trace()
   game_engine = GameEngine(g.database_service, session['player_id'])
   if request.method == 'GET':
     return jsonify(done=False, prompt=game_engine.prompt())
