@@ -62,7 +62,7 @@ class GameEngine(object):
         self.database_service.find_unlocked_items_in_room(current_room.get_id())
     item_names = [item.get_name() for item in items_in_room]
     prompt = """
-    You are in the %s.
+    You are in %s.
     %s
     """ % (current_room.get_name(), current_room.get_description())
     if len(item_names) != 0:
