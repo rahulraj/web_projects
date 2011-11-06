@@ -10,6 +10,7 @@ class FakeDatabaseService(object):
     self.rooms_to_exits = defaultdict(lambda: [])
     self.rooms_to_items = defaultdict(lambda: [])
     self.players_to_items = defaultdict(lambda: [])
+    self.rooms = []
 
   def stub_add_player_occupied_room(self, player_id, room):
     self.players_to_rooms[player_id] = room
@@ -47,10 +48,15 @@ class FakeDatabaseService(object):
     return [item for item in self.rooms_to_items[room_id] \
         if item.is_locked()]
 
+  def stub_add_room(self, room):
+    self.rooms.append(room)
+
   def move_player(self, player_id, new_room_id):
     self.players_to_room_ids[player_id] = new_room_id
-    # Not fully updated, but this is not inspected in testing
-    del self.players_to_rooms[player_id]
+    # Use stub_add_room from a test function to make this
+    # aware of the new room.
+    new_room = [room for room in self.rooms if room.get_id() == new_room_id][0]
+    self.players_to_rooms[player_id] = new_room
 
   def move_item_to_player(self, item_id, player_id):
     room_with_item = self.players_to_rooms[player_id]
@@ -151,6 +157,7 @@ class GameEngineTest(unittest.TestCase):
 
   def test_step_move_through_exit_changes_room(self):
     self.add_test_room_and_test_exit()
+    self.database.stub_add_room(self.production_room)
     self.game_engine.step('exit ' + self.test_exit.get_name())
     self.assertEquals(self.production_room.get_id(),
         self.database.players_to_room_ids[self.player_id])
