@@ -157,6 +157,14 @@ def step_game():
     return jsonify(prompt=result + '\nCongrats, you fulfilled the objective!')
   return jsonify(prompt=result)
 
+@app.route('/game/define', methods=['POST'])
+def create_game():
+  if 'user_id' not in session:
+    return redirect(url_for('index'))
+  user_id = session['user_id']
+  game_data = request.form['gameData']
+  return "Submitted game"
+
 @app.route('/logout')
 def logout():
   """ Logout a user """

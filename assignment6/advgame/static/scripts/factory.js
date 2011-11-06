@@ -127,13 +127,55 @@ game.Factory.attachForms = function(forms, parentElement) {
 game.Factory.createGameTerminal = function(parentElement) {
   // start the game to get the initial message
   $.post(game.newGameUrl, {}, function(data) {
-    console.log('started a new game');
+    /** @const */ var terminalDiv = $('<div>', {id: 'terminal'});
     /** @const */ var prompt = data.prompt; 
-    parentElement.terminal(function(command, terminal) {
+    terminalDiv.terminal(function(command, terminal) {
       $.post(game.stepGameUrl, {userInput: command}, function(data) {
         /** @const */ var prompt = data.prompt; 
         terminal.echo(prompt);
       });
     }, {greetings: prompt, prompt: '>', name: 'game'});
+    /** @const */ var anchorsList = $('<ul>');
+    /** @const */ var logoutAnchor = $('<a>', {
+      href: game.logoutUrl,
+      html: 'Log out'
+    });
+    /** @const */ var logoutItem = $('<li>');
+    logoutItem.append(logoutAnchor);
+    /** @const */ var gameDefinerAnchor = $('<a>', {
+      href: '#',
+      html: 'Create game'
+    });
+    /** @const */ var definerItem = $('<li>');
+    definerItem.append(gameDefinerAnchor);
+    anchorsList.append(logoutItem).append(definerItem);
+    gameDefinerAnchor.bind('click', function(event) {
+      parentElement.html('');
+      game.Factory.createGameDefiner(parentElement);
+    });
+    parentElement.append(terminalDiv).append(anchorsList);
+  });
+};
+
+game.Factory.createGameDefiner = function(parentElement) {
+  /** @const */ var description = $('<p>', {
+    html: 'Define a game.' 
+  });
+  /** @const */ var textArea = $('<textarea>', {
+    html: "def my_game(builder):\n  return builder. \\\n  #Your code here",
+    cols: 80,
+    rows: 30
+  });
+  /** @const */ var submitButton = $('<input>', {
+    type: 'button',
+    value: 'Submit'
+  });
+  parentElement.append(textArea).append(submitButton);
+  submitButton.bind('click', function(event) {
+    /** @const */ var data = textArea.val();
+    console.log(data);
+    $.post(game.defineGameUrl, {gameData: data}, function(event) {
+      // Nothing to do here 
+    });
   });
 };
