@@ -127,12 +127,15 @@ game.Factory.attachForms = function(forms, parentElement) {
 game.Factory.createGameTerminal = function(parentElement) {
   // start the game to get the initial message
   $.post(game.newGameUrl, {}, function(data) {
-    console.log('started a new game');
     /** @const */ var prompt = data.prompt; 
     /** @const */ var terminalDiv = $('<div>', {
       id: 'terminal'
     });
-    parentElement.append(terminalDiv);
+    /** @const */ var logoutAnchor = $('<a>', {
+      href: game.logoutUrl,
+      html: 'Log out'
+    });
+    parentElement.append(terminalDiv).append(logoutAnchor);
     terminalDiv.terminal(function(command, terminal) {
       $.post(game.stepGameUrl, {userInput: command}, function(data) {
         /** @const */ var prompt = data.prompt; 
