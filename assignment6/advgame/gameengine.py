@@ -188,18 +188,18 @@ class GameEngine(object):
     else:
       raise UnknownItemType
 
-  def try_examine_item(self, item_name):
+  def try_examine(self, name):
     inventory = self.inventory()
     item_names = self.inventory_names()
-    if item_name in item_names:
+    if name in item_names:
       items_with_name = [item for item in inventory \
-          if item.get_name() == item_name]
+          if item.get_name() == name]
       return items_with_name[0].get_description()
     (_, exits) = self.room_and_exits()
     exit_names = [exit.get_name() for exit in exits]
-    if item_name in exit_names:
+    if name in exit_names:
       exits_with_name = [exit for exit in exits \
-          if exit.get_name() == item_name]
+          if exit.get_name() == name]
       return exits_with_name[0].get_description()
 
   def try_take_item(self, item_name):
@@ -259,7 +259,7 @@ class GameEngine(object):
       return self.try_use_item(item_name)
     elif action.startswith('examine'):
       item_name = action[len('examine'):].strip()
-      return self.try_examine_item(item_name)
+      return self.try_examine(item_name)
     elif action.startswith('take'):
       item_name = action[len('take'):].strip()
       return self.try_take_item(item_name)
