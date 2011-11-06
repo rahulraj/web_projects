@@ -57,3 +57,9 @@ h2 {
   padding-top: 15px;
   text-align: center;
 }
+#terminal {
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  margin-bottom: 15px;
+}
