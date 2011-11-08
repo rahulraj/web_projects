@@ -415,6 +415,19 @@ class DatabaseService(object):
     return map(item_from_row, result)
 
   def find_room_occupied_by_player(self, player_id):
+    """
+    Retrieve the room occupied by a player.
+
+    Args:
+      player_id the ID of the player.
+
+    Returns:
+      The Room that the player is in.
+
+    Raises:
+      PlayerNotInRoom if the data is inconsistent and no room exists
+      that the player is in. This generally indicates a bug.
+    """
     self.cursor.execute( \
         """
         select rooms.id, rooms.name, rooms.description, rooms.final_room
@@ -427,6 +440,15 @@ class DatabaseService(object):
     return Room.from_row(result)
 
   def player_in_final_room(self, player_id):
+    """
+    Tell if the player is in the last room
+
+    Args:
+      player_id the ID of the player.
+
+    Returns:
+      True if the room the player is in was marked as the last room.
+    """
     self.cursor.execute( \
         """
         select rooms.id
@@ -438,6 +460,13 @@ class DatabaseService(object):
     return result is not None
 
   def move_player(self, player_id, new_room_id):
+    """
+    Move the player
+
+    Args:
+      player_id the ID of the player.
+      new_room_id the ID of the next room for the player.
+    """
     self.cursor.execute( \
         """
         update players
@@ -447,6 +476,12 @@ class DatabaseService(object):
     self.connection.commit()
 
   def unlock_exit(self, exit_id):
+    """
+    Set an exit's locked boolean to False
+
+    Args:
+      exit_id the ID of the exit.
+    """
     self.cursor.execute( \
         """
         update exits
@@ -456,6 +491,12 @@ class DatabaseService(object):
     self.connection.commit()
 
   def unlock_item(self, item_id):
+    """
+    Set an item's locked boolean to False
+
+    Args:
+      item_id the ID of the item.
+    """
     self.cursor.execute( \
         """
         update items
@@ -465,6 +506,12 @@ class DatabaseService(object):
     self.connection.commit()
 
   def delete_item(self, item_id):
+    """
+    Delete an item (it was used up)
+
+    Args:
+      item_id the ID of the item.
+    """
     self.cursor.execute( \
         """
         delete from items
@@ -473,4 +520,5 @@ class DatabaseService(object):
     self.connection.commit()
 
   def close(self):
+    """ Close the cursor for resource cleanup.  """
     self.cursor.close()

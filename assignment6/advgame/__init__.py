@@ -134,6 +134,7 @@ def add_user():
 
 @app.route('/game/new', methods=['POST'])
 def new_game():
+  """ Start a new game, if the user is authenticated. """
   if 'user_id' not in session:
     return redirect(url_for('index'))
   user_id = session['user_id']
@@ -146,6 +147,7 @@ def new_game():
 
 @app.route('/game', methods=['GET', 'POST'])
 def step_game():
+  """ Take one step through the game. """
   if 'player_id' not in session:
     return redirect(url_for('index'))
   game_engine = GameEngine(g.database_service, session['player_id'])
