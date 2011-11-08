@@ -189,6 +189,15 @@ class GameEngine(object):
       raise UnknownItemType
 
   def try_examine(self, name):
+    """
+    Try to examine an item
+
+    Args:
+      name the name of the item
+
+    Returns:
+      The string description for the item.
+    """
     inventory = self.inventory()
     item_names = self.inventory_names()
     if name in item_names:
@@ -220,9 +229,11 @@ class GameEngine(object):
     return "\tYou took the %s." % (item_name,)
 
   def inventory_names(self):
+    """ Returns the names of items in the player's inventory. """
     return [item.get_name() for item in self.inventory()]
 
   def game_is_over(self):
+    """ Return True if the game is over. """
     return self.database_service.player_in_final_room(self.player_id)
 
   def step(self, action):
