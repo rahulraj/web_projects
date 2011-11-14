@@ -128,19 +128,19 @@ game.Factory.createGameTerminal = function(parentElement) {
   // start the game to get the initial message
   $.post(game.newGameUrl, {}, function(data) {
     /** @const */ var prompt = data.prompt; 
-    /** @const */ var terminalDiv = $('<div>', {
-      id: 'terminal'
-    });
     /** @const */ var logoutAnchor = $('<a>', {
       href: game.logoutUrl,
       html: 'Log out'
     });
-    parentElement.append(terminalDiv).append(logoutAnchor);
-    terminalDiv.terminal(function(command, terminal) {
+    // I have no idea why, but putting the terminal in its
+    // own div breaks the scrollbar. This is slightly uglier,
+    // but it's functional.
+    parentElement.terminal(function(command, terminal) {
       $.post(game.stepGameUrl, {userInput: command}, function(data) {
         /** @const */ var prompt = data.prompt; 
         terminal.echo(prompt);
       });
     }, {greetings: prompt, prompt: '>', name: 'game'});
+    parentElement.after(logoutAnchor);
   });
 };
