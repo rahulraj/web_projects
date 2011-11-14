@@ -47,6 +47,8 @@ jQueryObject.prototype.fadeOut = function() {};
 jQueryObject.prototype.slideToggle = function() {};
 jQueryObject.prototype.terminal = function(arg1, arg2) {};
 
+
+
 /**
  * Terminal objects.
  * @const

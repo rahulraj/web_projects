@@ -127,7 +127,7 @@ game.Factory.attachForms = function(forms, parentElement) {
 game.Factory.createGameTerminal = function(parentElement) {
   // start the game to get the initial message
   $.post(game.newGameUrl, {}, function(data) {
-    /** @const */ var prompt = data.prompt; 
+    /** @const */ var prompt = data.prompt;
     /** @const */ var logoutAnchor = $('<a>', {
       href: game.logoutUrl,
       html: 'Log out'
@@ -136,18 +136,18 @@ game.Factory.createGameTerminal = function(parentElement) {
     // own div breaks the scrollbar. This is slightly uglier,
     // but it's functional.
     parentElement.terminal(
-      /**
+        /**
        * Terminal callback function
        * @param {string} command the user's command.
        * @param {Terminal} terminal a reference to the Terminal.
        * @const
        */
-      function(command, terminal) {
-        $.post(game.stepGameUrl, {userInput: command}, function(data) {
-          /** @const */ var prompt = data.prompt; 
-          terminal.echo(prompt);
-      });
-    }, {greetings: prompt, prompt: '>', name: 'game'});
+        function(command, terminal) {
+          $.post(game.stepGameUrl, {userInput: command}, function(data) {
+            /** @const */ var prompt = data.prompt;
+            terminal.echo(prompt);
+          });
+        }, {greetings: prompt, prompt: '>', name: 'game'});
     parentElement.after(logoutAnchor);
   });
 };
