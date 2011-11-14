@@ -45,7 +45,15 @@ jQueryObject.prototype.after = function(arg) {};
 jQueryObject.prototype.before = function(arg) {};
 jQueryObject.prototype.fadeOut = function() {};
 jQueryObject.prototype.slideToggle = function() {};
-jQueryObject.prototype.terminal = function() {};
+jQueryObject.prototype.terminal = function(arg1, arg2) {};
+
+/**
+ * Terminal objects.
+ * @const
+ * @constructor
+ */
+var Terminal = function() {};
+Terminal.prototype.echo = function(arg) {};
 
 
 /**
