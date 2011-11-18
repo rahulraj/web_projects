@@ -11,6 +11,10 @@ individually. I had significant design freedom - the prompt
 simply listed a set of features which I had to provide, and
 allowed me to decide the architecture myself.
 
+The staff provided the index.fcgi files (to run the Flask
+applications on scripts.mit.edu), and a skeleton \_\_init\_\_.py 
+file, but the rest of the code is my own.
+
 This repository is primarily for me to present some code I've
 written for interested parties. As of the  writing of this
 readme file, the due date for all the assignments have passed.
