@@ -11,6 +11,15 @@ individually. I had significant design freedom - the prompt
 simply listed a set of features which I had to provide, and
 allowed me to decide the architecture myself.
 
+This repository is primarily for me to present some code I've
+written for interested parties. As of the  writing of this
+readme file, the due date for all the assignments have passed.
+
+If you're taking 6.170 in a subsequent semester though, please
+don't use this code - it would make both me and the staff very sad.
+You could look at it after you've submitted your own
+version, to see how we did things differently :)
+
 Assignment 1 - Object Models
 ----------------------------
 This assignment did not require writiting code. I was asked
