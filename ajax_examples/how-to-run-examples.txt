@@ -1,7 +1,0 @@
-How to run Ajax examples
--- cd to this directory
--- execute the command
-	python runserver.py
--- you should now have a server running at http://127.0.0.1:5000
--- edit ajax_examples.html to uncomment function you want to run
--- load it in a browser
