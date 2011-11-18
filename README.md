@@ -13,9 +13,9 @@ Assignment 1 - Object Models
 ----------------------------
 This assignment did not require writiting code. I was asked
 to draw object models for several scenarios. The goal was to
-  *   Practice planning out software architecture before implementing
-      it
-  *   Familiarize myself with the OM notation that the class used
-      *   It drew inspiration from Alloy, UML, among others, but was
-          simplified compared to them
-  *   Practice expressing ideas in writeups
+*   Practice planning out software architecture before implementing
+    it
+*   Familiarize myself with the OM notation that the class used
+    *   It drew inspiration from Alloy, UML, among others, but was
+        simplified compared to them
+*   Practice expressing ideas in writeups
