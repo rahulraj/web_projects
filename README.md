@@ -130,3 +130,5 @@ This assignment emphasized the ideas of:
 *   More practice with JavaScript and Python on the client and
     server sides.
 *   Decoupling the game scenario from the engine.
+
+Time Frame: 2 weeks
